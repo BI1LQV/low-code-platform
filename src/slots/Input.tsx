@@ -1,10 +1,18 @@
-/* eslint-disable react/jsx-key */
-export default function Input() {
-  return [(
+import { defineComponent, reactive } from "vue"
+import type { Options } from "@/models"
+
+export default function Input(): [any, Options] {
+  const data: Options = reactive({
+    value: "a",
+  })
+
+  return [defineComponent(() => () => (
     <div>
-      <input type="text" />
-      abc123
+      <input class="border-1 border-black" type="text"
+        v-model={data.value}
+       />
+       <div>{data.value}</div>
     </div>
-  ), { a: 1 }] as [JSX.Element, any]
+  )), data]
 }
 

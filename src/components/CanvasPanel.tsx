@@ -1,12 +1,13 @@
+import { defineComponent, h } from "vue"
 import Input from "@/slots/Input"
-export default function CanvasPanel() {
+export default defineComponent(() => {
   const [Comp, data] = Input()
   console.log(Comp, data)
-  return (
+  return () => (
     <div w-800px border-3px>
       abc
-     {{ Comp }}
+     { h(Comp) }
     </div>
   )
-}
+})
 
