@@ -1,4 +1,4 @@
-import { defineComponent, h } from "vue"
+import { defineComponent } from "vue"
 import Slots from "@/slots"
 import type { Options } from "@/models"
 export default defineComponent(() => {
@@ -10,9 +10,9 @@ export default defineComponent(() => {
   let compList: (JSX.Element)[] = []
   let dataList: Options[] = []
   for (const { type } of dsl) {
-    const [Comp, data] = Slots[type]()
-    compList.push(h(Comp))
-    dataList.push(data)
+    const { Elements, props } = Slots[type]()
+    compList.push(<Elements></Elements>)
+    dataList.push(props)
   }
   setTimeout(() => {
     dataList.forEach((data) => {
