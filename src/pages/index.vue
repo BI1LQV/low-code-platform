@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Canvas from "../components/Canvas.vue"
-import PropertyPanel from "../components/PropertyPanel.vue"
+import CanvasPanel from "@/components/CanvasPanel"
+import PropertyPanel from "@/components/PropertyPanel.vue"
 import ControlPanel from "@/components/ControlPanel.vue"
 </script>
 
@@ -10,7 +10,7 @@ import ControlPanel from "@/components/ControlPanel.vue"
   </header>
   <div flex flex-row h="[calc(100%-40px)]" justify-between>
     <ControlPanel></ControlPanel>
-    <Canvas></Canvas>
+    <CanvasPanel></CanvasPanel>
     <PropertyPanel></PropertyPanel>
   </div>
 </template>

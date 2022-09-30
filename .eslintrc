@@ -1,0 +1,6 @@
+{
+  "extends": "@bi1lqv",
+  "rules": {
+    "react/no-unknown-property":"off"
+  }
+}
