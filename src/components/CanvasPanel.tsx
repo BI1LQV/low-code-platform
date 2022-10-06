@@ -4,6 +4,7 @@ import { Slots } from "@/slots"
 
 export default defineComponent(() => {
   const { dsl, binderList, propList, styleList } = useCanvasStore()
+
   let compList = computed(() => {
     let list = []
     for (const { type, id } of dsl.children) {

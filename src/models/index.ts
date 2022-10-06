@@ -8,9 +8,11 @@ export interface Styles {
 export interface dslRoot {
   children: dslElement[]
 }
+
+export type allSlots = "input"
 export interface dslElement {
   id: string
-  type: "input"
+  type: allSlots
   children: dslElement[]
   parent: dslElement | dslRoot
 }
