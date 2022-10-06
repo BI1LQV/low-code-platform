@@ -5,14 +5,32 @@ export interface Options {
 export interface Styles {
   [key: string]: string
 }
-export interface dslRoot {
-  children: dslElement[]
+
+export enum functionalSlots {
+  "input" = 0,
+  "select",
+}
+export enum containerSlots {
+  "flex" = 100,
+}
+export const allSlots = {
+  ...functionalSlots, ...containerSlots,
+}
+export type allSlotsKey = keyof typeof allSlots
+
+export interface dslRootElement {
+  children: dslBaseElement[]
 }
 
-export type allSlots = "input"
-export interface dslElement {
+export interface dslBaseElement {
   id: string
-  type: allSlots
-  children: dslElement[]
-  parent: dslElement | dslRoot
+  type: allSlotsKey
+  parent: dslContainerElement | dslRootElement
+}
+
+export interface dslContainerElement extends dslBaseElement {
+  children: dslBaseElement[]
+}
+
+export interface dslFunctionalElement extends dslBaseElement {
 }

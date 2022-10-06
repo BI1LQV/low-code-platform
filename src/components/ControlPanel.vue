@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import { ref } from "vue"
 import { useCanvasStore } from "@/store"
+import { functionalSlots } from "@/models"
 const { appendElement } = useCanvasStore()
 let i = 1
 function append() {
   appendElement({
-    type: "input",
+    type: functionalSlots.input,
     binder: ref(`${i++}`),
     prop: {},
     style: {},

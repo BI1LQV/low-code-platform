@@ -1,10 +1,12 @@
 import { defineStore } from "pinia"
 import type { Ref } from "vue"
 import { reactive } from "vue"
-import type { Options, Styles, allSlots, dslElement, dslRoot } from "@/models"
+import type { Options, Styles, allSlotsKey, dslBaseElement, dslRootElement } from "@/models"
+import { containerSlots } from "@/models"
+import { genId } from "@/utils"
 
 export const useCanvasStore = defineStore("counter", () => {
-  const dsl: dslRoot = reactive({
+  const dsl: dslRootElement = reactive({
     children: [],
   })
   let binderList: Map<string, Ref<any>> = new Map()
@@ -12,44 +14,46 @@ export const useCanvasStore = defineStore("counter", () => {
   let styleList: Map<string, Styles> = new Map()
 
   function appendElement(child: {
-    type: allSlots
+    type: allSlotsKey
     binder: Ref<any>
     prop: Options
     style: Styles
   }): void
   function appendElement(child: {
-    type: allSlots
+    type: allSlotsKey
     binder: Ref<any>
     prop: Options
     style: Styles
-  }, posElement: dslElement, pos: "before" | "after"): void
+  }, posElement: dslBaseElement, pos: "before" | "after"): void
 
   function appendElement(
     { type, binder, prop, style }: {
-      type: allSlots
+      type: allSlotsKey
       binder: Ref<any>
       prop: Options
       style: Styles
     },
-    posElement?: dslElement,
+    posElement?: dslBaseElement,
     _pos?: "before" | "after",
   ) {
-    const id = Math.random().toString()
+    const id = genId()
+    let base
+    if (type in containerSlots) {
+      base = { id, type, children: [] }
+    } else {
+      base = { id, type }
+    }
 
     if (!posElement) {
-      let child: dslElement = {
-        id,
-        type,
+      let child: dslBaseElement = {
+        ...base,
         parent: dsl,
-        children: [],
       }
       dsl.children.push(child)
     } else {
-      let child: dslElement = {
-        id,
-        type,
+      let child: dslBaseElement = {
+        ...base,
         parent: posElement.parent,
-        children: [],
       }
       const insertPlace = posElement.parent.children.findIndex(originEle => originEle === posElement)
       posElement.parent.children.splice(insertPlace, 0, child)
