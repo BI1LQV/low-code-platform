@@ -1,8 +1,8 @@
 import type { Ref } from "vue"
 import { defineComponent } from "vue"
 import type { Options, Styles } from "@/models"
-
-export default function Input(binder: Ref<any>, prop: Options, style: Styles) {
+export const name = "input"
+export function Component(binder: Ref<any>, prop: Options, style: Styles) {
   return defineComponent(() => () => (
     <div>
       <input class="border-1 border-black" type="text"
@@ -15,3 +15,10 @@ export default function Input(binder: Ref<any>, prop: Options, style: Styles) {
   ))
 }
 
+export function Style() {
+  return {}
+}
+
+export function Prop() {
+  return {}
+}

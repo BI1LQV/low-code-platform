@@ -1,14 +1,13 @@
-import type { ComputedRef } from "vue"
 import { computed, defineComponent } from "vue"
 import { useCanvasStore } from "@/store"
-import Slots from "@/slots"
+import { Slots } from "@/slots"
 
 export default defineComponent(() => {
   const { dsl, binderList, propList, styleList } = useCanvasStore()
-  let compList: ComputedRef<(JSX.Element)[]> = computed(() => {
+  let compList = computed(() => {
     let list = []
     for (const { type, id } of dsl.children) {
-      const Element = Slots[(type as "input")](
+      const Element = Slots.get(type)!(
         binderList.get(id)!, propList.get(id)!, styleList.get(id)!,
       )
       list.push(<Element></Element>)
