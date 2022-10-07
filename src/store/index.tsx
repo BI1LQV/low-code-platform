@@ -11,6 +11,7 @@ export const implList: Map<string, JSX.Element> = new Map()
 export const dslList: Map<string, dslContainerElement | dslFunctionalElement | dslRootElement> = new Map()
 
 export const useCanvasStore = defineStore("canvasStore", () => {
+  // dsl tree
   const root: dslRootElement = reactive({
     children: [],
     type: containerSlots.ERoot,
@@ -50,6 +51,8 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     posElement.parent.children.splice(insertPlace, 0, childImpl)
     return childImpl
   }
+
+  // selected box
   let selectedElementId = ref<string>(rootID)
   function setSelectedElement(comp: { id: string }) {
     selectedElementId.value = comp.id
@@ -68,6 +71,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
       }
     }
   })
+
   return {
     root,
     appendElement,

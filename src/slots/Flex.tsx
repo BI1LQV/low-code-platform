@@ -5,12 +5,12 @@ export const Component = defineComponent({
   name: "EFlex",
   props: ["binder", "prop"],
   setup(
-    { binder: _binder, prop: _prop }: { binder: Ref<any>; prop: SlotOptions },
+    { prop }: { binder: Ref<any>; prop: SlotOptions },
     { slots },
   ) {
     return () => {
       return (
-        <div class="min-h-10px w-100% border-2px m-5px">
+        <div class="min-h-10px w-100% border-2px m-5px" props={prop}>
           {slots.default?.()[0].children}
         </div>
       )
