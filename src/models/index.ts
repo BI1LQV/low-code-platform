@@ -7,7 +7,6 @@ export interface SlotOptions {
 export enum functionalSlots {
   "input" = 0,
   "select",
-  "container",
 }
 export enum containerSlots {
   "flex" = 100,
@@ -33,6 +32,10 @@ export interface dslContainerElement extends dslBaseElement {
 }
 
 export interface dslFunctionalElement extends dslBaseElement {
+}
+
+export function isParent(comp: any): comp is dslContainerElement | dslRootElement {
+  return "children" in comp
 }
 
 export interface passedChild {

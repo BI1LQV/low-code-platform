@@ -3,6 +3,7 @@ import { defineComponent } from "vue"
 import type { SlotOptions } from "@/models"
 export const name = "input"
 export const Component = defineComponent({
+  name: "EInput",
   props: ["binder", "prop"],
   setup({ binder, prop }: { binder: Ref<any>; prop: SlotOptions }) {
     return () => (
