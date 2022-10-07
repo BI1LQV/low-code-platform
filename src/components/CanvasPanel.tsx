@@ -1,13 +1,13 @@
 import { defineComponent, ref, watch } from "vue"
 import { useCanvasStore } from "@/store"
 
-import { genComp } from "@/composables/genCompList"
+import { renderComp } from "@/composables/genCompList"
 export default defineComponent(() => {
   const { root, selectorPos } = useCanvasStore()
 
   let renderedRoot = ref()
   watch(root, () => {
-    renderedRoot.value = genComp(root)
+    renderedRoot.value = renderComp(root)
   }, { immediate: true })
 
   return () => (
