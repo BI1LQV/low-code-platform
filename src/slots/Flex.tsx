@@ -1,9 +1,8 @@
 import type { Ref } from "vue"
 import { defineComponent } from "vue"
 import type { SlotOptions } from "@/models"
-export const name = "flex"
 export const Component = defineComponent({
-  name: "Flex",
+  name: "EFlex",
   props: ["binder", "prop"],
   setup(
     { binder: _binder, prop: _prop }: { binder: Ref<any>; prop: SlotOptions },

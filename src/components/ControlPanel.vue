@@ -7,7 +7,7 @@ let pre: any = null
 let i = 1
 function append() {
   insertElement({
-    type: functionalSlots.input,
+    type: functionalSlots.EInput,
     binder: ref(`${i++}`),
     prop: {},
   })
@@ -15,7 +15,7 @@ function append() {
 
 function appendC() {
   pre = insertElement({
-    type: containerSlots.flex,
+    type: containerSlots.EFlex,
     binder: ref(`${i++}`),
     prop: {},
   })
@@ -23,7 +23,7 @@ function appendC() {
 function insertC() {
   insertElement(
     {
-      type: functionalSlots.input,
+      type: functionalSlots.EInput,
       binder: ref(`${i++}`),
       prop: {},
     }, pre)
