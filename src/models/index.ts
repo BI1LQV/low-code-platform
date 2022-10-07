@@ -38,6 +38,10 @@ export function isParent(comp: any): comp is dslContainerElement | dslRootElemen
   return "children" in comp
 }
 
+export function isRoot(comp: any): comp is dslRootElement {
+  return !("id" in comp)
+}
+
 export interface passedChild {
   type: allSlotsKey
   binder: Ref<any>

@@ -7,7 +7,7 @@ export const Component = defineComponent({
   props: ["binder", "prop"],
   setup({ binder, prop }: { binder: Ref<any>; prop: SlotOptions }) {
     return () => (
-    <div>
+    <div class=" w-50%">
       <input class="border-1 border-black" type="text"
         v-model={binder.value}
         props={prop}

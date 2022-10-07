@@ -1,16 +1,20 @@
 import { defineStore } from "pinia"
 import type { Ref } from "vue"
-import { reactive } from "vue"
-import type { SlotOptions, dslBaseElement, dslContainerElement, dslRootElement, passedChild } from "@/models"
-import { containerSlots } from "@/models"
+import { reactive, ref, watch } from "vue"
+import type { SlotOptions, dslBaseElement, dslContainerElement, dslFunctionalElement, dslRootElement, passedChild } from "@/models"
+import { containerSlots, isRoot } from "@/models"
 import { genId } from "@/utils"
+
+export const binderList: Map<string, Ref<any>> = new Map()
+export const propList: Map<string, SlotOptions> = new Map()
+export const implList: Map<string, JSX.Element> = new Map()
+export const dslList: Map<string, dslContainerElement | dslFunctionalElement> = new Map()
 
 export const useCanvasStore = defineStore("canvasStore", () => {
   const root: dslRootElement = reactive({
     children: [],
+    id: "0",
   })
-  let binderList: Map<string, Ref<any>> = new Map()
-  let propList: Map<string, SlotOptions> = new Map()
 
   function Base(
     { type, binder, prop }: passedChild, parent: dslContainerElement | dslRootElement,
@@ -18,14 +22,18 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     const id = genId()
     binderList.set(id, binder)
     propList.set(id, prop)
+    let base
     if (type in containerSlots) {
-      return reactive({ id, type, parent, children: [] })
+      base = reactive({ id, type, parent, children: [] })
     } else {
-      return reactive({ id, type, parent })
+      base = reactive({ id, type, parent })
     }
+    dslList.set(id, base)
+    return base
   }
 
-  function insertElement(child: passedChild, parent: dslContainerElement | dslRootElement = root) {
+  function insertElement(child: passedChild, parent?: dslContainerElement | dslRootElement) {
+    parent ??= root
     const childImpl = Base(child, parent)
     parent.children.push(childImpl)
     return childImpl
@@ -41,5 +49,30 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     posElement.parent.children.splice(insertPlace, 0, childImpl)
     return childImpl
   }
-  return { root, binderList, propList, appendElement, insertElement }
+  let selectedElementId = ref<string>("0")
+  function setSelectedElement(comp: dslBaseElement) {
+    selectedElementId.value = comp.id
+  }
+  let selectorPos = reactive({ x: -100, y: -100, h: 0, w: 0 })
+  watch(selectedElementId, () => {
+    let selectedElement = dslList.get(selectedElementId.value)!
+    if (!isRoot(selectedElement)) {
+      let impl = implList.get(selectedElementId.value)
+      if (impl) {
+        const { left, top, height, width } = impl.el!.getBoundingClientRect()
+        selectorPos.x = left
+        selectorPos.y = top
+        selectorPos.h = height
+        selectorPos.w = width
+      }
+    }
+  })
+  return {
+    root,
+    appendElement,
+    insertElement,
+    selectedElementId,
+    setSelectedElement,
+    selectorPos,
+  }
 })

@@ -1,41 +1,53 @@
 <script lang="ts" setup>
 import { ref } from "vue"
-import { useCanvasStore } from "@/store"
-import { containerSlots, functionalSlots } from "@/models"
-const { insertElement } = useCanvasStore()
-let pre: any = null
+import { storeToRefs } from "pinia"
+import { dslList, useCanvasStore } from "@/store"
+import { containerSlots, functionalSlots, isParent } from "@/models"
+const canvasStore = useCanvasStore()
+const { insertElement } = canvasStore
+const { selectedElementId } = storeToRefs(canvasStore)
+
 let i = 1
-function append() {
-  insertElement({
-    type: functionalSlots.EInput,
-    binder: ref(`${i++}`),
-    prop: {},
-  })
-}
 
 function appendC() {
-  pre = insertElement({
+  insertElement({
     type: containerSlots.EFlex,
     binder: ref(`${i++}`),
     prop: {},
   })
 }
-function insertC() {
-  insertElement(
-    {
-      type: functionalSlots.EInput,
-      binder: ref(`${i++}`),
-      prop: {},
-    }, pre)
+
+function insertD() {
+  let toInsert = dslList.get(selectedElementId.value)!
+  if (isParent(toInsert)) {
+    insertElement(
+      {
+        type: functionalSlots.EInput,
+        binder: ref(`${i++}`),
+        prop: {},
+      }, toInsert)
+  }
+}
+
+function insertCon() {
+  let toInsert = dslList.get(selectedElementId.value)!
+  if (isParent(toInsert)) {
+    insertElement(
+      {
+        type: containerSlots.EFlex,
+        binder: ref(`${i++}`),
+        prop: {},
+      }, toInsert)
+  }
 }
 </script>
 
 <template>
   <div w-200px border-3px>
-    <button @click="append">add input</button>
-    <div></div>
     <button @click="appendC">add container</button>
     <div></div>
-    <button @click="insertC">insert container</button>
+    <button @click="insertD">insert input</button>
+    <div></div>
+    <button @click="insertCon">insert container</button>
   </div>
 </template>
