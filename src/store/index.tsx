@@ -2,20 +2,21 @@ import { defineStore } from "pinia"
 import type { Ref } from "vue"
 import { reactive, ref, watch } from "vue"
 import type { SlotOptions, dslBaseElement, dslContainerElement, dslFunctionalElement, dslRootElement, passedChild } from "@/models"
-import { containerSlots, isRoot } from "@/models"
+import { containerSlots, isRoot, rootID } from "@/models"
 import { genId } from "@/utils"
 
 export const binderList: Map<string, Ref<any>> = new Map()
 export const propList: Map<string, SlotOptions> = new Map()
 export const implList: Map<string, JSX.Element> = new Map()
-export const dslList: Map<string, dslContainerElement | dslFunctionalElement> = new Map()
+export const dslList: Map<string, dslContainerElement | dslFunctionalElement | dslRootElement> = new Map()
 
 export const useCanvasStore = defineStore("canvasStore", () => {
   const root: dslRootElement = reactive({
     children: [],
-    id: "0",
+    type: containerSlots.ERoot,
+    id: rootID,
   })
-
+  dslList.set(rootID, root)
   function Base(
     { type, binder, prop }: passedChild, parent: dslContainerElement | dslRootElement,
   ): dslBaseElement {
@@ -49,8 +50,8 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     posElement.parent.children.splice(insertPlace, 0, childImpl)
     return childImpl
   }
-  let selectedElementId = ref<string>("0")
-  function setSelectedElement(comp: dslBaseElement) {
+  let selectedElementId = ref<string>(rootID)
+  function setSelectedElement(comp: { id: string }) {
     selectedElementId.value = comp.id
   }
   let selectorPos = reactive({ x: -100, y: -100, h: 0, w: 0 })

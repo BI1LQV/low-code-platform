@@ -2,16 +2,12 @@ import type { Ref } from "vue"
 import { defineComponent } from "vue"
 import type { SlotOptions } from "@/models"
 export const Component = defineComponent({
-  name: "EInput",
+  name: "ERoot",
   props: ["binder", "prop"],
-  setup({ binder, prop }: { binder: Ref<any>; prop: SlotOptions }) {
+  setup({ binder: _binder, prop: _prop }: { binder: Ref<any>; prop: SlotOptions }, { slots }) {
     return () => (
-    <div class=" w-50%">
-      <input class="border-1 border-black" type="text"
-        v-model={binder.value}
-        props={prop}
-       />
-       <div>{binder.value}</div>
+    <div class="h-100% w-100% border-1px border-amber">
+      {slots.default?.()[0].children}
     </div>
     )
   },

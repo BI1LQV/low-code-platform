@@ -10,13 +10,16 @@ export enum functionalSlots {
 }
 export enum containerSlots {
   "EFlex" = 100,
+  ERoot,
 }
 export const allSlots = {
   ...functionalSlots, ...containerSlots,
 }
 export type allSlotsKey = keyof typeof allSlots
-
+export const rootID = "root"
 export interface dslRootElement {
+  id: typeof rootID
+  type: containerSlots.ERoot
   children: dslBaseElement[]
 }
 
@@ -34,11 +37,11 @@ export interface dslContainerElement extends dslBaseElement {
 export interface dslFunctionalElement extends dslBaseElement {
 }
 
-export function isParent(comp: any): comp is dslContainerElement | dslRootElement {
+export function isParent(comp: dslBaseElement | dslRootElement): comp is dslContainerElement | dslRootElement {
   return "children" in comp
 }
 
-export function isRoot(comp: any): comp is dslRootElement {
+export function isRoot(comp: dslBaseElement | dslRootElement): comp is dslRootElement {
   return !("id" in comp)
 }
 

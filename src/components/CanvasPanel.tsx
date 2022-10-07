@@ -1,14 +1,14 @@
 import { defineComponent, ref, watch } from "vue"
 import { useCanvasStore } from "@/store"
 
-import { genCompList } from "@/composables/genCompList"
+import { genComp } from "@/composables/genCompList"
 export default defineComponent(() => {
   const { root, selectorPos } = useCanvasStore()
 
-  let renderedCompList = ref()
+  let renderedRoot = ref()
   watch(root, () => {
-    renderedCompList.value = genCompList(root)
-  })
+    renderedRoot.value = genComp(root)
+  }, { immediate: true })
 
   return () => (
     <div class="w-800px border-3px">
@@ -21,7 +21,7 @@ export default defineComponent(() => {
           "pointer-events": "none",
         }
       }></div>
-      { renderedCompList.value }
+      { renderedRoot.value }
     </div>
   )
 })
