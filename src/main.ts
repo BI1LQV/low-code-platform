@@ -25,4 +25,9 @@ const router = createRouter({
 app.use(router)
 const pinia = createPinia()
 app.use(pinia)
-app.mount("#app")
+
+if (!(import.meta.env.MODE === "test")) {
+  app.mount("#app")
+}
+export const JUST_FOR_TEST = 1
+
