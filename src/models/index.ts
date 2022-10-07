@@ -1,3 +1,5 @@
+import type { Ref } from "vue"
+
 export interface SlotOptions {
   [key: string]: any
 }
@@ -5,6 +7,7 @@ export interface SlotOptions {
 export enum functionalSlots {
   "input" = 0,
   "select",
+  "container",
 }
 export enum containerSlots {
   "flex" = 100,
@@ -22,6 +25,7 @@ export interface dslBaseElement {
   id: string
   type: allSlotsKey
   parent: dslContainerElement | dslRootElement
+  children?: dslBaseElement[]
 }
 
 export interface dslContainerElement extends dslBaseElement {
@@ -30,3 +34,10 @@ export interface dslContainerElement extends dslBaseElement {
 
 export interface dslFunctionalElement extends dslBaseElement {
 }
+
+export interface passedChild {
+  type: allSlotsKey
+  binder: Ref<any>
+  prop: SlotOptions
+}
+
