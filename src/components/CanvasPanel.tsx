@@ -3,15 +3,17 @@ import { useCanvasStore } from "@/store"
 import { Slots } from "@/slots"
 
 export default defineComponent(() => {
-  const { dsl, binderList, propList, styleList } = useCanvasStore()
+  const { dsl, binderList, propList } = useCanvasStore()
 
   let compList = computed(() => {
     let list = []
     for (const { type, id } of dsl.children) {
-      const Element = Slots.get(type)!(
-        binderList.get(id)!, propList.get(id)!, styleList.get(id)!,
-      )
-      list.push(<Element></Element>)
+      const Element = Slots.get(type)!
+      list.push(
+      <Element
+         binder={binderList.get(id)!}
+         prop={propList.get(id)!}
+      />)
     }
     return list
   })

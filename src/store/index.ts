@@ -1,7 +1,7 @@
 import { defineStore } from "pinia"
 import type { Ref } from "vue"
 import { reactive } from "vue"
-import type { Options, Styles, allSlotsKey, dslBaseElement, dslRootElement } from "@/models"
+import type { SlotOptions, allSlotsKey, dslBaseElement, dslRootElement } from "@/models"
 import { containerSlots } from "@/models"
 import { genId } from "@/utils"
 
@@ -10,28 +10,24 @@ export const useCanvasStore = defineStore("counter", () => {
     children: [],
   })
   let binderList: Map<string, Ref<any>> = new Map()
-  let propList: Map<string, Options> = new Map()
-  let styleList: Map<string, Styles> = new Map()
+  let propList: Map<string, SlotOptions> = new Map()
 
   function appendElement(child: {
     type: allSlotsKey
     binder: Ref<any>
-    prop: Options
-    style: Styles
+    prop: SlotOptions
   }): void
   function appendElement(child: {
     type: allSlotsKey
     binder: Ref<any>
-    prop: Options
-    style: Styles
+    prop: SlotOptions
   }, posElement: dslBaseElement, pos: "before" | "after"): void
 
   function appendElement(
-    { type, binder, prop, style }: {
+    { type, binder, prop }: {
       type: allSlotsKey
       binder: Ref<any>
-      prop: Options
-      style: Styles
+      prop: SlotOptions
     },
     posElement?: dslBaseElement,
     _pos?: "before" | "after",
@@ -60,7 +56,6 @@ export const useCanvasStore = defineStore("counter", () => {
     }
     binderList.set(id, binder)
     propList.set(id, prop)
-    styleList.set(id, style)
   }
-  return { dsl, binderList, styleList, propList, appendElement }
+  return { dsl, binderList, propList, appendElement }
 })

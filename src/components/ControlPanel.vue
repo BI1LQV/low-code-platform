@@ -9,7 +9,6 @@ function append() {
     type: functionalSlots.input,
     binder: ref(`${i++}`),
     prop: {},
-    style: {},
   })
 }
 </script>

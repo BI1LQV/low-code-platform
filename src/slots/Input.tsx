@@ -1,19 +1,21 @@
 import type { Ref } from "vue"
 import { defineComponent } from "vue"
-import type { Options, Styles } from "@/models"
+import type { SlotOptions } from "@/models"
 export const name = "input"
-export function Component(binder: Ref<any>, prop: Options, style: Styles) {
-  return defineComponent(() => () => (
+export const Component = defineComponent({
+  props: ["binder", "prop"],
+  setup({ binder, prop }: { binder: Ref<any>; prop: SlotOptions }) {
+    return () => (
     <div>
       <input class="border-1 border-black" type="text"
         v-model={binder.value}
-        style={style}
         props={prop}
        />
        <div>{binder.value}</div>
     </div>
-  ))
-}
+    )
+  },
+})
 
 export function Style() {
   return {}

@@ -1,9 +1,5 @@
-export interface Options {
+export interface SlotOptions {
   [key: string]: any
-}
-
-export interface Styles {
-  [key: string]: string
 }
 
 export enum functionalSlots {
