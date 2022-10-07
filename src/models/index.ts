@@ -16,32 +16,33 @@ export const allSlots = {
   ...functionalSlots, ...containerSlots,
 }
 export type allSlotsKey = keyof typeof allSlots
-export const rootID = "root"
-export interface dslRootElement {
-  id: typeof rootID
-  type: containerSlots.ERoot
-  children: dslBaseElement[]
-}
 
-export interface dslBaseElement {
+export interface DslBaseElement {
   id: string
   type: allSlotsKey
-  parent: dslContainerElement | dslRootElement
-  children?: dslBaseElement[]
+  children?: DslBaseElement[]
 }
 
-export interface dslContainerElement extends dslBaseElement {
-  children: dslBaseElement[]
+export const rootID = "root"
+export interface DslRootElement extends DslBaseElement {
+  id: typeof rootID
+  type: containerSlots.ERoot
+  children: DslBaseElement[]
+}
+export type MaybeParent = DslContainerElement | DslRootElement
+export interface DslSunElement extends DslBaseElement {
+  parent: MaybeParent
 }
 
-export interface dslFunctionalElement extends dslBaseElement {
+export interface DslContainerElement extends DslSunElement {
+  children: DslBaseElement[]
 }
 
-export function isParent(comp: dslBaseElement | dslRootElement): comp is dslContainerElement | dslRootElement {
+export function isParent(comp: DslBaseElement): comp is MaybeParent {
   return "children" in comp
 }
 
-export function isRoot(comp: dslBaseElement | dslRootElement): comp is dslRootElement {
+export function isRoot(comp: DslBaseElement): comp is DslRootElement {
   return !("id" in comp)
 }
 

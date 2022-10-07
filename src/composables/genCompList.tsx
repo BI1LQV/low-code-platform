@@ -1,8 +1,8 @@
-import type { dslBaseElement } from "@/models"
+import type { DslBaseElement } from "@/models"
 import { Slots } from "@/slots"
 import { binderList, implList, propList, useCanvasStore } from "@/store"
 
-export function renderComp(comp: Omit<dslBaseElement, "parent">) {
+export function renderComp(comp: DslBaseElement) {
   const { setSelectedElement } = useCanvasStore()
   const { type, id, children } = comp
   const Element = Slots.get(type)!

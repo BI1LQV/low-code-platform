@@ -1,26 +1,26 @@
 import { defineStore } from "pinia"
 import type { Ref } from "vue"
 import { reactive, ref, watch } from "vue"
-import type { SlotOptions, dslBaseElement, dslContainerElement, dslFunctionalElement, dslRootElement, passedChild } from "@/models"
+import type { DslBaseElement, DslContainerElement, DslRootElement, DslSunElement, MaybeParent, SlotOptions, passedChild } from "@/models"
 import { containerSlots, isRoot, rootID } from "@/models"
 import { genId } from "@/utils"
 
 export const binderList: Map<string, Ref<any>> = new Map()
 export const propList: Map<string, SlotOptions> = new Map()
 export const implList: Map<string, JSX.Element> = new Map()
-export const dslList: Map<string, dslContainerElement | dslFunctionalElement | dslRootElement> = new Map()
+export const dslList: Map<string, DslContainerElement | DslSunElement | DslBaseElement> = new Map()
 
 export const useCanvasStore = defineStore("canvasStore", () => {
   // dsl tree
-  const root: dslRootElement = reactive({
+  const root: DslRootElement = reactive({
     children: [],
     type: containerSlots.ERoot,
     id: rootID,
   })
   dslList.set(rootID, root)
   function Base(
-    { type, binder, prop }: passedChild, parent: dslContainerElement | dslRootElement,
-  ): dslBaseElement {
+    { type, binder, prop }: passedChild, parent: MaybeParent,
+  ): DslSunElement {
     const id = genId()
     binderList.set(id, binder)
     propList.set(id, prop)
@@ -34,7 +34,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     return base
   }
 
-  function insertElement(child: passedChild, parent?: dslContainerElement | dslRootElement) {
+  function insertElement(child: passedChild, parent?: MaybeParent) {
     parent ??= root
     const childImpl = Base(child, parent)
     parent.children.push(childImpl)
@@ -43,7 +43,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
 
   function appendElement(
     child: passedChild,
-    posElement: dslBaseElement,
+    posElement: DslSunElement,
     _pos: "before" | "after",
   ) {
     const childImpl = Base(child, posElement.parent)

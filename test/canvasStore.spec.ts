@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 import { ref } from "vue"
 import { JUST_FOR_TEST } from "@/main"
 import { binderList, dslList, implList, propList, useCanvasStore } from "@/store"
-import type { dslBaseElement } from "@/models"
+import type { DslSunElement } from "@/models"
 import { containerSlots } from "@/models"
 JUST_FOR_TEST// 不写这个就被tree-shake了
 
@@ -30,7 +30,7 @@ describe("canvasStore", () => {
     expect(implList).toMatchInlineSnapshot("Map {}")
     expect(propList).toMatchInlineSnapshot("Map {}")
   })
-  let appended: dslBaseElement
+  let appended: DslSunElement
   it("should works for method `insertElement`", () => {
     appended = insertElement({
       type: containerSlots.EFlex,
