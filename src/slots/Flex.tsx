@@ -9,11 +9,11 @@ export const Component = defineComponent({
     { slots },
   ) {
     return () => {
-      let slotComp = slots.default?.()[0].children
-      return (<div class="min-h-10px w-100% border-2px m-5px">
-        container:
-      {slotComp || null}
-          </div>)
+      return (
+        <div class="min-h-10px w-100% border-2px m-5px">
+          {slots.default?.()[0].children}
+        </div>
+      )
     }
   },
 })

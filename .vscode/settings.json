@@ -1,6 +1,8 @@
 {
   "cSpell.words": [
-    "pinia"
+    "composables",
+    "pinia",
+    "vueuse"
   ],
   "prettier.enable": false,
   "editor.codeActionsOnSave": {

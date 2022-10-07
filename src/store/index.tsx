@@ -25,8 +25,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     }
   }
 
-  function insertElement(child: passedChild, parent?: dslContainerElement | dslRootElement) {
-    parent ??= root
+  function insertElement(child: passedChild, parent: dslContainerElement | dslRootElement = root) {
     const childImpl = Base(child, parent)
     parent.children.push(childImpl)
     return childImpl
@@ -42,5 +41,5 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     posElement.parent.children.splice(insertPlace, 0, childImpl)
     return childImpl
   }
-  return { dsl: root, binderList, propList, appendElement, insertElement }
+  return { root, binderList, propList, appendElement, insertElement }
 })
