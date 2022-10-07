@@ -9,7 +9,7 @@
     "typecheck": "vue-tsc --noEmit",
     "preview": "vite preview",
     "test": "vitest",
-    "wow": "tokei . -e *.yaml"
+    "wow": "tokei . -e *.yaml -e **/test/**"
   },
   "dependencies": {
     "@vitejs/plugin-vue-jsx": "^2.0.1",
