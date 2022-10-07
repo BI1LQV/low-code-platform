@@ -1,5 +1,4 @@
 import type { dslBaseElement } from "@/models"
-import { isParent } from "@/models"
 import { Slots } from "@/slots"
 import { binderList, implList, propList, useCanvasStore } from "@/store"
 
@@ -13,13 +12,7 @@ export function renderComp(comp: Omit<dslBaseElement, "parent">) {
         key={id}
         onClickCapture={() => setSelectedElement(comp)}
       >{
-        children && children.map((child) => {
-          if (isParent(child)) {
-            return renderComp(child)
-          } else {
-            return renderComp(child)
-          }
-        })
+        children && children.map(child => renderComp(child))
       }</Element>
   implList.set(id, compImpl)
   return compImpl
