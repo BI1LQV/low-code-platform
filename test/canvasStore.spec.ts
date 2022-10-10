@@ -1,10 +1,11 @@
 import { describe, expect, it } from "vitest"
 import { ref } from "vue"
-import { JUST_FOR_TEST } from "@/main"
-import { binderList, dslList, implList, propList, useCanvasStore } from "@/store"
+import { mount } from "@vue/test-utils"
+import { app } from "@/main"
+import { binderList, dslList, propList, useCanvasStore } from "@/store"
 import type { DslSunElement } from "@/models"
 import { containerSlots } from "@/models"
-JUST_FOR_TEST// 不写这个就被tree-shake了
+mount(app)
 
 let i = 0
 describe("canvasStore", () => {
@@ -27,7 +28,7 @@ describe("canvasStore", () => {
         },
       }
     `)
-    expect(implList).toMatchInlineSnapshot("Map {}")
+    // expect(implList).toMatchInlineSnapshot("Map {}")
     expect(propList).toMatchInlineSnapshot("Map {}")
   })
   let appended: DslSunElement
@@ -90,7 +91,7 @@ describe("canvasStore", () => {
         },
       }
     `)
-    expect(implList).toMatchInlineSnapshot("Map {}")
+    // expect(implList).toMatchInlineSnapshot("Map {}")
     expect(propList).toMatchInlineSnapshot(`
       Map {
         "0" => {},
@@ -112,7 +113,7 @@ describe("canvasStore", () => {
           },
         }
       `)
-      expect(implList).toMatchInlineSnapshot("Map {}")
+      // expect(implList).toMatchInlineSnapshot("Map {}")
       expect(propList).toMatchInlineSnapshot("Map {}")
     })
   })
