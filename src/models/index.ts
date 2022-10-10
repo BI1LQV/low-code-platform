@@ -46,8 +46,8 @@ export function isRoot(comp: DslBaseElement): comp is DslRootElement {
   return !("id" in comp)
 }
 
-export interface passedChild {
-  type: allSlotsKey
+export interface passedChild<T=allSlotsKey> {
+  type: T
   binder: Ref<any>
   prop: SlotOptions
 }

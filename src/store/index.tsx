@@ -1,7 +1,7 @@
 import { defineStore } from "pinia"
 import type { Ref } from "vue"
 import { nextTick, reactive, ref, watch } from "vue"
-import type { DslBaseElement, DslContainerElement, DslRootElement, DslSunElement, MaybeParent, SlotOptions, passedChild } from "@/models"
+import type { DslBaseElement, DslContainerElement, DslRootElement, DslSunElement, MaybeParent, SlotOptions, functionalSlots, passedChild } from "@/models"
 import { containerSlots, rootID } from "@/models"
 import { genId, watchComputed } from "@/utils"
 
@@ -35,14 +35,12 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     dslList.set(id, base)
     return base
   }
+  function insertElement(child: passedChild<containerSlots>, parent?: MaybeParent): DslContainerElement
+  function insertElement(child: passedChild<functionalSlots>, parent?: MaybeParent): DslSunElement
 
-  function insertElement<
-    T extends passedChild,
-    R=T["type"] extends containerSlots ? DslContainerElement : DslSunElement,
-  >(child: T, parent: MaybeParent = root): R {
+  function insertElement(child: passedChild, parent: MaybeParent = root): DslContainerElement | DslSunElement {
     const childImpl = Base(child, parent)
     parent.children.push(childImpl)
-    // @ts-expect-error it's okay
     return childImpl
   }
 
