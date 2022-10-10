@@ -5,7 +5,7 @@ import { dslList, useCanvasStore } from "@/store"
 import { containerSlots, functionalSlots, isParent } from "@/models"
 const canvasStore = useCanvasStore()
 const { insertElement } = canvasStore
-const { selectedElementId } = storeToRefs(canvasStore)
+const { selectedElementId, dslString } = storeToRefs(canvasStore)
 
 let i = 1
 
@@ -49,5 +49,6 @@ function insertCon() {
     <button @click="insertD">insert input</button>
     <div></div>
     <button @click="insertCon">insert container</button>
+    <div v-html="dslString.replaceAll('\n', '<br/>').replaceAll(' ', '&nbsp;')"></div>
   </div>
 </template>
