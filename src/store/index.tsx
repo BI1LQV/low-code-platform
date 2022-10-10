@@ -36,9 +36,12 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     return base
   }
 
-  function insertElement(child: passedChild, parent: MaybeParent = root) {
+  function insertElement<
+    R=passedChild["type"] extends containerSlots ? DslContainerElement : DslSunElement,
+  >(child: passedChild, parent: MaybeParent = root): R {
     const childImpl = Base(child, parent)
     parent.children.push(childImpl)
+    // @ts-expect-error it's okay
     return childImpl
   }
 

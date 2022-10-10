@@ -3,10 +3,14 @@ import { ref } from "vue"
 import { mount } from "@vue/test-utils"
 import { app } from "@/main"
 import { binderList, dslList, propList, useCanvasStore } from "@/store"
-import type { DslSunElement } from "@/models"
-import { containerSlots } from "@/models"
+import type { DslContainerElement } from "@/models"
+import { containerSlots, functionalSlots } from "@/models"
 mount(app)
-
+function checkMaps(i: number) {
+  expect(Array.from(binderList.keys())).toHaveLength(i)
+  expect(Array.from(dslList.keys())).toHaveLength(i + 1)
+  expect(Array.from(propList.keys())).toHaveLength(i)
+}
 let i = 0
 describe("canvasStore", () => {
   const { root, insertElement, appendElement } = useCanvasStore()
@@ -19,20 +23,15 @@ describe("canvasStore", () => {
       }
     `)
     expect(binderList).toMatchInlineSnapshot("Map {}")
-    expect(dslList).toMatchInlineSnapshot(`
-      Map {
-        "root" => {
-          "children": [],
-          "id": "root",
-          "type": 101,
-        },
-      }
+    expect(Array.from(dslList.keys())).toMatchInlineSnapshot(`
+      [
+        "root",
+      ]
     `)
-    // expect(implList).toMatchInlineSnapshot("Map {}")
     expect(propList).toMatchInlineSnapshot("Map {}")
   })
-  let appended: DslSunElement
-  it("should works for method `insertElement`", () => {
+  let appended: DslContainerElement
+  it("should works for method `insertElement` when parent is root", () => {
     appended = insertElement({
       type: containerSlots.EFlex,
       binder: ref(`${i++}`),
@@ -52,69 +51,42 @@ describe("canvasStore", () => {
         "type": 100,
       }
     `)
-    expect(binderList).toMatchInlineSnapshot(`
-      Map {
-        "0" => RefImpl {
-          "__v_isRef": true,
-          "__v_isShallow": false,
-          "_rawValue": "0",
-          "_value": "0",
-          "dep": undefined,
-        },
-      }
-    `)
-    expect(dslList).toMatchInlineSnapshot(`
-      Map {
-        "root" => {
-          "children": [
-            {
-              "children": [],
-              "id": "0",
-              "parent": [Circular],
-              "type": 100,
-            },
-          ],
-          "id": "root",
-          "type": 101,
-        },
-        "0" => {
-          "children": [],
-          "id": "0",
-          "parent": {
+    checkMaps(i)
+  })
+  it("should works for method `insertElement` when parent is child", () => {
+    insertElement({
+      type: functionalSlots.EInput,
+      binder: ref(`${i++}`),
+      prop: {},
+    }, appended)
+    expect(root).toMatchInlineSnapshot(`
+      {
+        "children": [
+          {
             "children": [
-              [Circular],
+              {
+                "id": "1",
+                "parent": [Circular],
+                "type": 0,
+              },
             ],
-            "id": "root",
-            "type": 101,
+            "id": "0",
+            "parent": [Circular],
+            "type": 100,
           },
-          "type": 100,
-        },
+        ],
+        "id": "root",
+        "type": 101,
       }
     `)
-    // expect(implList).toMatchInlineSnapshot("Map {}")
-    expect(propList).toMatchInlineSnapshot(`
-      Map {
-        "0" => {},
-      }
-    `)
-    it("should works for method `appendElement`", () => {
-      expect(appendElement({
-        type: containerSlots.EFlex,
-        binder: ref(`${i++}`),
-        prop: {},
-      }, appended, "before"))
-      expect(binderList).toMatchInlineSnapshot("Map {}")
-      expect(dslList).toMatchInlineSnapshot(`
-        Map {
-          "root" => {
-            "children": [],
-            "id": "root",
-            "type": 101,
-          },
-        }
-      `)
-      // expect(implList).toMatchInlineSnapshot("Map {}")
-      expect(propList).toMatchInlineSnapshot("Map {}")
-    })
+    checkMaps(i)
+  })
+  it("should works for method `appendElement`", () => {
+    expect(appendElement({
+      type: containerSlots.EFlex,
+      binder: ref(`${i++}`),
+      prop: {},
+    }, appended, "before"))
+    checkMaps(i)
   })
 })
