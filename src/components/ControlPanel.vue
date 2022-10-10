@@ -9,17 +9,9 @@ const { selectedElementId, dslString } = storeToRefs(canvasStore)
 
 let i = 1
 
-function appendC() {
-  insertElement({
-    type: containerSlots.EFlex,
-    binder: ref(`${i++}`),
-    prop: {},
-  })
-}
-
 function insertD() {
-  let toInsert = dslList.get(selectedElementId.value)!
-  if (isParent(toInsert)) {
+  let toInsert = dslList.get(selectedElementId.value)
+  if (toInsert == null || isParent(toInsert)) {
     insertElement(
       {
         type: functionalSlots.EInput,
@@ -30,8 +22,8 @@ function insertD() {
 }
 
 function insertCon() {
-  let toInsert = dslList.get(selectedElementId.value)!
-  if (isParent(toInsert)) {
+  let toInsert = dslList.get(selectedElementId.value)
+  if (toInsert == null || isParent(toInsert)) {
     insertElement(
       {
         type: containerSlots.EFlex,
@@ -44,8 +36,6 @@ function insertCon() {
 
 <template>
   <div w-200px border-3px>
-    <button @click="appendC">add container</button>
-    <div></div>
     <button @click="insertD">insert input</button>
     <div></div>
     <button @click="insertCon">insert container</button>

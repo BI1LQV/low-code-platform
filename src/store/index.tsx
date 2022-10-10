@@ -36,8 +36,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     return base
   }
 
-  function insertElement(child: passedChild, parent?: MaybeParent) {
-    parent ??= root
+  function insertElement(child: passedChild, parent: MaybeParent = root) {
     const childImpl = Base(child, parent)
     parent.children.push(childImpl)
     return childImpl
