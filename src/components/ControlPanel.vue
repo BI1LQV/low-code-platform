@@ -39,6 +39,10 @@ function insertCon() {
     <button @click="insertD">insert input</button>
     <div></div>
     <button @click="insertCon">insert container</button>
-    <div v-html="dslString.replaceAll('\n', '<br/>').replaceAll(' ', '&nbsp;')"></div>
   </div>
+  <div
+    absolute
+    left-200px
+    v-html="dslString.replaceAll('\n', '<br/>').replaceAll(' ', '&nbsp;')"
+  ></div>
 </template>
