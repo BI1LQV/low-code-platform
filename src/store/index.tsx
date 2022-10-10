@@ -10,6 +10,13 @@ export const propList: Map<string, SlotOptions> = new Map()
 export const implList: Map<string, JSX.Element> = new Map()
 export const dslList: Map<string, DslContainerElement | DslSunElement | DslBaseElement> = new Map()
 
+function clearMap(id: string) {
+  dslList.delete(id)
+  implList.delete(id)
+  propList.delete(id)
+  binderList.delete(id)
+}
+
 window.store = { binderList, propList, implList, dslList }
 
 export const useCanvasStore = defineStore("canvasStore", () => {
@@ -35,6 +42,8 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     dslList.set(id, base)
     return base
   }
+
+  // 一些dsl操作
   function insertElement(child: passedChild<containerSlots>, parent?: MaybeParent): DslContainerElement
   function insertElement(child: passedChild<functionalSlots>, parent?: MaybeParent): DslSunElement
 
@@ -50,10 +59,19 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     pos: "before" | "after",
   ) {
     const childImpl = Base(child, posElement.parent)
-    const insertPlace = posElement.parent.children.findIndex(originEle => originEle === posElement)
+    const children = posElement.parent.children
+    const insertPlace = children.findIndex(originEle => originEle === posElement)
     const offset = pos === "after" ? 1 : 0
-    posElement.parent.children.splice(insertPlace + offset, 0, childImpl)
+    children.splice(insertPlace + offset, 0, childImpl)
     return childImpl
+  }
+
+  function removeElement(child: DslSunElement) {
+    const siblings = child.parent.children
+    const delIdx = siblings.findIndex(originEle => originEle === child)
+    siblings.splice(delIdx, 1)
+    clearMap(child.id)
+    child.children?.forEach(({ id }) => clearMap(id))
   }
 
   // selected box
@@ -79,6 +97,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
   const dslString = watchComputed([root], () => {
     return JSON.stringify(root, ["id", "type", "children"], 2)
   })
+
   return {
     root,
     appendElement,
@@ -87,5 +106,6 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     setSelectedElement,
     selectorPos,
     dslString,
+    removeElement,
   }
 })

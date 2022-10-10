@@ -4,7 +4,7 @@ import { storeToRefs } from "pinia"
 import { dslList, useCanvasStore } from "@/store"
 import { containerSlots, functionalSlots, isParent, isSun } from "@/models"
 const canvasStore = useCanvasStore()
-const { insertElement, appendElement } = canvasStore
+const { insertElement, appendElement, removeElement, setSelectedElement } = canvasStore
 const { selectedElementId, dslString } = storeToRefs(canvasStore)
 
 let i = 1
@@ -35,7 +35,7 @@ function insertContainer() {
 
 function appendAfter() {
   let toInsert = dslList.get(selectedElementId.value)
-  if (toInsert && isSun(toInsert)) {
+  if (isSun(toInsert)) {
     appendElement(
       {
         type: functionalSlots.EInput,
@@ -46,13 +46,21 @@ function appendAfter() {
 }
 function appendBefore() {
   let toInsert = dslList.get(selectedElementId.value)
-  if (toInsert && isSun(toInsert)) {
+  if (isSun(toInsert)) {
     appendElement(
       {
         type: functionalSlots.EInput,
         binder: ref(`${i++}`),
         prop: {},
       }, toInsert, "before")
+  }
+}
+
+function del() {
+  let toDel = dslList.get(selectedElementId.value)
+  if (isSun(toDel)) {
+    removeElement(toDel)
+    setSelectedElement(toDel.parent)
   }
 }
 </script>
@@ -66,10 +74,13 @@ function appendBefore() {
     <button @click="appendAfter">append after input</button>
     <div></div>
     <button @click="appendBefore">append before input</button>
+    <div></div>
+    <button @click="del">delete element</button>
   </div>
   <div
     absolute
     left-200px
+    pointer-events-none
     v-html="dslString.replaceAll('\n', '<br/>').replaceAll(' ', '&nbsp;')"
   ></div>
 </template>

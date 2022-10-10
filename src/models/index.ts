@@ -46,8 +46,8 @@ export function isRoot(comp: DslBaseElement): comp is DslRootElement {
   return !("id" in comp)
 }
 
-export function isSun(comp: DslBaseElement): comp is DslSunElement {
-  return ("parent" in comp)
+export function isSun(comp?: DslBaseElement): comp is DslSunElement {
+  return Boolean(comp && ("parent" in comp))
 }
 
 export interface passedChild<T=allSlotsKey> {

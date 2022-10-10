@@ -13,7 +13,7 @@ function checkMaps(i: number) {
 }
 let i = 0
 describe("canvasStore", () => {
-  const { root, insertElement, appendElement } = useCanvasStore()
+  const { root, insertElement, appendElement, removeElement } = useCanvasStore()
   it("should init", () => {
     expect(root).toMatchInlineSnapshot(`
       {
@@ -210,5 +210,30 @@ describe("canvasStore", () => {
       }
     `)
     checkMaps(i)
+  })
+  it("should works for method `removeElement`", () => {
+    expect(removeElement(appended))
+    expect(root).toMatchInlineSnapshot(`
+      {
+        "children": [
+          {
+            "children": [],
+            "id": "2",
+            "parent": [Circular],
+            "type": 100,
+          },
+          {
+            "children": [],
+            "id": "3",
+            "parent": [Circular],
+            "type": 100,
+          },
+        ],
+        "id": "root",
+        "type": 101,
+      }
+    `)
+    // 自己和一个子元素
+    checkMaps(i - 2)
   })
 })
