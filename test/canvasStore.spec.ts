@@ -81,12 +81,134 @@ describe("canvasStore", () => {
     `)
     checkMaps(i)
   })
-  it("should works for method `appendElement`", () => {
+  it("should works for method `appendElement` to before", () => {
     expect(appendElement({
       type: containerSlots.EFlex,
       binder: ref(`${i++}`),
       prop: {},
-    }, appended, "before"))
+    }, appended, "before")).toMatchInlineSnapshot(`
+      {
+        "children": [],
+        "id": "2",
+        "parent": {
+          "children": [
+            [Circular],
+            {
+              "children": [
+                {
+                  "id": "1",
+                  "parent": [Circular],
+                  "type": 0,
+                },
+              ],
+              "id": "0",
+              "parent": [Circular],
+              "type": 100,
+            },
+          ],
+          "id": "root",
+          "type": 101,
+        },
+        "type": 100,
+      }
+    `)
+    expect(root).toMatchInlineSnapshot(`
+      {
+        "children": [
+          {
+            "children": [],
+            "id": "2",
+            "parent": [Circular],
+            "type": 100,
+          },
+          {
+            "children": [
+              {
+                "id": "1",
+                "parent": [Circular],
+                "type": 0,
+              },
+            ],
+            "id": "0",
+            "parent": [Circular],
+            "type": 100,
+          },
+        ],
+        "id": "root",
+        "type": 101,
+      }
+    `)
+    checkMaps(i)
+  })
+  it("should works for method `appendElement` to after", () => {
+    expect(appendElement({
+      type: containerSlots.EFlex,
+      binder: ref(`${i++}`),
+      prop: {},
+    }, appended, "after")).toMatchInlineSnapshot(`
+      {
+        "children": [],
+        "id": "3",
+        "parent": {
+          "children": [
+            {
+              "children": [],
+              "id": "2",
+              "parent": [Circular],
+              "type": 100,
+            },
+            {
+              "children": [
+                {
+                  "id": "1",
+                  "parent": [Circular],
+                  "type": 0,
+                },
+              ],
+              "id": "0",
+              "parent": [Circular],
+              "type": 100,
+            },
+            [Circular],
+          ],
+          "id": "root",
+          "type": 101,
+        },
+        "type": 100,
+      }
+    `)
+    expect(root).toMatchInlineSnapshot(`
+      {
+        "children": [
+          {
+            "children": [],
+            "id": "2",
+            "parent": [Circular],
+            "type": 100,
+          },
+          {
+            "children": [
+              {
+                "id": "1",
+                "parent": [Circular],
+                "type": 0,
+              },
+            ],
+            "id": "0",
+            "parent": [Circular],
+            "type": 100,
+          },
+          {
+            "children": [],
+            "id": "3",
+            "parent": [Circular],
+            "type": 100,
+          },
+        ],
+        "id": "root",
+        "type": 101,
+      }
+    `)
     checkMaps(i)
   })
 })

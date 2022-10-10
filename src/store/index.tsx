@@ -47,11 +47,12 @@ export const useCanvasStore = defineStore("canvasStore", () => {
   function appendElement(
     child: passedChild,
     posElement: DslSunElement,
-    _pos: "before" | "after",
+    pos: "before" | "after",
   ) {
     const childImpl = Base(child, posElement.parent)
     const insertPlace = posElement.parent.children.findIndex(originEle => originEle === posElement)
-    posElement.parent.children.splice(insertPlace, 0, childImpl)
+    const offset = pos === "after" ? 1 : 0
+    posElement.parent.children.splice(insertPlace + offset, 0, childImpl)
     return childImpl
   }
 

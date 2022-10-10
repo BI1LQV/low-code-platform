@@ -2,14 +2,14 @@
 import { ref } from "vue"
 import { storeToRefs } from "pinia"
 import { dslList, useCanvasStore } from "@/store"
-import { containerSlots, functionalSlots, isParent } from "@/models"
+import { containerSlots, functionalSlots, isParent, isSun } from "@/models"
 const canvasStore = useCanvasStore()
-const { insertElement } = canvasStore
+const { insertElement, appendElement } = canvasStore
 const { selectedElementId, dslString } = storeToRefs(canvasStore)
 
 let i = 1
 
-function insertD() {
+function insertInput() {
   let toInsert = dslList.get(selectedElementId.value)
   if (toInsert == null || isParent(toInsert)) {
     insertElement(
@@ -21,7 +21,7 @@ function insertD() {
   }
 }
 
-function insertCon() {
+function insertContainer() {
   let toInsert = dslList.get(selectedElementId.value)
   if (toInsert == null || isParent(toInsert)) {
     insertElement(
@@ -32,13 +32,40 @@ function insertCon() {
       }, toInsert)
   }
 }
+
+function appendAfter() {
+  let toInsert = dslList.get(selectedElementId.value)
+  if (toInsert && isSun(toInsert)) {
+    appendElement(
+      {
+        type: functionalSlots.EInput,
+        binder: ref(`${i++}`),
+        prop: {},
+      }, toInsert, "after")
+  }
+}
+function appendBefore() {
+  let toInsert = dslList.get(selectedElementId.value)
+  if (toInsert && isSun(toInsert)) {
+    appendElement(
+      {
+        type: functionalSlots.EInput,
+        binder: ref(`${i++}`),
+        prop: {},
+      }, toInsert, "before")
+  }
+}
 </script>
 
 <template>
   <div w-200px border-3px>
-    <button @click="insertD">insert input</button>
+    <button @click="insertInput">insert input</button>
     <div></div>
-    <button @click="insertCon">insert container</button>
+    <button @click="insertContainer">insert container</button>
+    <div></div>
+    <button @click="appendAfter">append after input</button>
+    <div></div>
+    <button @click="appendBefore">append before input</button>
   </div>
   <div
     absolute
