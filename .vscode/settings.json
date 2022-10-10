@@ -2,6 +2,7 @@
   "cSpell.words": [
     "composables",
     "pinia",
+    "unocss",
     "vueuse"
   ],
   "prettier.enable": false,

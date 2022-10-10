@@ -1,6 +1,6 @@
 import type * as Slot from "./Input"
-import type { allSlotsKey } from "@/models"
-import { allSlots } from "@/models"
+import type { allSlotsKey } from "@/models/slots"
+import { allSlots } from "@/models/slots"
 
 let c: Record<string, typeof Slot> = import.meta.glob("./*.tsx", { eager: true })
 

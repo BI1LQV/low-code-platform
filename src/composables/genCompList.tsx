@@ -1,4 +1,4 @@
-import type { DslBaseElement } from "@/models"
+import type { DslBaseElement } from "@/models/slots"
 import { Slots } from "@/slots"
 import { binderList, implList, propList, useCanvasStore } from "@/store/canvasStore"
 

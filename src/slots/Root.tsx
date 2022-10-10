@@ -1,6 +1,6 @@
 import type { Ref } from "vue"
 import { defineComponent } from "vue"
-import type { SlotOptions } from "@/models"
+import type { SlotOptions } from "@/models/slots"
 export const Component = defineComponent({
   name: "ERoot",
   props: ["binder", "prop"],

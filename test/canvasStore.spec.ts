@@ -3,8 +3,8 @@ import { ref } from "vue"
 import { mount } from "@vue/test-utils"
 import { app } from "@/main"
 import { binderList, dslList, propList, useCanvasStore } from "@/store/canvasStore"
-import type { DslContainerElement } from "@/models"
-import { containerSlots, functionalSlots } from "@/models"
+import type { DslContainerElement } from "@/models/slots"
+import { containerSlots, functionalSlots } from "@/models/slots"
 mount(app)
 function checkMaps(i: number) {
   expect(Array.from(binderList.keys())).toHaveLength(i)

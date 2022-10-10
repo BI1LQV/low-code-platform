@@ -1,8 +1,8 @@
 import { defineStore } from "pinia"
 import type { Ref } from "vue"
 import { nextTick, reactive, ref, watch } from "vue"
-import type { DslBaseElement, DslContainerElement, DslRootElement, DslSunElement, MaybeParent, SlotOptions, functionalSlots, passedChild } from "@/models"
-import { containerSlots, rootID } from "@/models"
+import type { DslBaseElement, DslContainerElement, DslRootElement, DslSunElement, MaybeParent, SlotOptions, functionalSlots, passedChild } from "@/models/slots"
+import { containerSlots, rootID } from "@/models/slots"
 import { genId, watchComputed } from "@/utils"
 
 export const binderList: Map<string, Ref<any>> = new Map()

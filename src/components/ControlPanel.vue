@@ -2,7 +2,7 @@
 import { ref } from "vue"
 import { storeToRefs } from "pinia"
 import { dslList, useCanvasStore } from "@/store/canvasStore"
-import { containerSlots, functionalSlots, isParent, isSun } from "@/models"
+import { containerSlots, functionalSlots, isParent, isSun } from "@/models/slots"
 const canvasStore = useCanvasStore()
 const { insertElement, appendElement, removeElement, setSelectedElement } = canvasStore
 const { selectedElementId, dslString } = storeToRefs(canvasStore)
