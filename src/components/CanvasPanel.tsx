@@ -1,24 +1,21 @@
-import { defineComponent, ref, watch } from "vue"
+import { defineComponent } from "vue"
 import { useCanvasStore } from "@/store"
 
 import { renderComp } from "@/composables/genCompList"
+import { watchComputed } from "@/utils"
 export default defineComponent(() => {
   const { root, selectorPos } = useCanvasStore()
 
-  let renderedRoot = ref()
-  watch(root, () => {
-    renderedRoot.value = renderComp(root)
-  }, { immediate: true })
+  let renderedRoot = watchComputed(root, () => renderComp(root))
 
   return () => (
     <div class="w-800px border-3px">
-      <div class="w-800px border-5px border-green absolute" style={
+      <div class="w-800px border-5px border-green absolute pointer-events-none" style={
         {
           "height": `${selectorPos.h}px`,
           "width": `${selectorPos.w}px`,
           "left": `${selectorPos.x}px`,
           "top": `${selectorPos.y}px`,
-          "pointer-events": "none",
         }
       }></div>
       { renderedRoot.value }
