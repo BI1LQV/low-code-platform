@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 import { ref } from "vue"
 import { mount } from "@vue/test-utils"
 import { app } from "@/main"
-import { binderList, dslList, propList, useCanvasStore } from "@/store"
+import { binderList, dslList, propList, useCanvasStore } from "@/store/canvasStore"
 import type { DslContainerElement } from "@/models"
 import { containerSlots, functionalSlots } from "@/models"
 mount(app)

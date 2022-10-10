@@ -1,6 +1,6 @@
 import type { DslBaseElement } from "@/models"
 import { Slots } from "@/slots"
-import { binderList, implList, propList, useCanvasStore } from "@/store"
+import { binderList, implList, propList, useCanvasStore } from "@/store/canvasStore"
 
 export function renderComp(comp: DslBaseElement) {
   const { setSelectedElement } = useCanvasStore()

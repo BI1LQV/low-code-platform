@@ -1,5 +1,5 @@
 import { defineComponent } from "vue"
-import { useCanvasStore } from "@/store"
+import { useCanvasStore } from "@/store/canvasStore"
 
 import { renderComp } from "@/composables/genCompList"
 import { watchComputed } from "@/utils"
