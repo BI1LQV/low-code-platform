@@ -4,6 +4,7 @@ import { nextTick, reactive, ref, watch } from "vue"
 import type { DslBaseElement, DslContainerElement, DslRootElement, DslSunElement, MaybeParent, SlotOptions, allSlotsKey, functionalSlots, passedChild } from "@/models/slots"
 import { containerSlots, rootID } from "@/models/slots"
 import { genId, watchComputed } from "@/utils"
+import { Props } from "@/slots"
 
 export const binderList: Map<string, Ref<any>> = new Map()
 export const propList: Map<string, SlotOptions> = new Map()
@@ -28,7 +29,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
   })
   dslList.set(rootID, root)
   function Base(
-    { type, binder, prop }: passedChild, parent: MaybeParent,
+    { type, binder = ref(), prop = Props.get(type)!() }: passedChild<allSlotsKey>, parent: MaybeParent,
   ): DslSunElement {
     const id = genId()
     binderList.set(id, binder)
@@ -55,7 +56,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
   }
 
   function appendElement(
-    child: passedChild,
+    child: passedChild<allSlotsKey>,
     posElement: DslSunElement,
     pos: "before" | "after",
   ) {

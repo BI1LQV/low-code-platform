@@ -52,7 +52,7 @@ export function isSun(comp?: DslBaseElement): comp is DslSunElement {
 
 export interface passedChild<T=allSlotsKey> {
   type: T
-  binder: Ref<any>
-  prop: SlotOptions
+  binder?: Ref<any>
+  prop?: SlotOptions
 }
 
