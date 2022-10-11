@@ -53,6 +53,12 @@ export function isSun(comp?: DslBaseElement): comp is DslSunElement {
 export interface passedChild<T=allSlotsKey> {
   type: T
   binder?: Ref<any>
-  prop?: SlotOptions
 }
 
+export interface EFlexOptions {
+  [key: string]: any
+  style: {
+    display: "flex"
+    "flex-direction": "column" | "row"
+  }
+}

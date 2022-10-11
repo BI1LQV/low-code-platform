@@ -27,11 +27,13 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     type: containerSlots.ERoot,
     id: rootID,
   })
+  propList.set(rootID, Props.get(containerSlots.ERoot)!())
   dslList.set(rootID, root)
   function Base(
-    { type, binder = ref(), prop = Props.get(type)!() }: passedChild<allSlotsKey>, parent: MaybeParent,
+    { type, binder = ref() }: passedChild<allSlotsKey>, parent: MaybeParent,
   ): DslSunElement {
     const id = genId()
+    const prop = Props.get(type)!()
     binderList.set(id, binder)
     propList.set(id, prop)
     let base

@@ -34,8 +34,6 @@ describe("canvasStore", () => {
   it("should works for method `insertElement` when parent is root", () => {
     appended = insertElement({
       type: containerSlots.EFlex,
-      binder: ref(`${i++}`),
-      prop: {},
     })
     expect(appended).toMatchInlineSnapshot(`
       {
@@ -57,7 +55,6 @@ describe("canvasStore", () => {
     insertElement({
       type: functionalSlots.EInput,
       binder: ref(`${i++}`),
-      prop: {},
     }, appended)
     expect(root).toMatchInlineSnapshot(`
       {
@@ -85,7 +82,6 @@ describe("canvasStore", () => {
     expect(appendElement({
       type: containerSlots.EFlex,
       binder: ref(`${i++}`),
-      prop: {},
     }, appended, "before")).toMatchInlineSnapshot(`
       {
         "children": [],
@@ -144,7 +140,6 @@ describe("canvasStore", () => {
     expect(appendElement({
       type: containerSlots.EFlex,
       binder: ref(`${i++}`),
-      prop: {},
     }, appended, "after")).toMatchInlineSnapshot(`
       {
         "children": [],

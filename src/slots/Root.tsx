@@ -1,6 +1,6 @@
 import type { Ref } from "vue"
 import { defineComponent } from "vue"
-import type { SlotOptions } from "@/models/slots"
+import type { EFlexOptions, SlotOptions } from "@/models/slots"
 export const Component = defineComponent({
   name: "ERoot",
   props: ["binder", "prop"],
@@ -17,6 +17,11 @@ export function Style() {
   return {}
 }
 
-export function Prop() {
-  return {}
+export function Prop(): EFlexOptions {
+  return {
+    style: {
+      "display": "flex",
+      "flex-direction": "column",
+    },
+  }
 }

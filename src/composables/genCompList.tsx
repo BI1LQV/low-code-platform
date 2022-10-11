@@ -1,7 +1,7 @@
 import { ref } from "vue"
 import type { MoveSlotDragger, NewSlotDragger } from "@/models/drags"
-import type { DslBaseElement } from "@/models/slots"
-import { isParent } from "@/models/slots"
+import type { DslBaseElement, EFlexOptions } from "@/models/slots"
+import { isParent, isSun } from "@/models/slots"
 import { Slots } from "@/slots"
 import { binderList, implList, propList, useCanvasStore } from "@/store/canvasStore"
 
@@ -16,7 +16,6 @@ export function renderComp(comp: DslBaseElement) {
         insertElement({
           type: data.slot,
           binder: ref(),
-          prop: {},
         }, comp)
       } else {
         // console.log()
@@ -26,9 +25,10 @@ export function renderComp(comp: DslBaseElement) {
   }
   function dragOverComp(ev: DragEvent) {
     ev.preventDefault()
-    if (!isParent(comp)) {
+    if (!isParent(comp) && isSun(comp)) {
       const { left, top } = (implList.get(comp.id)!.el as HTMLElement).getBoundingClientRect()
       console.log(ev.clientX - left, ev.clientY - top)
+      console.log(comp.parent.id, propList.get(comp.parent.id) as EFlexOptions)
     }
   }
   const Element = Slots.get(type)!

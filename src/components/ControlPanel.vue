@@ -19,7 +19,6 @@ function insertInput() {
       {
         type: functionalSlots.EInput,
         binder: ref(`${i++}`),
-        prop: {},
       }, toInsert)
   }
 }
@@ -31,7 +30,6 @@ function insertContainer() {
       {
         type: containerSlots.EFlex,
         binder: ref(`${i++}`),
-        prop: {},
       }, toInsert)
   }
 }
@@ -43,7 +41,6 @@ function appendAfter() {
       {
         type: functionalSlots.EInput,
         binder: ref(`${i++}`),
-        prop: {},
       }, toInsert, "after")
   }
 }
@@ -54,7 +51,6 @@ function appendBefore() {
       {
         type: functionalSlots.EInput,
         binder: ref(`${i++}`),
-        prop: {},
       }, toInsert, "before")
   }
 }
