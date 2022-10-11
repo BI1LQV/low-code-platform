@@ -1,7 +1,7 @@
 import { defineStore } from "pinia"
 import type { Ref } from "vue"
 import { nextTick, reactive, ref, watch } from "vue"
-import type { DslBaseElement, DslContainerElement, DslRootElement, DslSunElement, MaybeParent, SlotOptions, functionalSlots, passedChild } from "@/models/slots"
+import type { DslBaseElement, DslContainerElement, DslRootElement, DslSunElement, MaybeParent, SlotOptions, allSlotsKey, functionalSlots, passedChild } from "@/models/slots"
 import { containerSlots, rootID } from "@/models/slots"
 import { genId, watchComputed } from "@/utils"
 
@@ -46,6 +46,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
   // 一些dsl操作
   function insertElement(child: passedChild<containerSlots>, parent?: MaybeParent): DslContainerElement
   function insertElement(child: passedChild<functionalSlots>, parent?: MaybeParent): DslSunElement
+  function insertElement(child: passedChild<allSlotsKey>, parent?: MaybeParent): DslSunElement
 
   function insertElement(child: passedChild, parent: MaybeParent = root): DslContainerElement | DslSunElement {
     const childImpl = Base(child, parent)
@@ -84,7 +85,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     nextTick(() => {
       let selectedElement = implList.get(selectedElementId.value)
       if (selectedElement) {
-        const { left, top, height, width } = selectedElement.el!.getBoundingClientRect()
+        const { left, top, height, width } = (selectedElement.el as HTMLElement).getBoundingClientRect()
         selectorPos.x = left
         selectorPos.y = top
         selectorPos.h = height

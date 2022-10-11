@@ -2,8 +2,10 @@
 import { ref } from "vue"
 import { storeToRefs } from "pinia"
 import { dslList, useCanvasStore } from "@/store/canvasStore"
+import type { allSlotsKey } from "@/models/slots"
 import { allSlots, containerSlots, functionalSlots, isParent, isSun } from "@/models/slots"
 import { Slots } from "@/slots"
+import type { NewSlotDragger } from "@/models/drags"
 const canvasStore = useCanvasStore()
 const { insertElement, appendElement, removeElement, setSelectedElement } = canvasStore
 const { selectedElementId, dslString } = storeToRefs(canvasStore)
@@ -64,12 +66,8 @@ function del() {
     setSelectedElement(toDel.parent)
   }
 }
-function dragHandler() {
-  console.log("1", 1)
-}
-function dragend(ev: DragEvent) {
-  console.log(2, 2)
-  ev.preventDefault()
+function dragHandler(ev: DragEvent, type: allSlotsKey) {
+  ev.dataTransfer!.setData("text/plain", JSON.stringify({ type: "newSlot", slot: type } as NewSlotDragger))
 }
 </script>
 
@@ -86,7 +84,7 @@ function dragend(ev: DragEvent) {
     <button @click="del">delete element</button>
     <template v-for="name of Slots.keys()" :key="name">
       <div></div>
-      <button draggable="true" @dragstart="dragHandler" @dragend="dragend">{{ allSlots[name] }}</button>
+      <button draggable="true" @dragstart="dragHandler($event, name)">{{ allSlots[name] }}</button>
     </template>
   </div>
   <div
