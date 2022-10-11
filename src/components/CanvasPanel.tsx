@@ -4,15 +4,13 @@ import { useCanvasStore } from "@/store/canvasStore"
 import { renderComp } from "@/composables/genCompList"
 import { watchComputed } from "@/utils"
 export default defineComponent(() => {
-  const { root, selectorPos } = useCanvasStore()
+  const { root, selectorPos, posPrompt } = useCanvasStore()
 
   let renderedRoot = watchComputed(root, () => renderComp(root))
-
-  return () => (
-    <div class="w-800px border-3px">
+  return () => (<div class="w-800px border-3px">
       <div
         class="\
-          w-800px border-5px border-green \
+          border-5px border-green \
           absolute pointer-events-none \
           transition-all duration-200 \
         "
@@ -25,8 +23,21 @@ export default defineComponent(() => {
           }
         }
       ></div>
-      { renderedRoot.value}
-    </div>
-  )
+      <div
+        class="\
+          border-3px border-blue \
+          absolute pointer-events-none \
+        "
+        style={
+          {
+            "height": `${posPrompt.height}px`,
+            "width": `${posPrompt.width}px`,
+            "left": `${posPrompt.left}px`,
+            "top": `${posPrompt.top}px`,
+          }
+        }
+      ></div>
+      {renderedRoot.value}
+    </div>)
 })
 

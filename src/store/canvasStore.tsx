@@ -97,6 +97,21 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     })
   }, { immediate: true })
 
+  // posPrompt
+  type PosPrompt = Record<
+    "left" | "top" | "width" | "height", number
+  > & { type: "left" | "right" | "top" | "bottom" }
+
+  let posPrompt = reactive<PosPrompt>({ left: 0, top: 0, width: 0, height: 0, type: "left" })
+  function setPosPrompt(
+    newPos: PosPrompt,
+  ) {
+    posPrompt.left = newPos.left
+    posPrompt.top = newPos.top
+    posPrompt.width = newPos.width
+    posPrompt.height = newPos.height
+    posPrompt.type = newPos.type
+  }
   // dsl export
   const dslString = watchComputed([root], () => {
     return JSON.stringify(root, ["id", "type", "children"], 2)
@@ -111,5 +126,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     selectorPos,
     dslString,
     removeElement,
+    posPrompt,
+    setPosPrompt,
   }
 })

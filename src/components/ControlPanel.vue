@@ -8,7 +8,7 @@ import { Slots } from "@/slots"
 import type { NewSlotDragger } from "@/models/drags"
 const canvasStore = useCanvasStore()
 const { insertElement, appendElement, removeElement, setSelectedElement } = canvasStore
-const { selectedElementId, dslString } = storeToRefs(canvasStore)
+const { selectedElementId } = storeToRefs(canvasStore)
 
 let i = 1
 
@@ -83,10 +83,10 @@ function dragHandler(ev: DragEvent, type: allSlotsKey) {
       <button draggable="true" @dragstart="dragHandler($event, name)">{{ allSlots[name] }}</button>
     </template>
   </div>
-  <div
+  <!-- <div
     absolute
     left-200px
     pointer-events-none
     v-html="dslString.replaceAll('\n', '<br/>').replaceAll(' ', '&nbsp;')"
-  ></div>
+  ></div> -->
 </template>
