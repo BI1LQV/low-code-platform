@@ -11,6 +11,7 @@ export function renderComp(comp: DslBaseElement) {
         prop={propList.get(id)!}
         key={id}
         onClickCapture={() => setSelectedElement(comp)}
+        onDragover={(ev: DragEvent) => ev.preventDefault()}
       >{
         children && children.map(child => renderComp(child))
       }</Element>
