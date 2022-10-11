@@ -7,9 +7,10 @@ import type { DslContainerElement } from "@/models/slots"
 import { containerSlots, functionalSlots } from "@/models/slots"
 mount(app)
 function checkMaps(i: number) {
+  i = i + 1
   expect(Array.from(binderList.keys())).toHaveLength(i)
   expect(Array.from(dslList.keys())).toHaveLength(i + 1)
-  expect(Array.from(propList.keys())).toHaveLength(i)
+  expect(Array.from(propList.keys())).toHaveLength(i + 1)
 }
 let i = 0
 describe("canvasStore", () => {
@@ -28,7 +29,16 @@ describe("canvasStore", () => {
         "root",
       ]
     `)
-    expect(propList).toMatchInlineSnapshot("Map {}")
+    expect(propList).toMatchInlineSnapshot(`
+      Map {
+        "root" => {
+          "style": {
+            "display": "flex",
+            "flex-direction": "column",
+          },
+        },
+      }
+    `)
   })
   let appended: DslContainerElement
   it("should works for method `insertElement` when parent is root", () => {
@@ -74,6 +84,24 @@ describe("canvasStore", () => {
         ],
         "id": "root",
         "type": 101,
+      }
+    `)
+    expect(binderList).toMatchInlineSnapshot(`
+      Map {
+        "0" => RefImpl {
+          "__v_isRef": true,
+          "__v_isShallow": false,
+          "_rawValue": undefined,
+          "_value": undefined,
+          "dep": undefined,
+        },
+        "1" => RefImpl {
+          "__v_isRef": true,
+          "__v_isShallow": false,
+          "_rawValue": "0",
+          "_value": "0",
+          "dep": undefined,
+        },
       }
     `)
     checkMaps(i)
