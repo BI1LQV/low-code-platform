@@ -15,7 +15,7 @@ export default defineComponent(() => {
           absolute pointer-events-none \
           transition-all duration-200 \
         "
-        style={renderStyle(selectorPos)}
+        style={renderStyle(selectorPos).value}
       ></div>
       {/* insert helper */}
       <div
@@ -23,8 +23,7 @@ export default defineComponent(() => {
           bg-blue \
           absolute pointer-events-none \
         "
-        style={
-          renderStyle(posPrompt)}
+        style={renderStyle(posPrompt).value}
       ></div>
       {renderedRoot.value}
     </div>)

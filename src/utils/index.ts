@@ -1,5 +1,5 @@
 import type { Ref } from "vue"
-import { ref, watch } from "vue"
+import { computed, ref, watch } from "vue"
 import type { StyleLike } from "@/models/drags"
 const genIncId = (() => {
   let i = 0
@@ -21,12 +21,12 @@ export function watchComputed<T>(toWatches: (Ref | {})[]|(Ref | {}), cb: () => T
   return bucket
 }
 export function renderStyle(styleLike: StyleLike) {
-  return {
+  return computed(() => ({
     "height": `${styleLike.height}px`,
     "width": `${styleLike.width}px`,
     "left": `${styleLike.left}px`,
     "top": `${styleLike.top}px`,
-  }
+  }))
 }
 
 type oneString<T> = T extends string ? T : never
