@@ -30,6 +30,7 @@ export function renderComp(comp: DslBaseElement) {
   }
   function dragOverComp(ev: DragEvent) {
     ev.preventDefault()
+    ev.stopPropagation()
     const { left, top, width, height } = (implList.get(comp.id)!.el as HTMLElement).getBoundingClientRect()
     setHoverHelper({ left, top, width, height })
     if (!isParent(comp) && isSun(comp)) {
@@ -51,13 +52,17 @@ export function renderComp(comp: DslBaseElement) {
       }
     }
   }
+  function clickComp(ev: MouseEvent) {
+    setSelectedElement(comp)
+    ev.stopPropagation()
+  }
   const Element = Slots.get(type)!
   const compImpl = <Element
         binder={binderList.get(id)!}
         prop={propList.get(id)!}
         key={id}
-        onClickCapture={() => setSelectedElement(comp)}
-        onDragoverCapture={(ev: DragEvent) => dragOverComp(ev)}
+        onClick={(ev: MouseEvent) => clickComp(ev)}
+        onDragover={(ev: DragEvent) => dragOverComp(ev)}
         onDrop={(ev: DragEvent) => dropComp(ev)}
       >{
         children && children.map(child => renderComp(child))
