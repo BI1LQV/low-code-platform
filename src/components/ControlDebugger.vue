@@ -5,7 +5,7 @@ import { dslList, useCanvasStore } from "@/store/canvasStore"
 import { containerSlots, functionalSlots, isParent, isSun } from "@/models/slots"
 const canvasStore = useCanvasStore()
 const {
-  insertElement, appendElement,
+  insertElement, appendElement, removeElement, setSelectedElement,
 } = canvasStore
 const { selectedElementId } = storeToRefs(canvasStore)
 
@@ -52,6 +52,13 @@ function appendBefore() {
       }, toInsert, "before")
   }
 }
+function del() {
+  let toDel = dslList.get(selectedElementId.value)
+  if (isSun(toDel)) {
+    removeElement(toDel)
+    setSelectedElement(toDel.parent)
+  }
+}
 </script>
 
 <template>
@@ -63,4 +70,5 @@ function appendBefore() {
   <div></div>
   <button @click="appendBefore">append before input</button>
   <div></div>
+  <button @click="del">delete element</button>
 </template>

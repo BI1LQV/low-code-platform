@@ -1,25 +1,18 @@
 <script lang="ts" setup>
-import { storeToRefs } from "pinia"
 // import ControlDebugger from "./ControlDebugger.vue"
-import { dslList, useCanvasStore } from "@/store/canvasStore"
+import { useCanvasStore } from "@/store/canvasStore"
 import type { allSlotsKey } from "@/models/slots"
-import { allSlots, isSun } from "@/models/slots"
+import { allSlots, containerSlots } from "@/models/slots"
 import { Slots } from "@/slots"
 import type { NewSlotDragger } from "@/models/drags"
+const showedSlots = Array.from(Slots.keys())
+showedSlots.splice(showedSlots.findIndex(i => i === containerSlots.ERoot), 1)
+
 const canvasStore = useCanvasStore()
 const {
-  removeElement,
   setSelectedElement, clearPosPrompt, clearHoverHelper,
 } = canvasStore
-const { selectedElementId } = storeToRefs(canvasStore)
 
-function del() {
-  let toDel = dslList.get(selectedElementId.value)
-  if (isSun(toDel)) {
-    removeElement(toDel)
-    setSelectedElement(toDel.parent)
-  }
-}
 function dragHandler(ev: DragEvent, type: allSlotsKey) {
   ev.dataTransfer!.setData("text/plain", JSON.stringify({ type: "newSlot", slot: type } as NewSlotDragger))
   setSelectedElement({ id: "" })
@@ -33,8 +26,7 @@ function clearDragEffect() {
 <template>
   <div w-200px border-3px>
     <!-- <ControlDebugger></ControlDebugger> -->
-    <button @click="del">delete element</button>
-    <template v-for="name of Slots.keys()" :key="name">
+    <template v-for="name of showedSlots" :key="name">
       <div></div>
       <button
         draggable="true"
