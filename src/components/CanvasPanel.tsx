@@ -8,6 +8,7 @@ export default defineComponent(() => {
 
   let renderedRoot = watchComputed(root, () => renderComp(root))
   return () => (<div class="w-800px border-3px">
+    {/* click helper */}
       <div
         class="\
           border-5px border-green \
@@ -23,9 +24,10 @@ export default defineComponent(() => {
           }
         }
       ></div>
+      {/* insert helper */}
       <div
         class="\
-          border-3px border-blue \
+          bg-blue \
           absolute pointer-events-none \
         "
         style={

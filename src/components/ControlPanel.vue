@@ -7,7 +7,7 @@ import { allSlots, containerSlots, functionalSlots, isParent, isSun } from "@/mo
 import { Slots } from "@/slots"
 import type { NewSlotDragger } from "@/models/drags"
 const canvasStore = useCanvasStore()
-const { insertElement, appendElement, removeElement, setSelectedElement } = canvasStore
+const { insertElement, appendElement, removeElement, setSelectedElement, clearPosPrompt } = canvasStore
 const { selectedElementId } = storeToRefs(canvasStore)
 
 let i = 1
@@ -80,7 +80,7 @@ function dragHandler(ev: DragEvent, type: allSlotsKey) {
     <button @click="del">delete element</button>
     <template v-for="name of Slots.keys()" :key="name">
       <div></div>
-      <button draggable="true" @dragstart="dragHandler($event, name)">{{ allSlots[name] }}</button>
+      <button draggable="true" @dragstart="dragHandler($event, name)" @dragend="clearPosPrompt">{{ allSlots[name] }}</button>
     </template>
   </div>
   <!-- <div

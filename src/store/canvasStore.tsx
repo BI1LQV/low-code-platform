@@ -112,6 +112,13 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     posPrompt.height = newPos.height
     posPrompt.type = newPos.type
   }
+  function clearPosPrompt() {
+    posPrompt.left = 0
+    posPrompt.top = 0
+    posPrompt.width = 0
+    posPrompt.height = 0
+    posPrompt.type = "left"
+  }
   // dsl export
   const dslString = watchComputed([root], () => {
     return JSON.stringify(root, ["id", "type", "children"], 2)
@@ -128,5 +135,6 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     removeElement,
     posPrompt,
     setPosPrompt,
+    clearPosPrompt,
   }
 })
