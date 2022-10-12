@@ -80,13 +80,24 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     child.children?.forEach(({ id }) => clearMap(id))
   }
 
-  // selected box
-  let selectedElementId = ref<string>(rootID)
+  // selected box 点击的组件
+  let selectedElementId = ref<string>("")
   function setSelectedElement(comp: { id: string }) {
     selectedElementId.value = comp.id
   }
+  const isShowSelectorPos = ref(false)
   const [selectorPos, setSelectorPos, clearSelectorPos] = clearableReactive(
     (): StyleLike => ({ left: -100, top: -100, height: 0, width: 0 }),
+    {
+      onClear: () => {
+        isShowSelectorPos.value = false
+      },
+      onSet: () => {
+        setTimeout(() => {
+          isShowSelectorPos.value = true
+        })
+      },
+    },
   )
 
   watch([selectedElementId, root], () => {
@@ -103,14 +114,14 @@ export const useCanvasStore = defineStore("canvasStore", () => {
 
   // posPrompt
   type PosPrompt = StyleLike & { type: "left" | "right" | "top" | "bottom" }
-
+  // 前后还是上下插入
   const [posPrompt, setPosPrompt, clearPosPrompt] = clearableReactive(
-    (): PosPrompt => ({ left: 0, top: 0, width: 0, height: 0, type: "left" }),
+    (): PosPrompt => ({ left: -100, top: -100, width: 0, height: 0, type: "left" }),
   )
 
   // hover-helper
   const [hoverHelper, setHoverHelper, clearHoverHelper] = clearableReactive(
-    (): StyleLike => ({ left: 0, top: 0, width: 0, height: 0 }),
+    (): StyleLike => ({ left: -100, top: -100, width: 0, height: 0 }),
   )
 
   // dsl export
@@ -124,6 +135,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     insertElement,
     selectedElementId,
     setSelectedElement,
+    isShowSelectorPos,
     selectorPos,
     dslString,
     removeElement,

@@ -1,9 +1,12 @@
 import { Teleport, defineComponent } from "vue"
+import { storeToRefs } from "pinia"
 import { useCanvasStore } from "@/store/canvasStore"
 import { renderStyle } from "@/utils"
 
 export default defineComponent(() => {
-  const { selectorPos, posPrompt, hoverHelper } = useCanvasStore()
+  const canvasStore = useCanvasStore()
+  const { selectorPos, posPrompt, hoverHelper } = canvasStore
+  const { isShowSelectorPos } = storeToRefs(canvasStore)
   return () => (
     <Teleport to={"#app"}>
     {/* click helper */}
@@ -11,9 +14,12 @@ export default defineComponent(() => {
         class="\
           border-5px border-green \
           absolute pointer-events-none \
-          transition-all duration-200 \
+          duration-200 \
         "
-        style={renderStyle(selectorPos)}
+        style={{
+          ...renderStyle(selectorPos),
+          "transition-property": isShowSelectorPos.value ? "all" : "none",
+        }}
       ></div>
       {/* insert helper */}
       <div

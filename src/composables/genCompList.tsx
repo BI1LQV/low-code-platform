@@ -1,14 +1,15 @@
 import type { MoveSlotDragger, NewSlotDragger } from "@/models/drags"
 import type { DslBaseElement, EFlexOptions } from "@/models/slots"
-import { isParent, isSun } from "@/models/slots"
+import { containerSlots, isParent, isSun } from "@/models/slots"
 import { Slots } from "@/slots"
 import { binderList, implList, propList, useCanvasStore } from "@/store/canvasStore"
 
 export function renderComp(comp: DslBaseElement) {
   const {
     setSelectedElement, insertElement, appendElement,
-    setPosPrompt, posPrompt,
+    setPosPrompt, posPrompt, clearPosPrompt,
     setHoverHelper,
+
   } = useCanvasStore()
   const { type, id, children } = comp
   function dropComp(ev: DragEvent) {
@@ -50,11 +51,18 @@ export function renderComp(comp: DslBaseElement) {
           setPosPrompt({ left, top: top + height, width, height: 3, type: "top" })
         }
       }
+    } else {
+      // 在container parent上
+      clearPosPrompt()
     }
   }
   function clickComp(ev: MouseEvent) {
-    setSelectedElement(comp)
     ev.stopPropagation()
+    if (comp.type === containerSlots.ERoot) {
+      setSelectedElement({ id: "" })
+    } else {
+      setSelectedElement(comp)
+    }
   }
   const Element = Slots.get(type)!
   const compImpl = <Element
