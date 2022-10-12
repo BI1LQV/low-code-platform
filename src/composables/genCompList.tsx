@@ -5,7 +5,11 @@ import { Slots } from "@/slots"
 import { binderList, implList, propList, useCanvasStore } from "@/store/canvasStore"
 
 export function renderComp(comp: DslBaseElement) {
-  const { setSelectedElement, insertElement, setPosPrompt, posPrompt, appendElement } = useCanvasStore()
+  const {
+    setSelectedElement, insertElement, appendElement,
+    setPosPrompt, posPrompt,
+    setHoverHelper,
+  } = useCanvasStore()
   const { type, id, children } = comp
   function dropComp(ev: DragEvent) {
     ev.preventDefault()
@@ -26,8 +30,9 @@ export function renderComp(comp: DslBaseElement) {
   }
   function dragOverComp(ev: DragEvent) {
     ev.preventDefault()
+    const { left, top, width, height } = (implList.get(comp.id)!.el as HTMLElement).getBoundingClientRect()
+    setHoverHelper({ left, top, width, height })
     if (!isParent(comp) && isSun(comp)) {
-      const { left, top, width, height } = (implList.get(comp.id)!.el as HTMLElement).getBoundingClientRect()
       const parentDirection = (propList.get(comp.parent.id) as EFlexOptions).style["flex-direction"]
       if (parentDirection === "column") {
         // 横着算
@@ -52,7 +57,7 @@ export function renderComp(comp: DslBaseElement) {
         prop={propList.get(id)!}
         key={id}
         onClickCapture={() => setSelectedElement(comp)}
-        onDragover={(ev: DragEvent) => dragOverComp(ev)}
+        onDragoverCapture={(ev: DragEvent) => dragOverComp(ev)}
         onDrop={(ev: DragEvent) => dropComp(ev)}
       >{
         children && children.map(child => renderComp(child))

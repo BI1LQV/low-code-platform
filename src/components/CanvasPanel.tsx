@@ -4,7 +4,7 @@ import { useCanvasStore } from "@/store/canvasStore"
 import { renderComp } from "@/composables/genCompList"
 import { renderStyle, watchComputed } from "@/utils"
 export default defineComponent(() => {
-  const { root, selectorPos, posPrompt } = useCanvasStore()
+  const { root, selectorPos, posPrompt, hoverHelper } = useCanvasStore()
 
   let renderedRoot = watchComputed(root, () => renderComp(root))
   return () => (<div class="w-800px border-3px">
@@ -24,6 +24,14 @@ export default defineComponent(() => {
           absolute pointer-events-none \
         "
         style={renderStyle(posPrompt).value}
+      ></div>
+      {/* hover helper */}
+      <div
+        class="\
+          border-3px border-gray border-dashed\
+          absolute pointer-events-none \
+        "
+        style={renderStyle(hoverHelper).value}
       ></div>
       {renderedRoot.value}
     </div>)

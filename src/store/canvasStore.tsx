@@ -91,7 +91,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
       let selectedElement = implList.get(selectedElementId.value)
       if (selectedElement) {
         const rectInfo = (selectedElement.el as HTMLElement).getBoundingClientRect()
-        copyAttr(rectInfo, selectorPos, ["left", "top", "height", "width"])
+        copyAttr(rectInfo, selectorPos, ["left", "top", "height", "width"] as const)
       } else {
         copyAttr(InitSelectorPos(), selectorPos)
       }
@@ -106,10 +106,22 @@ export const useCanvasStore = defineStore("canvasStore", () => {
   function setPosPrompt(
     newPos: PosPrompt,
   ) {
-    copyAttr(newPos, posPrompt, ["left", "top", "width", "height", "type"])
+    copyAttr(newPos, posPrompt, ["left", "top", "width", "height", "type"] as const)
   }
   function clearPosPrompt() {
     copyAttr(InitPosPrompt(), posPrompt)
+  }
+
+  // hover-helper
+  const InitHoverHelper = () => ({ left: 0, top: 0, width: 0, height: 0 } as const)
+  let hoverHelper = reactive(InitHoverHelper())
+  function setHoverHelper(
+    newPos: StyleLike,
+  ) {
+    copyAttr(newPos, hoverHelper, ["left", "top", "width", "height"] as const)
+  }
+  function clearHoverHelper() {
+    copyAttr(InitHoverHelper(), hoverHelper)
   }
   // dsl export
   const dslString = watchComputed([root], () => {
@@ -128,5 +140,8 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     posPrompt,
     setPosPrompt,
     clearPosPrompt,
+    hoverHelper,
+    setHoverHelper,
+    clearHoverHelper,
   }
 })
