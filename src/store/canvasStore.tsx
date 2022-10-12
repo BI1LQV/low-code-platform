@@ -3,9 +3,10 @@ import type { Ref } from "vue"
 import { nextTick, reactive, ref, watch } from "vue"
 import type { DslBaseElement, DslContainerElement, DslRootElement, DslSunElement, MaybeParent, SlotOptions, allSlotsKey, functionalSlots, passedChild } from "@/models/slots"
 import { containerSlots, rootID } from "@/models/slots"
-import { copyAttr, genId, watchComputed } from "@/utils"
+import { genId, watchComputed } from "@/utils"
 import { Props } from "@/slots"
 import type { StyleLike } from "@/models/drags"
+import { clearableReactive } from "@/composables/clearableReactive"
 
 export const binderList: Map<string, Ref<any>> = new Map()
 export const propList: Map<string, SlotOptions> = new Map()
@@ -84,16 +85,18 @@ export const useCanvasStore = defineStore("canvasStore", () => {
   function setSelectedElement(comp: { id: string }) {
     selectedElementId.value = comp.id
   }
-  const InitSelectorPos = () => ({ left: -100, top: -100, height: 0, width: 0 } as const)
-  let selectorPos = reactive(InitSelectorPos())
+  const [selectorPos, setSelectorPos, clearSelectorPos] = clearableReactive(
+    (): StyleLike => ({ left: -100, top: -100, height: 0, width: 0 }),
+  )
+
   watch([selectedElementId, root], () => {
     nextTick(() => {
       let selectedElement = implList.get(selectedElementId.value)
       if (selectedElement) {
         const rectInfo = (selectedElement.el as HTMLElement).getBoundingClientRect()
-        copyAttr(rectInfo, selectorPos, ["left", "top", "height", "width"] as const)
+        setSelectorPos(rectInfo)
       } else {
-        copyAttr(InitSelectorPos(), selectorPos)
+        clearSelectorPos()
       }
     })
   }, { immediate: true })
@@ -101,28 +104,15 @@ export const useCanvasStore = defineStore("canvasStore", () => {
   // posPrompt
   type PosPrompt = StyleLike & { type: "left" | "right" | "top" | "bottom" }
 
-  const InitPosPrompt = () => ({ left: 0, top: 0, width: 0, height: 0, type: "left" } as const)
-  let posPrompt = reactive<PosPrompt>(InitPosPrompt())
-  function setPosPrompt(
-    newPos: PosPrompt,
-  ) {
-    copyAttr(newPos, posPrompt, ["left", "top", "width", "height", "type"] as const)
-  }
-  function clearPosPrompt() {
-    copyAttr(InitPosPrompt(), posPrompt)
-  }
+  const [posPrompt, setPosPrompt, clearPosPrompt] = clearableReactive(
+    (): PosPrompt => ({ left: 0, top: 0, width: 0, height: 0, type: "left" }),
+  )
 
   // hover-helper
-  const InitHoverHelper = () => ({ left: 0, top: 0, width: 0, height: 0 } as const)
-  let hoverHelper = reactive(InitHoverHelper())
-  function setHoverHelper(
-    newPos: StyleLike,
-  ) {
-    copyAttr(newPos, hoverHelper, ["left", "top", "width", "height"] as const)
-  }
-  function clearHoverHelper() {
-    copyAttr(InitHoverHelper(), hoverHelper)
-  }
+  const [hoverHelper, setHoverHelper, clearHoverHelper] = clearableReactive(
+    (): StyleLike => ({ left: 0, top: 0, width: 0, height: 0 }),
+  )
+
   // dsl export
   const dslString = watchComputed([root], () => {
     return JSON.stringify(root, ["id", "type", "children"], 2)
