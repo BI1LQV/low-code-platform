@@ -9,3 +9,5 @@ export interface MoveSlotDragger {
   type: "moveSlot"
   id: string
 }
+
+export type StyleLike = Record<"left" | "top" | "width" | "height", number>

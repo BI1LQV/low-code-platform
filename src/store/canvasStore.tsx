@@ -3,8 +3,9 @@ import type { Ref } from "vue"
 import { nextTick, reactive, ref, watch } from "vue"
 import type { DslBaseElement, DslContainerElement, DslRootElement, DslSunElement, MaybeParent, SlotOptions, allSlotsKey, functionalSlots, passedChild } from "@/models/slots"
 import { containerSlots, rootID } from "@/models/slots"
-import { genId, watchComputed } from "@/utils"
+import { copyAttr, genId, watchComputed } from "@/utils"
 import { Props } from "@/slots"
+import type { StyleLike } from "@/models/drags"
 
 export const binderList: Map<string, Ref<any>> = new Map()
 export const propList: Map<string, SlotOptions> = new Map()
@@ -83,41 +84,28 @@ export const useCanvasStore = defineStore("canvasStore", () => {
   function setSelectedElement(comp: { id: string }) {
     selectedElementId.value = comp.id
   }
-  let selectorPos = reactive({ x: -100, y: -100, h: 0, w: 0 })
+  let selectorPos = reactive({ left: -100, top: -100, height: 0, width: 0 })
   watch([selectedElementId, root], () => {
     nextTick(() => {
       let selectedElement = implList.get(selectedElementId.value)
       if (selectedElement) {
-        const { left, top, height, width } = (selectedElement.el as HTMLElement).getBoundingClientRect()
-        selectorPos.x = left
-        selectorPos.y = top
-        selectorPos.h = height
-        selectorPos.w = width
+        const rectInfo = (selectedElement.el as HTMLElement).getBoundingClientRect()
+        copyAttr(rectInfo, selectorPos, ["left", "top", "height", "width"])
       }
     })
   }, { immediate: true })
 
   // posPrompt
-  type PosPrompt = Record<
-    "left" | "top" | "width" | "height", number
-  > & { type: "left" | "right" | "top" | "bottom" }
+  type PosPrompt = StyleLike & { type: "left" | "right" | "top" | "bottom" }
 
   let posPrompt = reactive<PosPrompt>({ left: 0, top: 0, width: 0, height: 0, type: "left" })
   function setPosPrompt(
     newPos: PosPrompt,
   ) {
-    posPrompt.left = newPos.left
-    posPrompt.top = newPos.top
-    posPrompt.width = newPos.width
-    posPrompt.height = newPos.height
-    posPrompt.type = newPos.type
+    copyAttr(newPos, posPrompt, ["left", "top", "width", "height", "type"])
   }
   function clearPosPrompt() {
-    posPrompt.left = 0
-    posPrompt.top = 0
-    posPrompt.width = 0
-    posPrompt.height = 0
-    posPrompt.type = "left"
+    copyAttr({ left: 0, top: 0, width: 0, height: 0, type: "left" }, posPrompt)
   }
   // dsl export
   const dslString = watchComputed([root], () => {
