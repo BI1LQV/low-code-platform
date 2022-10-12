@@ -84,13 +84,16 @@ export const useCanvasStore = defineStore("canvasStore", () => {
   function setSelectedElement(comp: { id: string }) {
     selectedElementId.value = comp.id
   }
-  let selectorPos = reactive({ left: -100, top: -100, height: 0, width: 0 })
+  const InitSelectorPos = () => ({ left: -100, top: -100, height: 0, width: 0 } as const)
+  let selectorPos = reactive(InitSelectorPos())
   watch([selectedElementId, root], () => {
     nextTick(() => {
       let selectedElement = implList.get(selectedElementId.value)
       if (selectedElement) {
         const rectInfo = (selectedElement.el as HTMLElement).getBoundingClientRect()
         copyAttr(rectInfo, selectorPos, ["left", "top", "height", "width"])
+      } else {
+        copyAttr(InitSelectorPos(), selectorPos)
       }
     })
   }, { immediate: true })
@@ -98,14 +101,15 @@ export const useCanvasStore = defineStore("canvasStore", () => {
   // posPrompt
   type PosPrompt = StyleLike & { type: "left" | "right" | "top" | "bottom" }
 
-  let posPrompt = reactive<PosPrompt>({ left: 0, top: 0, width: 0, height: 0, type: "left" })
+  const InitPosPrompt = () => ({ left: 0, top: 0, width: 0, height: 0, type: "left" } as const)
+  let posPrompt = reactive<PosPrompt>(InitPosPrompt())
   function setPosPrompt(
     newPos: PosPrompt,
   ) {
     copyAttr(newPos, posPrompt, ["left", "top", "width", "height", "type"])
   }
   function clearPosPrompt() {
-    copyAttr({ left: 0, top: 0, width: 0, height: 0, type: "left" }, posPrompt)
+    copyAttr(InitPosPrompt(), posPrompt)
   }
   // dsl export
   const dslString = watchComputed([root], () => {

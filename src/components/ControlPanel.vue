@@ -64,6 +64,7 @@ function del() {
 }
 function dragHandler(ev: DragEvent, type: allSlotsKey) {
   ev.dataTransfer!.setData("text/plain", JSON.stringify({ type: "newSlot", slot: type } as NewSlotDragger))
+  setSelectedElement({ id: "" })
 }
 </script>
 
