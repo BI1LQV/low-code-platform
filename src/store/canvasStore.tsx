@@ -1,6 +1,7 @@
 import { defineStore } from "pinia"
 import type { Ref } from "vue"
 import { nextTick, reactive, ref, watch } from "vue"
+import { useToggle } from "@vueuse/core"
 import type { DslBaseElement, DslContainerElement, DslRootElement, DslSunElement, MaybeParent, SlotOptions, allSlotsKey, functionalSlots, passedChild } from "@/models/slots"
 import { containerSlots, rootID } from "@/models/slots"
 import { genId, watchComputed } from "@/utils"
@@ -85,18 +86,12 @@ export const useCanvasStore = defineStore("canvasStore", () => {
   function setSelectedElement(comp: { id: string }) {
     selectedElementId.value = comp.id
   }
-  const isShowSelectorPos = ref(false)
+  const [isShowSelectorPos, toggleShowSelectorPos] = useToggle(false)
   const [selectorPos, setSelectorPos, clearSelectorPos] = clearableReactive(
     (): StyleLike => ({ left: -100, top: -100, height: 0, width: 0 }),
     {
-      onClear: () => {
-        isShowSelectorPos.value = false
-      },
-      onSet: () => {
-        setTimeout(() => {
-          isShowSelectorPos.value = true
-        })
-      },
+      onClear() { toggleShowSelectorPos(false) },
+      onSet() { setTimeout(() => toggleShowSelectorPos(true)) },
     },
   )
 
