@@ -36,7 +36,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     { type, binder = ref() }: passedChild<allSlotsKey>, parent: MaybeParent,
   ): DslSunElement {
     const id = genId()
-    const prop = Props.get(type)!()
+    const prop = reactive(Props.get(type)!())
     binderList.set(id, binder)
     propList.set(id, prop)
     let base
