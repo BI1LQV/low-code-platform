@@ -9,7 +9,7 @@ export default defineComponent(() => {
 
   let renderedRoot = watchComputed(root, () => renderComp(root))
   return () => (
-    <div class="w-800px border-3px">
+    <div w-800px border-3px>
       <Helper></Helper>
       {renderedRoot.value}
     </div>

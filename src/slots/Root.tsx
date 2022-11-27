@@ -6,7 +6,7 @@ export const Component = defineComponent({
   props: ["binder", "prop"],
   setup({ binder: _binder, prop }: { binder: Ref<any>; prop: SlotOptions }, { slots }) {
     return () => (
-    <div class="h-100% w-100% border-1px border-amber" props={prop}>
+    <div h-full w-full border-1px border-amber props={prop}>
       {slots.default?.()[0].children}
     </div>
     )

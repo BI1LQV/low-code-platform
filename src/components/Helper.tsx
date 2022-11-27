@@ -11,11 +11,9 @@ export default defineComponent(() => {
     <Teleport to={"#app"}>
     {/* click helper */}
       <div
-        class="\
-          border-5px border-green \
-          absolute pointer-events-none \
-          duration-200 \
-        "
+        border-5px border-green
+        absolute pointer-events-none
+        duration-200
         style={{
           ...renderStyle(selectorPos),
           "transition-property": isShowSelectorPos.value ? "all" : "none",
@@ -23,18 +21,13 @@ export default defineComponent(() => {
       ></div>
       {/* insert helper */}
       <div
-        class="\
-          bg-blue \
-          absolute pointer-events-none \
-        "
+        bg-blue absolute pointer-events-none
         style={renderStyle(posPrompt)}
       ></div>
       {/* hover helper */}
       <div
-        class="\
-          border-3px border-gray border-dashed\
-          absolute pointer-events-none \
-        "
+        border-3px border-gray border-dashed
+        absolute pointer-events-none
         style={renderStyle(hoverHelper)}
       ></div>
     </Teleport>
