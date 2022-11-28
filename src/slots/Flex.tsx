@@ -10,7 +10,7 @@ export const Component = defineComponent({
   ) {
     return () => {
       return (
-        <div class="min-h-10px w-100% border-2px m-5px" props={prop}>
+        <div class="min-h-10px w-100% border-2px m-5px" {...prop}>
           {slots.default?.()[0].children}
         </div>
       )

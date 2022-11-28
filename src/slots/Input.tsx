@@ -6,12 +6,13 @@ export const Component = defineComponent({
   props: ["binder", "prop"],
   setup({ binder, prop }: { binder: Ref<any>; prop: SlotOptions }) {
     return () => {
+      // JSON.stringify(prop)// TODO: 研究到底是怎么做到依赖捕获的
       return <div class="w-50%">
-      <input border-1 border-black type="text"
+      <input type="text"
+       border-1 border-black
         v-model={binder.value}
-        props={prop}
+        {...prop}
        />
-       <div>{binder.value}</div>
     </div>
     }
   },
