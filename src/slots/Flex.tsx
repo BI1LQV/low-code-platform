@@ -2,6 +2,7 @@ import type { Ref } from "vue"
 import { Fragment, defineComponent } from "vue"
 import { ElFormItem, ElInput } from "element-plus"
 import type { EFlexOptions, SlotOptions } from "@/models/slots"
+import { BaseStyleImpl } from "@/models/slots"
 export const Component = defineComponent({
   name: "EFlex",
   props: ["binder", "prop", "isProd"],
@@ -22,10 +23,9 @@ export const Component = defineComponent({
 export function Prop(): EFlexOptions {
   return {
     style: {
+      ...BaseStyleImpl(),
       "display": "flex",
       "flex-direction": "column",
-      "height": "auto",
-      "width": "auto",
     },
   }
 }

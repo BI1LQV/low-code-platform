@@ -55,11 +55,45 @@ export interface passedChild<T=allSlotsKey> {
   binder?: Ref<any>
 }
 
+export interface BaseStyle {
+  width: string
+  height: string
+  "margin-top": string
+  "margin-bottom": string
+  "margin-left": string
+  "margin-right": string
+  "font-size": string
+  "font-family": string
+  "color": string
+  "background-color": string
+}
+
+export function BaseStyleImpl(): BaseStyle {
+  return {
+    "width": "auto",
+    "height": "auto",
+    "margin-top": "0px",
+    "margin-bottom": "0px",
+    "margin-left": "0px",
+    "margin-right": "0px",
+    "font-size": "14px",
+    "font-family": "sans-serif",
+    "color": "#000000",
+    "background-color": "#ffffff",
+  }
+}
+
 export interface EFlexOptions {
   [key: string]: any
-  style: {
+  style: BaseStyle & {
     display: "flex"
     "flex-direction": "column" | "row"
+    [key: string]: string
+  }
+}
+export interface CommonOptions {
+  [key: string]: any
+  style: BaseStyle & {
     [key: string]: string
   }
 }

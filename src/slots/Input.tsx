@@ -1,6 +1,7 @@
 import type { Ref } from "vue"
 import { defineComponent } from "vue"
-import type { SlotOptions } from "@/models/slots"
+import type { CommonOptions, SlotOptions } from "@/models/slots"
+import { BaseStyleImpl } from "@/models/slots"
 export const Component = defineComponent({
   name: "EInput",
   props: ["binder", "prop", "isProd"],
@@ -15,9 +16,10 @@ export const Component = defineComponent({
   },
 })
 
-export function Prop() {
+export function Prop(): CommonOptions {
   return {
     style: {
+      ...BaseStyleImpl(),
       "border-width": "1px",
       "border-style": "solid",
       "border-color": "black",
