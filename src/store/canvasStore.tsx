@@ -1,10 +1,10 @@
 import { defineStore } from "pinia"
 import type { Ref } from "vue"
 import { reactive, ref, watch, watchEffect } from "vue"
-import { useElementBounding, useToggle } from "@vueuse/core"
+import { useElementBounding, useLocalStorage, useToggle } from "@vueuse/core"
 import type { DslBaseElement, DslContainerElement, DslRootElement, DslSunElement, MaybeParent, SlotOptions, allSlotsKey, functionalSlots, passedChild } from "@/models/slots"
 import { containerSlots, rootID } from "@/models/slots"
-import { genId, watchComputed } from "@/utils"
+import { genId, setParent } from "@/utils"
 import { Props } from "@/slots"
 import type { StyleLike } from "@/models/drags"
 import { clearableReactive } from "@/composables/clearableReactive"
@@ -33,7 +33,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
   propList.set(rootID, Props.get(containerSlots.ERoot)!())
   dslList.set(rootID, root)
   function Base(
-    { type, binder = ref() }: passedChild<allSlotsKey>, parent: MaybeParent,
+    { type, binder = ref(null) }: passedChild<allSlotsKey>, parent: MaybeParent,
   ): DslSunElement {
     const id = genId()
     const prop = reactive(Props.get(type)!())
@@ -127,10 +127,41 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     (): StyleLike => ({ left: -100, top: -100, width: 0, height: 0 }),
   )
 
-  // dsl export
-  const dslString = watchComputed([root], () => {
-    return JSON.stringify(root, ["id", "type", "children"], 2)
-  })
+  // // dsl export
+  // const dslString = watchComputed([root], () => {
+  //   return JSON.stringify(root, ["id", "type", "children"], 2)
+  // })
+
+  const childrenStorage = useLocalStorage("children", "")
+  const propListStorage = useLocalStorage("propList", "")
+  const binderListStorage = useLocalStorage("binderList", "")
+
+  function saveDSL() {
+    childrenStorage.value = JSON.stringify(root.children, ["id", "type", "children"])
+    propListStorage.value = JSON.stringify(Array.from(propList))
+    binderListStorage.value = JSON.stringify(Array.from(binderList).map(([key, value]) => [key, value.value]))
+  }
+  function loadDSL() {
+    const loadedPropList = JSON.parse(propListStorage.value)
+    const loadedBinderList = JSON.parse(binderListStorage.value)
+
+    propList.clear()
+    binderList.clear()
+    dslList.clear()
+    implList.clear()
+
+    loadedPropList.forEach(([key, value]: [ string, object ]) => {
+      propList.set(key, reactive(value))
+    })
+
+    loadedBinderList.forEach(([key, value]: [ string, any ]) => {
+      binderList.set(key, ref(value))
+    })
+
+    const children = JSON.parse(childrenStorage.value)
+    setParent(root, children, sun => dslList.set(sun.id, sun))
+    root.children = children
+  }
 
   return {
     root,
@@ -140,7 +171,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     setSelectedElement,
     isShowSelectorPos,
     selectorPos,
-    dslString,
+    // dslString,
     removeElement,
     posPrompt,
     setPosPrompt,
@@ -148,5 +179,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     hoverHelper,
     setHoverHelper,
     clearHoverHelper,
+    saveDSL,
+    loadDSL,
   }
 })

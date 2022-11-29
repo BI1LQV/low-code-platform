@@ -27,7 +27,7 @@ export const rootID = "root"
 export interface DslRootElement extends DslBaseElement {
   id: typeof rootID
   type: containerSlots.ERoot
-  children: DslBaseElement[]
+  children: DslSunElement[]
 }
 export type MaybeParent = DslContainerElement | DslRootElement
 export interface DslSunElement extends DslBaseElement {
@@ -35,7 +35,7 @@ export interface DslSunElement extends DslBaseElement {
 }
 
 export interface DslContainerElement extends DslSunElement {
-  children: DslBaseElement[]
+  children: DslSunElement[]
 }
 
 export function isParent(comp: DslBaseElement): comp is MaybeParent {

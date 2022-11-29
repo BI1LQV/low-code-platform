@@ -1,6 +1,8 @@
 import type { Ref } from "vue"
 import { ref, watch } from "vue"
 import type { StyleLike } from "@/models/drags"
+import type { DslSunElement, MaybeParent } from "@/models/slots"
+import { isParent } from "@/models/slots"
 const genIncId = (() => {
   let i = 0
   return () => `${i++}`
@@ -41,5 +43,15 @@ export function copyAttr<
   attrs.forEach((val) => {
     // @ts-expect-error it's safe
     target[val] = from[val]
+  })
+}
+
+export function setParent(root: MaybeParent, children: DslSunElement[], cb: (sun: DslSunElement) => void) {
+  children.forEach((child) => {
+    child.parent = root
+    cb(child)
+    if (isParent(child)) {
+      setParent(child, child.children, cb)
+    }
   })
 }
