@@ -1,9 +1,12 @@
-<script lang="ts" setup>
+<script lang="tsx" setup>
+import type { Component } from "vue"
 import { toRefs } from "vue"
 import NumberWithUnit from "./NumberWithUnit.vue"
 import type { SlotOptions } from "@/models/slots"
+
 const props = defineProps<{
   selectedProp: SlotOptions | undefined
+  optionalPanel: Component
 }>()
 const { selectedProp: prop } = toRefs(props)
 </script>
@@ -18,7 +21,7 @@ const { selectedProp: prop } = toRefs(props)
         <el-form-item label="高度">
           <NumberWithUnit v-model="prop.style.height" :units="['%', 'px']"></NumberWithUnit>
         </el-form-item>
-        <slot></slot>
+        <Component :is="props.optionalPanel" :prop="prop"></Component>
       </el-form>
     </div>
   </div>
