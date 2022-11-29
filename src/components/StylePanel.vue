@@ -10,7 +10,7 @@ const { selectedProp: prop } = toRefs(props)
 
 <template>
   <div v-if="prop">
-    <div class="w-80%">
+    <div class="w-100%">
       <el-form :model="prop.style" label-width="50px">
         <el-form-item label="宽度">
           <NumberWithUnit v-model="prop.style.width" :units="['%', 'px']"></NumberWithUnit>

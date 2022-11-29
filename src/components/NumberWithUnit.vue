@@ -7,18 +7,30 @@ const { units } = defineProps<{
 const { modelValue } = defineModel<{
   modelValue: string
 }>()
+const splitted = modelValue.value.split(/(\d+)/)
+const numRef = ref("")
+const unitRef = ref("")
+if (splitted.length >= 3) {
+  const [_, _num, _unit] = splitted
+  numRef.value = _num
+  unitRef.value = _unit
+} else {
+  unitRef.value = "auto"
+}
 
-const [_, _num, _unit] = modelValue.value.split(/(\d+)/)
-const numRef = ref(_num)
-const unitRef = ref(_unit)
 watch([numRef, unitRef], ([num, unit]) => {
-  modelValue.value = `${num}${unit}`
+  if (unitRef.value === "auto") {
+    modelValue.value = "auto"
+  } else {
+    modelValue.value = `${num}${unit}`
+  }
 })
 </script>
 
 <template>
-  <el-input v-model="numRef" class="w-50%" />
+  <el-input v-model="numRef" :disabled="unitRef === 'auto'" class="w-30%" />
   <el-radio-group v-model="unitRef">
     <el-radio-button v-for="unit of units" :key="unit" :label="unit"></el-radio-button>
+    <el-radio-button label="auto"></el-radio-button>
   </el-radio-group>
 </template>

@@ -60,5 +60,6 @@ export interface EFlexOptions {
   style: {
     display: "flex"
     "flex-direction": "column" | "row"
+    [key: string]: string
   }
 }
