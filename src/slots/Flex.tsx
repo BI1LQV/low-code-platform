@@ -1,5 +1,6 @@
 import type { Ref } from "vue"
-import { defineComponent } from "vue"
+import { Fragment, defineComponent } from "vue"
+import { ElFormItem } from "element-plus"
 import type { EFlexOptions, SlotOptions } from "@/models/slots"
 export const Component = defineComponent({
   name: "EFlex",
@@ -18,10 +19,6 @@ export const Component = defineComponent({
   },
 })
 
-export function Style() {
-  return {}
-}
-
 export function Prop(): EFlexOptions {
   return {
     style: {
@@ -32,3 +29,9 @@ export function Prop(): EFlexOptions {
     },
   }
 }
+
+export const StylePanel = (
+  <Fragment>
+    <ElFormItem label="元素方向">123</ElFormItem>
+  </Fragment>
+)

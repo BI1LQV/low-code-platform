@@ -13,10 +13,6 @@ export const Component = defineComponent({
   },
 })
 
-export function Style() {
-  return {}
-}
-
 export function Prop(): EFlexOptions {
   return {
     style: {
