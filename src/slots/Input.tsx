@@ -7,21 +7,22 @@ export const Component = defineComponent({
   setup({ binder, prop }: { binder: Ref<any>; prop: SlotOptions }) {
     return () => {
       // JSON.stringify(prop)// TODO: 研究到底是怎么做到依赖捕获的
-      return <div class="w-50%">
-      <input type="text"
-       border-1 border-black
+      return <input type="text"
         v-model={binder.value}
         {...prop}
        />
-    </div>
     }
   },
 })
 
-export function Style() {
-  return {}
-}
-
 export function Prop() {
-  return {}
+  return {
+    style: {
+      "border-width": "1px",
+      "border-style": "solid",
+      "border-color": "black",
+      "width": "50%",
+      "height": "24px",
+    },
+  }
 }
