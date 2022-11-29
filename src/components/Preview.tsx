@@ -6,7 +6,7 @@ import { watchComputed } from "@/utils"
 export default defineComponent(() => {
   const { root, loadDSL } = useCanvasStore()
   loadDSL()
-  let renderedRoot = watchComputed(root, () => renderComp(root))
+  let renderedRoot = watchComputed(root, () => renderComp(root, false))
   return () => (
     <div>
       {renderedRoot.value}
