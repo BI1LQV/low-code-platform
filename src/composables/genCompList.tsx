@@ -21,6 +21,7 @@ export function renderComp(comp: DslBaseElement, editing: boolean) {
         binder={binderList.get(id)!}
         prop={propList.get(id)!}
         key={id}
+        isProd={!editing}
         {...editEventHandlers}
       >{
         children && children.map(child => renderComp(child, editing))

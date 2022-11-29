@@ -3,14 +3,14 @@ import { defineComponent } from "vue"
 import type { EFlexOptions, SlotOptions } from "@/models/slots"
 export const Component = defineComponent({
   name: "EFlex",
-  props: ["binder", "prop"],
+  props: ["binder", "prop", "isProd"],
   setup(
-    { prop }: { binder: Ref<any>; prop: SlotOptions },
+    { prop, isProd }: { binder: Ref<any>; prop: SlotOptions; isProd: boolean },
     { slots },
   ) {
     return () => {
       return (
-        <div class="min-h-10px border-2px m-5px" {...prop}>
+        <div class={isProd ? "" : "min-h-10px border-2px m-5px"} {...prop}>
           {slots.default?.()[0].children}
         </div>
       )
