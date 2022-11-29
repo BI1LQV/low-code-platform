@@ -11,6 +11,7 @@ import Components from "unplugin-vue-components/vite"
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
 import BuildInfo from "vite-plugin-info"
 import Inspect from "vite-plugin-inspect"
+import VueMacros from "unplugin-vue-macros/vite"
 
 export default defineConfig({
   resolve: {
@@ -20,10 +21,12 @@ export default defineConfig({
   },
   plugins: [
     BuildInfo(),
-    Vue({
-      reactivityTransform: true,
+    VueMacros({
+      plugins: {
+        vue: Vue({ reactivityTransform: true }),
+        vueJsx: VueJsx(),
+      },
     }),
-    VueJsx(),
     Inspect(),
     // https://github.com/hannoeru/vite-plugin-pages
     Pages({

@@ -18,11 +18,18 @@
       "vite/client",
       "vite-plugin-pages/client",
       "vue/macros-global",
-      "vite-plugin-info/client"
+      "vite-plugin-info/client",
+      "unplugin-vue-macros/macros-global"
     ],
     "paths": {
       "@/*": ["src/*"]
     }
   },
-  "exclude": ["dist", "node_modules"]
+  "exclude": ["dist", "node_modules"],
+  "vueCompilerOptions": {
+    "plugins": [
+      "@vue-macros/volar/define-model",
+      "@vue-macros/volar/short-vmodel"
+    ]
+  }
 }
