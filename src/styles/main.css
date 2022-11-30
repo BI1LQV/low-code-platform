@@ -9,3 +9,10 @@ body,
 html.dark {
   background: #121212;
 }
+
+.override-el-radio-button .el-radio-button__inner {
+  padding:4px;
+  flex-direction:row;
+  display:flex;
+  line-height:24px;
+}

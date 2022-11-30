@@ -12,6 +12,7 @@ import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
 import BuildInfo from "vite-plugin-info"
 import Inspect from "vite-plugin-inspect"
 import VueMacros from "unplugin-vue-macros/vite"
+import HotExport from "vite-plugin-hot-export"
 
 export default defineConfig({
   resolve: {
@@ -45,6 +46,7 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
       dirs: [],
     }),
+    HotExport(),
   ],
 
   // https://github.com/vitest-dev/vitest

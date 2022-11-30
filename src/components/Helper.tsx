@@ -1,6 +1,6 @@
 import { Teleport, computed, defineComponent } from "vue"
 import { storeToRefs } from "pinia"
-import helperCss from "./helper.module.css"
+import helperCss from "@/styles/helper.module.css"
 import { dslList, useCanvasStore } from "@/store/canvasStore"
 import { renderStyle } from "@/utils"
 import { isRoot, isSun } from "@/models/slots"
