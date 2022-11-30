@@ -5,13 +5,13 @@ border:2px solid gray;
 }
 
 .click-helper-move{
-  background-image:url("src/assets/helper/move.svg");
+  background-image:url("/src/assets/helper/move.svg");
 }
 
 .click-helper-delete{
-  background-image:url("src/assets/helper/delete.svg");
+  background-image:url("/src/assets/helper/delete.svg");
 }
 
 .click-helper-parent{
-  background-image:url("src/assets/helper/parent.svg");
+  background-image:url("/src/assets/helper/parent.svg");
 }
