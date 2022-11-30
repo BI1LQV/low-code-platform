@@ -1,5 +1,3 @@
-import type { Ref } from "vue"
-
 export interface SlotOptions {
   [key: string]: any
 }
@@ -46,7 +44,7 @@ export function isRoot(comp: DslBaseElement): comp is DslRootElement {
   return comp.id === rootID
 }
 
-export function isSun(comp?: DslBaseElement | passedChild<allSlotsKey>): comp is DslSunElement {
+export function isSun(comp?: DslBaseElement): comp is DslSunElement {
   return Boolean(comp && ("parent" in comp))
 }
 
@@ -62,11 +60,6 @@ export function isParentAndSun(parent: DslBaseElement, child: DslSunElement) {
       return false
     }
   }
-}
-
-export interface passedChild<T=allSlotsKey> {
-  type: T
-  binder?: Ref<any>
 }
 
 export interface BaseStyle {
