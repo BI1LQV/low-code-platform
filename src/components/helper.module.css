@@ -1,0 +1,17 @@
+.click-helper>button{
+height:20px;
+width:20px;
+border:2px solid gray;
+}
+
+.click-helper-move{
+  background-image:url("src/assets/helper/move.svg");
+}
+
+.click-helper-delete{
+  background-image:url("src/assets/helper/delete.svg");
+}
+
+.click-helper-parent{
+  background-image:url("src/assets/helper/parent.svg");
+}

@@ -1,5 +1,6 @@
 import { Teleport, defineComponent } from "vue"
 import { storeToRefs } from "pinia"
+import helperCss from "./helper.module.css"
 import { useCanvasStore } from "@/store/canvasStore"
 import { renderStyle } from "@/utils"
 
@@ -18,7 +19,13 @@ export default defineComponent(() => {
           ...renderStyle(selectorPos),
           "transition-property": isShowSelectorPos.value ? "all" : "none",
         }}
-      ></div>
+      >
+        <div absolute right-0 top--24px class={helperCss["click-helper"]}>
+          <button class={helperCss["click-helper-parent"]}></button>
+          <button class={helperCss["click-helper-move"]}></button>
+          <button class={helperCss["click-helper-delete"]}></button>
+        </div>
+      </div>
       {/* insert helper */}
       <div
         bg-blue absolute pointer-events-none

@@ -107,10 +107,10 @@ export const useCanvasStore = defineStore("canvasStore", () => {
       clearSelectorPos()
     } else {
       setSelectorPos({
-        left: selectedElementBounding.left.value,
-        top: selectedElementBounding.top.value,
-        height: selectedElementBounding.height.value,
-        width: selectedElementBounding.width.value,
+        left: selectedElementBounding.left.value - 6,
+        top: selectedElementBounding.top.value - 6,
+        height: selectedElementBounding.height.value + 12,
+        width: selectedElementBounding.width.value + 12,
       })
     }
   })
