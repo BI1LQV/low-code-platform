@@ -1,7 +1,7 @@
 import { nextTick } from "vue"
 import type { useCanvasStore } from "@/store/canvasStore"
-import { implList, propList } from "@/store/canvasStore"
-import { containerSlots, isParent, isSun } from "@/models/slots"
+import { dslList, implList, propList } from "@/store/canvasStore"
+import { containerSlots, isParent, isParentAndSun, isSun } from "@/models/slots"
 import type { MoveSlotDragger, NewSlotDragger } from "@/models/drags"
 import type { DslBaseElement, DslSunElement, EFlexOptions } from "@/models/slots"
 
@@ -13,6 +13,10 @@ export function dropComp(ev: DragEvent, comp: DslBaseElement, storeUtilities: Re
     posPrompt, setSelectedElement,
   } = storeUtilities
   const data: NewSlotDragger | MoveSlotDragger = JSON.parse(ev.dataTransfer!.getData("text/plain"))
+
+  if (data.type === "moveSlot" && isSun(comp) && isParentAndSun(dslList.get(data.id) as DslSunElement, comp)) {
+    return
+  }
   let curComp: DslSunElement
   if (isParent(comp)) {
     curComp = insertElement(data, comp)

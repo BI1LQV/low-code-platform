@@ -50,6 +50,20 @@ export function isSun(comp?: DslBaseElement | passedChild<allSlotsKey>): comp is
   return Boolean(comp && ("parent" in comp))
 }
 
+export function isParentAndSun(parent: DslBaseElement, child: DslSunElement) {
+  let childsParent = child
+  while (true) {
+    if (childsParent.id === parent.id) {
+      return true
+    }
+    if (isSun(childsParent.parent)) {
+      childsParent = childsParent.parent
+    } else {
+      return false
+    }
+  }
+}
+
 export interface passedChild<T=allSlotsKey> {
   type: T
   binder?: Ref<any>
