@@ -12,7 +12,7 @@ export const Component = defineComponent({
   ) {
     return () => {
       return (
-        <div class={isProd ? "" : "min-h-10px border-2px m-5px"} {...prop}>
+        <div class={isProd ? "" : "important-min-h-10px important-border-2px important-m-5px"} {...prop}>
           {slots.default?.()[0].children}
         </div>
       )
