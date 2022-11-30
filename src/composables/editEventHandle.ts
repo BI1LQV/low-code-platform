@@ -40,7 +40,7 @@ export function dragOverComp(ev: DragEvent, comp: DslBaseElement, storeUtilities
   setHoverHelper({ left, top, width, height })
   if (!isParent(comp) && isSun(comp)) {
     const parentDirection = (propList.get(comp.parent.id) as EFlexOptions).style["flex-direction"]
-    if (parentDirection === "column") {
+    if (parentDirection === "row") {
       // 横着算
       if (ev.clientX - left < width / 2) {
         setPosPrompt({ left, top, width: 3, height, type: "left" })
