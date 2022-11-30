@@ -30,6 +30,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     type: containerSlots.ERoot,
     id: rootID,
   })
+  window.store.root = root
   propList.set(rootID, Props.get(containerSlots.ERoot)!())
   dslList.set(rootID, root)
   function Base(
@@ -57,6 +58,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     if (data.type === "moveSlot") {
       childImpl = dslList.get(data.id) as DslSunElement
       removeElement(childImpl, true)
+      childImpl.parent = parent
     } else {
       childImpl = Base(data.slot, parent)
     }
@@ -86,8 +88,10 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     const siblings = child.parent.children
     const delIdx = siblings.findIndex(originEle => originEle === child)
     siblings.splice(delIdx, 1)
-    !isTemp && clearMap(child.id)
-    child.children?.forEach(({ id }) => clearMap(id))
+    if (!isTemp) {
+      clearMap(child.id)
+      child.children?.forEach(({ id }) => clearMap(id))
+    }
   }
 
   // selected box 点击的组件
