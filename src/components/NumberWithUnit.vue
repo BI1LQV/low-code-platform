@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue"
+import { ref, watch, watchEffect } from "vue"
 
 const { units } = defineProps<{
   units: string[]
@@ -7,16 +7,20 @@ const { units } = defineProps<{
 const { modelValue } = defineModel<{
   modelValue: string
 }>()
-const splitted = modelValue.value.split(/(\d+)/)
+
 const numRef = ref("")
 const unitRef = ref("")
-if (splitted.length >= 3) {
-  const [_, _num, _unit] = splitted
-  numRef.value = _num
-  unitRef.value = _unit
-} else {
-  unitRef.value = "auto"
-}
+
+watchEffect(() => {
+  const splitted = modelValue.value.split(/(\d+)/)
+  if (splitted.length >= 3) {
+    const [_, _num, _unit] = splitted
+    numRef.value = _num
+    unitRef.value = _unit
+  } else {
+    unitRef.value = "auto"
+  }
+})
 
 watch([numRef, unitRef], ([num, unit]) => {
   if (unitRef.value === "auto") {
