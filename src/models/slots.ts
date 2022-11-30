@@ -90,11 +90,22 @@ export function BaseStyleImpl(): BaseStyle {
   }
 }
 
+export function BaseFlexStyleImpl() {
+  return {
+    "display": "flex",
+    "flex-direction": "column",
+    "align-items": "flex-start",
+    "justify-content": "flex-start",
+  } as const
+}
+
 export interface EFlexOptions {
   [key: string]: any
   style: BaseStyle & {
     display: "flex"
     "flex-direction": "column" | "row"
+    "align-items": string
+    "justify-content": string
     [key: string]: string
   }
 }

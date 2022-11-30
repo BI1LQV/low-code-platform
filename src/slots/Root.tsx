@@ -1,7 +1,7 @@
 import type { Ref } from "vue"
 import { defineComponent } from "vue"
 import type { EFlexOptions, SlotOptions } from "@/models/slots"
-import { BaseStyleImpl } from "@/models/slots"
+import { BaseFlexStyleImpl, BaseStyleImpl } from "@/models/slots"
 export const Component = defineComponent({
   name: "ERoot",
   props: ["binder", "prop", "isProd"],
@@ -18,8 +18,7 @@ export function Prop(): EFlexOptions {
   return {
     style: {
       ...BaseStyleImpl(),
-      "display": "flex",
-      "flex-direction": "column",
+      ...BaseFlexStyleImpl(),
       "height": "100%",
       "width": "100%",
     },

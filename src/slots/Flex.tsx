@@ -2,7 +2,7 @@ import type { Ref } from "vue"
 import { Fragment, defineComponent } from "vue"
 import { ElFormItem, ElRadioButton, ElRadioGroup } from "element-plus"
 import type { EFlexOptions, SlotOptions } from "@/models/slots"
-import { BaseStyleImpl } from "@/models/slots"
+import { BaseFlexStyleImpl, BaseStyleImpl } from "@/models/slots"
 import { PngDirection, PngItemsCenter, PngItemsEnd, PngItemsStart, PngJustifyAround, PngJustifyBetween, PngJustifyCenter, PngJustifyEnd, PngJustifyStart } from "@/assets/stylePanel"
 export const Component = defineComponent({
   name: "EFlex",
@@ -25,9 +25,7 @@ export function Prop(): EFlexOptions {
   return {
     style: {
       ...BaseStyleImpl(),
-      "display": "flex",
-      "flex-direction": "column",
-      "align-items": "flex-start",
+      ...BaseFlexStyleImpl(),
     },
   }
 }
