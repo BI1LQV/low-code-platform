@@ -2,11 +2,11 @@ import { defineStore } from "pinia"
 import type { Ref } from "vue"
 import { reactive, ref, watch, watchEffect } from "vue"
 import { useElementBounding, useLocalStorage, useToggle } from "@vueuse/core"
-import type { DslBaseElement, DslContainerElement, DslRootElement, DslSunElement, MaybeParent, SlotOptions, allSlotsKey, functionalSlots, passedChild } from "@/models/slots"
+import type { DslBaseElement, DslContainerElement, DslRootElement, DslSunElement, MaybeParent, SlotOptions, allSlotsKey } from "@/models/slots"
 import { containerSlots, rootID } from "@/models/slots"
 import { genId, setParent } from "@/utils"
 import { Props } from "@/slots"
-import type { StyleLike } from "@/models/drags"
+import type { MoveSlotDragger, NewSlotDragger, StyleLike } from "@/models/drags"
 import { clearableReactive } from "@/composables/clearableReactive"
 
 export const binderList: Map<string, Ref<any>> = new Map()
@@ -33,10 +33,11 @@ export const useCanvasStore = defineStore("canvasStore", () => {
   propList.set(rootID, Props.get(containerSlots.ERoot)!())
   dslList.set(rootID, root)
   function Base(
-    { type, binder = ref(null) }: passedChild<allSlotsKey>, parent: MaybeParent,
+    type: allSlotsKey, parent: MaybeParent,
   ): DslSunElement {
     const id = genId()
     const prop = reactive(Props.get(type)!())
+    const binder = ref(null)
     binderList.set(id, binder)
     propList.set(id, prop)
     let base
@@ -50,22 +51,30 @@ export const useCanvasStore = defineStore("canvasStore", () => {
   }
 
   // 一些dsl操作
-  function insertElement(child: passedChild<containerSlots>, parent?: MaybeParent): DslContainerElement
-  function insertElement(child: passedChild<functionalSlots>, parent?: MaybeParent): DslSunElement
-  function insertElement(child: passedChild<allSlotsKey>, parent?: MaybeParent): DslSunElement
 
-  function insertElement(child: passedChild, parent: MaybeParent = root): DslContainerElement | DslSunElement {
-    const childImpl = Base(child, parent)
+  function getMaybeImpl(data: NewSlotDragger | MoveSlotDragger, parent: MaybeParent): DslSunElement {
+    let childImpl: DslSunElement
+    if (data.type === "moveSlot") {
+      childImpl = dslList.get(data.id) as DslSunElement
+      removeElement(childImpl, true)
+    } else {
+      childImpl = Base(data.slot, parent)
+    }
+    return childImpl
+  }
+
+  function insertElement(data: NewSlotDragger | MoveSlotDragger, parent: MaybeParent) {
+    const childImpl = getMaybeImpl(data, parent)
     parent.children.push(childImpl)
     return childImpl
   }
 
   function appendElement(
-    child: passedChild<allSlotsKey>,
+    data: NewSlotDragger | MoveSlotDragger,
     posElement: DslSunElement,
     pos: "before" | "after",
   ) {
-    const childImpl = Base(child, posElement.parent)
+    const childImpl = getMaybeImpl(data, posElement.parent)
     const children = posElement.parent.children
     const insertPlace = children.findIndex(originEle => originEle === posElement)
     const offset = pos === "after" ? 1 : 0
@@ -73,11 +82,11 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     return childImpl
   }
 
-  function removeElement(child: DslSunElement) {
+  function removeElement(child: DslSunElement, isTemp = false) {
     const siblings = child.parent.children
     const delIdx = siblings.findIndex(originEle => originEle === child)
     siblings.splice(delIdx, 1)
-    clearMap(child.id)
+    !isTemp && clearMap(child.id)
     child.children?.forEach(({ id }) => clearMap(id))
   }
 
@@ -126,11 +135,10 @@ export const useCanvasStore = defineStore("canvasStore", () => {
   const [hoverHelper, setHoverHelper, clearHoverHelper] = clearableReactive(
     (): StyleLike => ({ left: -100, top: -100, width: 0, height: 0 }),
   )
-
-  // // dsl export
-  // const dslString = watchComputed([root], () => {
-  //   return JSON.stringify(root, ["id", "type", "children"], 2)
-  // })
+  function clearDragEffect() {
+    clearPosPrompt()
+    clearHoverHelper()
+  }
 
   const childrenStorage = useLocalStorage("children", "")
   const propListStorage = useLocalStorage("propList", "")
@@ -171,7 +179,6 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     setSelectedElement,
     isShowSelectorPos,
     selectorPos,
-    // dslString,
     removeElement,
     posPrompt,
     setPosPrompt,
@@ -181,5 +188,6 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     clearHoverHelper,
     saveDSL,
     loadDSL,
+    clearDragEffect,
   }
 })

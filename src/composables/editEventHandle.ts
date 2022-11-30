@@ -1,29 +1,29 @@
+import { nextTick } from "vue"
 import type { useCanvasStore } from "@/store/canvasStore"
 import { implList, propList } from "@/store/canvasStore"
 import { containerSlots, isParent, isSun } from "@/models/slots"
 import type { MoveSlotDragger, NewSlotDragger } from "@/models/drags"
-import type { DslBaseElement, EFlexOptions } from "@/models/slots"
+import type { DslBaseElement, DslSunElement, EFlexOptions } from "@/models/slots"
 
 export function dropComp(ev: DragEvent, comp: DslBaseElement, storeUtilities: ReturnType<typeof useCanvasStore>) {
   ev.preventDefault()
   ev.stopPropagation()
   const {
     insertElement, appendElement,
-    posPrompt,
+    posPrompt, setSelectedElement,
   } = storeUtilities
   const data: NewSlotDragger | MoveSlotDragger = JSON.parse(ev.dataTransfer!.getData("text/plain"))
-  if (data.type === "newSlot") {
-    if (isParent(comp)) {
-      insertElement({
-        type: data.slot,
-      }, comp)
-    } else if (isSun(comp)) {
-      const pos = ["left", "top"].includes(posPrompt.type) ? "before" : "after"
-      appendElement({ type: data.slot }, comp, pos)
-    } else {
-      console.log("???")
-    }
+  let curComp: DslSunElement
+  if (isParent(comp)) {
+    curComp = insertElement(data, comp)
+  } else if (isSun(comp)) {
+    const pos = ["left", "top"].includes(posPrompt.type) ? "before" : "after"
+    curComp = appendElement(data, comp, pos)
+  } else {
+    console.log("???")
   }
+  setSelectedElement({ id: "" })
+  nextTick(() => setSelectedElement(curComp))
 }
 
 export function dragOverComp(ev: DragEvent, comp: DslBaseElement, storeUtilities: ReturnType<typeof useCanvasStore>) {

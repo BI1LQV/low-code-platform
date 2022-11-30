@@ -43,10 +43,10 @@ export function isParent(comp: DslBaseElement): comp is MaybeParent {
 }
 
 export function isRoot(comp: DslBaseElement): comp is DslRootElement {
-  return !("id" in comp)
+  return comp.id === rootID
 }
 
-export function isSun(comp?: DslBaseElement): comp is DslSunElement {
+export function isSun(comp?: DslBaseElement | passedChild<allSlotsKey>): comp is DslSunElement {
   return Boolean(comp && ("parent" in comp))
 }
 

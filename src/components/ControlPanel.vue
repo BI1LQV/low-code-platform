@@ -10,16 +10,12 @@ showedSlots.splice(showedSlots.findIndex(i => i === containerSlots.ERoot), 1)
 
 const canvasStore = useCanvasStore()
 const {
-  setSelectedElement, clearPosPrompt, clearHoverHelper,
+  setSelectedElement, clearDragEffect,
 } = canvasStore
 
 function dragHandler(ev: DragEvent, type: allSlotsKey) {
   ev.dataTransfer!.setData("text/plain", JSON.stringify({ type: "newSlot", slot: type } as NewSlotDragger))
   setSelectedElement({ id: "" })
-}
-function clearDragEffect() {
-  clearPosPrompt()
-  clearHoverHelper()
 }
 </script>
 
@@ -37,10 +33,4 @@ function clearDragEffect() {
       </button>
     </template>
   </div>
-  <!-- <div
-    absolute
-    left-200px
-    pointer-events-none
-    v-html="dslString.replaceAll('\n', '<br/>').replaceAll(' ', '&nbsp;')"
-  ></div> -->
 </template>

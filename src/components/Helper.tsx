@@ -1,13 +1,28 @@
-import { Teleport, defineComponent } from "vue"
+import { Teleport, computed, defineComponent } from "vue"
 import { storeToRefs } from "pinia"
 import helperCss from "./helper.module.css"
-import { useCanvasStore } from "@/store/canvasStore"
+import { dslList, useCanvasStore } from "@/store/canvasStore"
 import { renderStyle } from "@/utils"
+import { isRoot, isSun } from "@/models/slots"
+import type { MoveSlotDragger } from "@/models/drags"
 
 export default defineComponent(() => {
   const canvasStore = useCanvasStore()
-  const { selectorPos, posPrompt, hoverHelper } = canvasStore
-  const { isShowSelectorPos } = storeToRefs(canvasStore)
+  const { selectorPos, posPrompt, hoverHelper, removeElement, setSelectedElement, clearDragEffect } = canvasStore
+  const { isShowSelectorPos, selectedElementId } = storeToRefs(canvasStore)
+  const selectedDslComp = computed(() => dslList.get(selectedElementId.value))
+  function toParent() {
+    isSun(selectedDslComp.value) && !isRoot(selectedDslComp.value.parent) && setSelectedElement(selectedDslComp.value.parent)
+  }
+
+  function deleteComp() {
+    // @ts-expect-error it's safe
+    removeElement(selectedDslComp.value)
+  }
+
+  function dragHandler(ev: DragEvent) {
+    ev.dataTransfer!.setData("text/plain", JSON.stringify({ type: "moveSlot", id: selectedElementId.value } as MoveSlotDragger))
+  }
   return () => (
     <Teleport to={"#app"}>
     {/* click helper */}
@@ -20,10 +35,14 @@ export default defineComponent(() => {
           "transition-property": isShowSelectorPos.value ? "all" : "none",
         }}
       >
-        <div absolute right-0 top--24px class={helperCss["click-helper"]}>
-          <button class={helperCss["click-helper-parent"]}></button>
-          <button class={helperCss["click-helper-move"]}></button>
-          <button class={helperCss["click-helper-delete"]}></button>
+        <div absolute right-0 top--24px pointer-events-initial class={helperCss["click-helper"]}>
+          <button class={helperCss["click-helper-parent"]} onClick={toParent}></button>
+          <button
+          class={helperCss["click-helper-move"]}
+          draggable={true}
+          onDragstart={dragHandler}
+          onDragend={clearDragEffect}></button>
+          <button class={helperCss["click-helper-delete"]} onClick={deleteComp}></button>
         </div>
       </div>
       {/* insert helper */}
