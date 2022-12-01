@@ -19,6 +19,7 @@ watchEffect(() => {
     unitRef.value = _unit
   } else {
     unitRef.value = "auto"
+    numRef.value = "0"
   }
 })
 
