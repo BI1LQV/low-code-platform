@@ -63,3 +63,10 @@ export const StylePanel = defineComponent({
     }
   },
 })
+
+export const AttrPanel = defineComponent({
+  props: ["prop"],
+  setup({ prop: _prop }: { prop: EFlexOptions }) {
+    return () => <div></div>
+  },
+})

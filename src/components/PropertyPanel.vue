@@ -3,16 +3,24 @@ import { storeToRefs } from "pinia"
 import type { Component } from "vue"
 import { computed, ref } from "vue"
 import StylePanel from "./StylePanel.vue"
+import AttrPanel from "./AttrPanel.vue"
 import { dslList, propList, useCanvasStore } from "@/store/canvasStore"
-import { StylePanels } from "@/slots"
+import { AttrPanels, StylePanels } from "@/slots"
 const canvasStore = useCanvasStore()
 const { selectedElementId } = storeToRefs(canvasStore)
 const activeName = ref("style")
 const selectedProp = computed(() => propList.get(selectedElementId.value))
-const OptionalPanel = computed<Component>(() => {
+const OptionalStylePanel = computed<Component>(() => {
   const _type = dslList.get(selectedElementId.value)?.type
   // @ts-expect-error it's safe
   const Panel = StylePanels.get(_type)
+  return Panel ?? <div></div>
+})
+
+const OptionalAttrPanel = computed<Component>(() => {
+  const _type = dslList.get(selectedElementId.value)?.type
+  // @ts-expect-error it's safe
+  const Panel = AttrPanels.get(_type)
   return Panel ?? <div></div>
 })
 </script>
@@ -21,10 +29,13 @@ const OptionalPanel = computed<Component>(() => {
   <div w-400px border-3px>
     <el-tabs v-model="activeName">
       <el-tab-pane label="样式" name="style">
-        <StylePanel :selected-prop="selectedProp" :optional-panel="OptionalPanel">
+        <StylePanel :selected-prop="selectedProp" :optional-panel="OptionalStylePanel">
         </StylePanel>
       </el-tab-pane>
-      <el-tab-pane label="属性" name="attr">Config</el-tab-pane>
+      <el-tab-pane label="属性" name="attr">
+        <AttrPanel :selected-prop="selectedProp" :optional-panel="OptionalAttrPanel">
+        </AttrPanel>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>

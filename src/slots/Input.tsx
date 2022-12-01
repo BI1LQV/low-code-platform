@@ -33,7 +33,7 @@ export function Prop(): CommonOptions {
   }
 }
 
-export const StylePanel = defineComponent({
+export const AttrPanel = defineComponent({
   props: ["prop"],
   setup({ prop }: { prop: CommonOptions }) {
     return () => {
