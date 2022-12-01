@@ -3,6 +3,7 @@
   "rules": {
     "react/no-unknown-property":"off",
     "react/display-name":"off",
-    "vue/one-component-per-file":"off"
+    "vue/one-component-per-file":"off",
+    "vue/no-mutating-props":"off"
   }
 }

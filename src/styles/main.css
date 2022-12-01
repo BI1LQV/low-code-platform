@@ -16,3 +16,7 @@ html.dark {
   display:flex;
   line-height:24px;
 }
+
+.override-el-input-disable .el-input__wrapper{
+  background-color: rgba(229, 231, 235, 1) !important
+}
