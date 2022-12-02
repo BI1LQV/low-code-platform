@@ -1,3 +1,4 @@
+import "@unocss/reset/tailwind.css"
 import { createApp } from "vue"
 import { createRouter, createWebHistory } from "vue-router"
 import { createPinia } from "pinia"
@@ -6,7 +7,6 @@ import App from "./App.vue"
 import now from "~build/time"
 import { sha } from "~build/info"
 
-import "@unocss/reset/tailwind.css"
 import "./styles/main.css"
 import "uno.css"
 
