@@ -5,6 +5,7 @@ export interface SlotOptions {
 export enum functionalSlots {
   "EInput" = 0,
   "ESelect",
+  "ESlider",
 }
 export enum containerSlots {
   "EFlex" = 100,
