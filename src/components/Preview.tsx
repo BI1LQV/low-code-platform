@@ -8,7 +8,7 @@ export default defineComponent(() => {
   loadDSL()
   let renderedRoot = watchComputed(root, () => renderComp(root, false))
   return () => (
-    <div>
+    <div h-full w-full>
       {renderedRoot.value}
     </div>
   )
