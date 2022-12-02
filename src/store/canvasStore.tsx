@@ -94,6 +94,37 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     }
   }
 
+  const childrenStorage = useLocalStorage("children", "")
+  const propListStorage = useLocalStorage("propList", "")
+  const binderListStorage = useLocalStorage("binderList", "")
+
+  function saveDSL() {
+    childrenStorage.value = JSON.stringify(root.children, ["id", "type", "children"])
+    propListStorage.value = JSON.stringify(Array.from(propList))
+    binderListStorage.value = JSON.stringify(Array.from(binderList).map(([key, value]) => [key, value.value]))
+  }
+  function loadDSL() {
+    const loadedPropList = JSON.parse(propListStorage.value)
+    const loadedBinderList = JSON.parse(binderListStorage.value)
+
+    propList.clear()
+    binderList.clear()
+    dslList.clear()
+    implList.clear()
+
+    loadedPropList.forEach(([key, value]: [ string, object ]) => {
+      propList.set(key, reactive(value))
+    })
+
+    loadedBinderList.forEach(([key, value]: [ string, any ]) => {
+      binderList.set(key, ref(value))
+    })
+
+    const children = JSON.parse(childrenStorage.value)
+    setParent(root, children, sun => dslList.set(sun.id, sun))
+    root.children = children
+  }
+
   // selected box 点击的组件
   let selectedElementId = ref<string>("")
   function setSelectedElement(comp: { id: string }) {
@@ -142,37 +173,6 @@ export const useCanvasStore = defineStore("canvasStore", () => {
   function clearDragEffect() {
     clearPosPrompt()
     clearHoverHelper()
-  }
-
-  const childrenStorage = useLocalStorage("children", "")
-  const propListStorage = useLocalStorage("propList", "")
-  const binderListStorage = useLocalStorage("binderList", "")
-
-  function saveDSL() {
-    childrenStorage.value = JSON.stringify(root.children, ["id", "type", "children"])
-    propListStorage.value = JSON.stringify(Array.from(propList))
-    binderListStorage.value = JSON.stringify(Array.from(binderList).map(([key, value]) => [key, value.value]))
-  }
-  function loadDSL() {
-    const loadedPropList = JSON.parse(propListStorage.value)
-    const loadedBinderList = JSON.parse(binderListStorage.value)
-
-    propList.clear()
-    binderList.clear()
-    dslList.clear()
-    implList.clear()
-
-    loadedPropList.forEach(([key, value]: [ string, object ]) => {
-      propList.set(key, reactive(value))
-    })
-
-    loadedBinderList.forEach(([key, value]: [ string, any ]) => {
-      binderList.set(key, ref(value))
-    })
-
-    const children = JSON.parse(childrenStorage.value)
-    setParent(root, children, sun => dslList.set(sun.id, sun))
-    root.children = children
   }
 
   return {
