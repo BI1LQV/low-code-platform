@@ -33,7 +33,11 @@ const OptionalAttrPanel = computed<Component>(() => {
         </StylePanel>
       </el-tab-pane>
       <el-tab-pane label="属性" name="attr">
-        <AttrPanel :selected-prop="selectedProp" :optional-panel="OptionalAttrPanel">
+        <AttrPanel
+          :selected-prop="selectedProp"
+          :selected-element-id="selectedElementId"
+          :optional-panel="OptionalAttrPanel"
+        >
         </AttrPanel>
       </el-tab-pane>
     </el-tabs>
