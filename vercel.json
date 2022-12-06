@@ -1,7 +1,7 @@
 {
   "rewrites": [
     {
-      "source": "/((?!api/.*).*)",
+      "source": "/((?!api/|src/|node_modules/|@|__uno.css|plugin-define-model.*).*)",
       "destination": "/index.html"
     }
   ]

@@ -5,8 +5,16 @@ import PropertyPanel from "@/components/PropertyPanel.vue"
 import ControlPanel from "@/components/ControlPanel.vue"
 import Preview from "@/components/Preview"
 import { useCanvasStore } from "@/store/canvasStore"
+import { pyCall } from "@/utils/globalCall"
 const { saveDSL, loadDSL } = useCanvasStore()
-loadDSL()
+try {
+  loadDSL()
+} catch (e) {
+
+}
+async function CALL() {
+  console.log(await pyCall("http://localhost:23330", "add", [1, 2]))
+}
 const [isPreview, togglePreview] = useToggle(false)
 </script>
 
@@ -14,6 +22,7 @@ const [isPreview, togglePreview] = useToggle(false)
   <header h-40px>
     <el-button type="primary" @click="saveDSL">保存</el-button>
     <el-button type="primary" @click="loadDSL">载入</el-button>
+    <el-button type="primary" @click="CALL">呼叫</el-button>
     <el-button type="primary" @click="() => { saveDSL(); togglePreview() }">{{ isPreview ? "进入编辑" : "进入预览" }}</el-button>
   </header>
   <div flex flex-row h="[calc(100%-40px)]" justify-between>
