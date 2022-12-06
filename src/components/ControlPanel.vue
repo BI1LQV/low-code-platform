@@ -6,6 +6,11 @@ import { allSlots, containerSlots } from "@/models/slots"
 import { Slots } from "@/slots"
 import type { NewSlotDragger } from "@/models/drags"
 import MonacoEditor from "@/components/MonacoEditor.vue"
+import { useFuncStore } from "@/store/funcStore"
+import { clearableReactive } from "@/composables/clearableReactive"
+
+const { setFunc } = useFuncStore()
+
 const activeName = ref("comps")
 
 const showedSlots = Array.from(Slots.keys())
@@ -22,10 +27,21 @@ function dragHandler(ev: DragEvent, type: allSlotsKey) {
 }
 
 const showAddBind = ref(false)
-const funcType = ref("js")
+const [form, _setForm, clearForm] = clearableReactive(() => ({
+  type: "js",
+  name: "",
+  impl: "",
+  baseUrl: "",
+}))
 const jsFuncImpl = ref("")
 function handleClose() {
-  console.log(jsFuncImpl.value)
+  clearForm()
+  showAddBind.value = false
+}
+
+function addFunc() {
+  setFunc(form)
+  showAddBind.value = false
 }
 </script>
 
@@ -55,21 +71,33 @@ function handleClose() {
     width="50%"
     :before-close="handleClose"
   >
-    <el-select v-model="funcType">
-      <el-option label="JavaScript函数" value="js" />
-      <el-option label="Python云函数" value="py" />
-    </el-select>
-    <MonacoEditor
-      v-if="funcType === 'js'"
-      v-model="jsFuncImpl"
-      height="300px"
-      language="json"
-    ></MonacoEditor>
+    <el-form :model="form" label-width="120px">
+      <el-form-item label="绑定函数名称">
+        <el-input v-model="form.name"></el-input>
+      </el-form-item>
+      <el-form-item label="绑定函数类型">
+        <el-select v-model="form.type">
+          <el-option label="JavaScript函数" value="js" />
+          <el-option label="Python云函数" value="py" />
+        </el-select>
+      </el-form-item>
+      <el-form-item v-if="form.type === 'js'" label="绑定函数实现体">
+        <MonacoEditor
+
+          v-model="jsFuncImpl"
+          height="300px"
+          language="json"
+        ></MonacoEditor>
+      </el-form-item>
+      <el-form-item v-else label="绑定目标地址">
+        <el-input v-model="form.baseUrl"></el-input>
+      </el-form-item>
+    </el-form>
     <template #footer>
       <span>
         <el-button @click="showAddBind = false">取消</el-button>
-        <el-button type="primary" @click="showAddBind = false">
-          添加
+        <el-button type="primary" @click="addFunc">
+          添加绑定
         </el-button>
       </span>
     </template>
