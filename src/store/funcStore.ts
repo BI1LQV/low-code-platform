@@ -1,4 +1,4 @@
-import { shallowReactive } from "vue"
+import { shallowReactive, watch } from "vue"
 import { defineStore } from "pinia"
 import { useLocalStorage } from "@vueuse/core"
 import { binderList } from "./canvasStore"
@@ -23,7 +23,7 @@ export const useFuncStore = defineStore("funcStore", () => {
       // eslint-disable-next-line no-new-func
       res = new Function(
         ...func.inputs,
-        func.impl)(...func.inputs)
+        func.impl)(...func.inputs.map(name => binderList.get(nameToIdMap[name])?.value))
     } else {
       res = pyCall(func.baseUrl, func.name, func.inputs.map((bindName: string) => {
         return binderList.get(nameToIdMap[bindName])!.value
@@ -32,6 +32,11 @@ export const useFuncStore = defineStore("funcStore", () => {
     if (func.receiver) {
       binderList.get(nameToIdMap[func.receiver])!.value = res
     }
+  }
+  function registerWatcher(name: string, inputs: string[]) {
+    watch(inputs.map(name => binderList.get(nameToIdMap[name])), () => {
+      callFunc(name)
+    })
   }
 
   function setFunc(form: Record<"name" | "type" | "impl" | "baseUrl" | "receiver", string> & { inputs: string[] }) {
@@ -53,6 +58,7 @@ export const useFuncStore = defineStore("funcStore", () => {
         receiver,
       } as PyFunc
     }
+    registerWatcher(name, inputs)
   }
 
   function setBindMap(name: string, id: string) {
@@ -75,6 +81,7 @@ export const useFuncStore = defineStore("funcStore", () => {
     })
     Object.entries<FuncType>(JSON.parse(funcStore.value)).forEach(([name, func]) => {
       funcMap[name] = func
+      registerWatcher(name, func.inputs)
     })
   }
 

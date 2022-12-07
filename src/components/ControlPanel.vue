@@ -38,7 +38,7 @@ const [form, setForm, clearForm] = clearableReactive(() => ({
   inputTmp: "",
   inputs: [] as string[],
 }))
-const jsFuncImpl = ref("")
+
 function handleClose() {
   clearForm()
   showAddBind.value = false
@@ -127,7 +127,7 @@ function modify(scope: any) {
       </el-form-item>
       <el-form-item v-if="form.type === 'js'" label="绑定函数实现体">
         <MonacoEditor
-          v-model="jsFuncImpl"
+          v-model="form.impl"
           height="300px"
           language="json"
         ></MonacoEditor>
