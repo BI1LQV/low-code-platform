@@ -4,11 +4,11 @@ import CanvasPanel from "@/components/CanvasPanel"
 import PropertyPanel from "@/components/PropertyPanel.vue"
 import ControlPanel from "@/components/ControlPanel.vue"
 import Preview from "@/components/Preview"
-import { useCanvasStore } from "@/store/canvasStore"
+import { load, save } from "@/store"
 import { pyCall } from "@/utils/globalCall"
-const { saveDSL, loadDSL } = useCanvasStore()
+
 try {
-  loadDSL()
+  load()
 } catch (e) {
 
 }
@@ -20,10 +20,10 @@ const [isPreview, togglePreview] = useToggle(false)
 
 <template>
   <header h-40px>
-    <el-button type="primary" @click="saveDSL">保存</el-button>
-    <el-button type="primary" @click="loadDSL">载入</el-button>
+    <el-button type="primary" @click="save">保存</el-button>
+    <el-button type="primary" @click="load">载入</el-button>
     <el-button type="primary" @click="CALL">呼叫</el-button>
-    <el-button type="primary" @click="() => { saveDSL(); togglePreview() }">{{ isPreview ? "进入编辑" : "进入预览" }}</el-button>
+    <el-button type="primary" @click="() => { save(); togglePreview() }">{{ isPreview ? "进入编辑" : "进入预览" }}</el-button>
   </header>
   <div flex flex-row h="[calc(100%-40px)]" justify-between>
     <ControlPanel></ControlPanel>

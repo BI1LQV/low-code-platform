@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { ref } from "vue"
+import { computed, ref } from "vue"
+import { Plus } from "@element-plus/icons-vue"
 import { useCanvasStore } from "@/store/canvasStore"
 import type { allSlotsKey } from "@/models/slots"
 import { allSlots, containerSlots } from "@/models/slots"
@@ -9,7 +10,8 @@ import MonacoEditor from "@/components/MonacoEditor.vue"
 import { useFuncStore } from "@/store/funcStore"
 import { clearableReactive } from "@/composables/clearableReactive"
 
-const { setFunc } = useFuncStore()
+const { nameToIdMap } = useFuncStore()
+const { setFunc, funcMap } = useFuncStore()
 
 const activeName = ref("comps")
 
@@ -27,11 +29,14 @@ function dragHandler(ev: DragEvent, type: allSlotsKey) {
 }
 
 const showAddBind = ref(false)
-const [form, _setForm, clearForm] = clearableReactive(() => ({
+const [form, setForm, clearForm] = clearableReactive(() => ({
   type: "js",
   name: "",
   impl: "",
   baseUrl: "",
+  receiver: "",
+  inputTmp: "",
+  inputs: [] as string[],
 }))
 const jsFuncImpl = ref("")
 function handleClose() {
@@ -42,6 +47,15 @@ function handleClose() {
 function addFunc() {
   setFunc(form)
   showAddBind.value = false
+}
+
+const funcList = computed(() => Object.values(funcMap))
+const nameList = computed(() => Object.keys(nameToIdMap))
+
+function modify(scope: any) {
+  // @ts-expect-error okay
+  setForm(funcMap[scope.row.name])
+  showAddBind.value = true
 }
 </script>
 
@@ -62,6 +76,14 @@ function addFunc() {
       </el-tab-pane>
       <el-tab-pane label="数据绑定" name="binds">
         <el-button type="primary" size="small" @click="showAddBind = true">添加</el-button>
+        <el-table :data="funcList" stripe style="width: 100%">
+          <el-table-column prop="name" />
+          <el-table-column>
+            <template #default="scope">
+              <el-button @click="modify(scope)">修改</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -75,6 +97,28 @@ function addFunc() {
       <el-form-item label="绑定函数名称">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
+      <el-form-item label="输入绑定列表">
+        <el-button
+          v-for="input of form.inputs" :key="input"
+          type="warning"
+          round
+          disabled
+        >
+          {{ input }}
+        </el-button>
+        <el-select v-model="form.inputTmp">
+          <el-option v-for="name of nameList" :key="name" :label="name" :value="name"></el-option>
+        </el-select>
+        <el-button
+          type="primary" :icon="Plus" circle
+          @click="() => { form.inputs.push(form.inputTmp);form.inputTmp = '' }"
+        />
+      </el-form-item>
+      <el-form-item label="输出绑定">
+        <el-select v-model="form.receiver">
+          <el-option v-for="name of nameList" :key="name" :label="name" :value="name"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="绑定函数类型">
         <el-select v-model="form.type">
           <el-option label="JavaScript函数" value="js" />
@@ -83,7 +127,6 @@ function addFunc() {
       </el-form-item>
       <el-form-item v-if="form.type === 'js'" label="绑定函数实现体">
         <MonacoEditor
-
           v-model="jsFuncImpl"
           height="300px"
           language="json"

@@ -120,7 +120,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
       binderList.set(key, ref(value))
     })
 
-    const children = JSON.parse(childrenStorage.value)
+    const children = reactive(JSON.parse(childrenStorage.value))
     setParent(root, children, sun => dslList.set(sun.id, sun))
     root.children = children
   }

@@ -1,11 +1,9 @@
-import type { Ref } from "vue"
-
 export type FuncType = JsFunc | PyFunc
 export interface FuncBase {
   name: string
   args: Record<string, "number" | "string">
-  inputs: Ref<any>[]
-  receiver?: Ref<any>
+  inputs: string[]
+  receiver?: string
 }
 export interface JsFunc extends FuncBase {
   type: "js"
