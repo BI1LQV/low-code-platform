@@ -1,5 +1,5 @@
 <script lang="tsx" setup>
-import type { Component } from "vue"
+import type { Component, Ref } from "vue"
 import { ref, toRefs, watch } from "vue"
 import type { SlotOptions } from "@/models/slots"
 import { useFuncStore } from "@/store/funcStore"
@@ -7,6 +7,7 @@ const props = defineProps<{
   selectedProp: SlotOptions | undefined
   optionalPanel: Component
   selectedElementId: string
+  selectedBinder: Ref<any> | undefined
 }>()
 const { getBindMap, setBindMap } = useFuncStore()
 const { selectedProp: prop } = toRefs(props)
@@ -23,6 +24,9 @@ watch(() => props.selectedElementId, () => {
         <el-form-item label="绑定ID">
           <el-input v-model="bindingId" class="w-50%"></el-input>
           <el-button type="success" @click="setBindMap(bindingId, selectedElementId)">确定</el-button>
+        </el-form-item>
+        <el-form-item v-if="props.selectedBinder" label="绑定值">
+          <el-input v-model="props.selectedBinder.value" class="w-50%"></el-input>
         </el-form-item>
         <Component :is="props.optionalPanel" :prop="prop"></Component>
       </el-form>

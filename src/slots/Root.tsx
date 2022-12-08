@@ -1,5 +1,5 @@
 import type { Ref } from "vue"
-import { defineComponent } from "vue"
+import { defineComponent, ref } from "vue"
 import type { EFlexOptions, SlotOptions } from "@/models/slots"
 import { BaseFlexStyleImpl, BaseStyleImpl } from "@/models/slots"
 export const Component = defineComponent({
@@ -25,4 +25,8 @@ export function Prop(): EFlexOptions {
       "justify-content": "auto",
     },
   }
+}
+
+export function Binder() {
+  return ref(null)
 }

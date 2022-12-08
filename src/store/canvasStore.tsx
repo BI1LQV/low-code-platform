@@ -5,7 +5,7 @@ import { useElementBounding, useLocalStorage, useToggle } from "@vueuse/core"
 import type { DslBaseElement, DslContainerElement, DslRootElement, DslSunElement, MaybeParent, SlotOptions, allSlotsKey } from "@/models/slots"
 import { containerSlots, rootID } from "@/models/slots"
 import { genId, setParent } from "@/utils"
-import { Props } from "@/slots"
+import { Binders, Props } from "@/slots"
 import type { MoveSlotDragger, NewSlotDragger, StyleLike } from "@/models/drags"
 import { clearableReactive } from "@/composables/clearableReactive"
 
@@ -38,7 +38,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
   ): DslSunElement {
     const id = genId()
     const prop = reactive(Props.get(type)!())
-    const binder = ref(null)
+    const binder = Binders.get(type)!()
     binderList.set(id, binder)
     propList.set(id, prop)
     let base

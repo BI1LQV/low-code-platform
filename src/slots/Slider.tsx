@@ -1,5 +1,5 @@
 import type { Ref } from "vue"
-import { Fragment, defineComponent } from "vue"
+import { Fragment, defineComponent, ref } from "vue"
 import { ElFormItem, ElInput, ElSlider, ElSwitch } from "element-plus"
 import "element-plus/es/components/slider/style/css"
 import type { CommonOptions, SlotOptions } from "@/models/slots"
@@ -48,3 +48,6 @@ export const AttrPanel = defineComponent({
     }
   },
 })
+export function Binder() {
+  return ref(0)
+}

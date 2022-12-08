@@ -1,5 +1,5 @@
 import type { Ref } from "vue"
-import { Fragment, defineComponent } from "vue"
+import { Fragment, defineComponent, ref } from "vue"
 import { ElFormItem, ElRadioButton, ElRadioGroup } from "element-plus"
 import type { EFlexOptions, SlotOptions } from "@/models/slots"
 import { BaseFlexStyleImpl, BaseStyleImpl } from "@/models/slots"
@@ -70,3 +70,6 @@ export const AttrPanel = defineComponent({
     return () => <div></div>
   },
 })
+export function Binder() {
+  return ref(null)
+}
