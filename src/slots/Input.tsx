@@ -35,14 +35,14 @@ export function Prop(): CommonOptions {
 
 export const AttrPanel = defineComponent({
   props: ["prop"],
-  setup({ prop }: { prop: CommonOptions }) {
+  setup(p) {
     return () => {
       return (<Fragment>
         <ElFormItem label="占位文本">
-          <ElInput v-model={prop.placeholder}></ElInput>
+          <ElInput v-model={p.prop.placeholder}></ElInput>
         </ElFormItem>
         <ElFormItem label="是否禁用">
-          <ElSwitch v-model={prop.disabled}></ElSwitch>
+          <ElSwitch v-model={p.prop.disabled}></ElSwitch>
         </ElFormItem>
       </Fragment>)
     }

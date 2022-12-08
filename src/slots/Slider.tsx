@@ -32,17 +32,17 @@ export function Prop(): CommonOptions {
 
 export const AttrPanel = defineComponent({
   props: ["prop"],
-  setup({ prop }: { prop: CommonOptions }) {
+  setup(p) {
     return () => {
       return (<Fragment>
         <ElFormItem label="最大值">
-          <ElInput v-model={prop.max} onInput={() => prop.max = Number(prop.max)}></ElInput>
+          <ElInput v-model={p.prop.max} onInput={() => p.prop.max = Number(p.prop.max)}></ElInput>
         </ElFormItem>
         <ElFormItem label="最小值">
-          <ElInput v-model={prop.min} onInput={() => prop.min = Number(prop.min)}></ElInput>
+          <ElInput v-model={p.prop.min} onInput={() => p.prop.min = Number(p.prop.min)}></ElInput>
         </ElFormItem>
         <ElFormItem label="是否禁用">
-          <ElSwitch v-model={prop.disabled}></ElSwitch>
+          <ElSwitch v-model={p.prop.disabled}></ElSwitch>
         </ElFormItem>
       </Fragment>)
     }
