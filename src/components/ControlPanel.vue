@@ -36,6 +36,7 @@ const [form, setForm, clearForm] = clearableReactive(() => ({
   baseUrl: "",
   receiver: "",
   inputTmp: "",
+  isDirect: false,
   inputs: [] as string[],
 }))
 
@@ -134,6 +135,9 @@ function modify(scope: any) {
       </el-form-item>
       <el-form-item v-else label="绑定目标地址">
         <el-input v-model="form.baseUrl"></el-input>
+      </el-form-item>
+      <el-form-item label="是否直连">
+        <el-checkbox v-model="form.isDirect"></el-checkbox>
       </el-form-item>
     </el-form>
     <template #footer>

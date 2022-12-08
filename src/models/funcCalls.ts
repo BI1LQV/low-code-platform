@@ -13,4 +13,5 @@ export interface JsFunc extends FuncBase {
 export interface PyFunc extends FuncBase {
   type: "py"
   baseUrl: string
+  isDirect: boolean
 }

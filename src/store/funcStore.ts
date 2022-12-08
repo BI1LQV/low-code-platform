@@ -13,7 +13,7 @@ export const useFuncStore = defineStore("funcStore", () => {
   const nameToIdMap: Record<string, string> = shallowReactive({})
   const idToNameMap: Record<string, string> = shallowReactive({})
 
-  function callFunc(id: string) {
+  async function callFunc(id: string) {
     const func = funcMap[id]
     if (func == null) {
       return
@@ -25,7 +25,7 @@ export const useFuncStore = defineStore("funcStore", () => {
         ...func.inputs,
         func.impl)(...func.inputs.map(name => binderList.get(nameToIdMap[name])?.value))
     } else {
-      res = pyCall(func.baseUrl, func.name, func.inputs.map((bindName: string) => {
+      res = await pyCall(func.baseUrl, func.name, func.isDirect, func.inputs.map((bindName: string) => {
         return binderList.get(nameToIdMap[bindName])!.value
       }))
     }
@@ -39,8 +39,11 @@ export const useFuncStore = defineStore("funcStore", () => {
     })
   }
 
-  function setFunc(form: Record<"name" | "type" | "impl" | "baseUrl" | "receiver", string> & { inputs: string[] }) {
-    const { name, type, impl, baseUrl, inputs, receiver } = form
+  function setFunc(form:
+  Record<"name" | "type" | "impl" | "baseUrl" | "receiver", string>
+  & { inputs: string[]; isDirect: boolean },
+  ) {
+    const { name, type, impl, baseUrl, inputs, receiver, isDirect } = form
     if (type === "js") {
       funcMap[name] = {
         name,
@@ -56,6 +59,7 @@ export const useFuncStore = defineStore("funcStore", () => {
         baseUrl,
         inputs,
         receiver,
+        isDirect,
       } as PyFunc
     }
     registerWatcher(name, inputs)
