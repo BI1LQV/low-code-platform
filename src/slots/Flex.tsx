@@ -28,6 +28,7 @@ export function Prop(): EFlexOptions {
       ...BaseFlexStyleImpl(),
       "align-items": "center",
       "justify-content": "center",
+      "width": "90%",
     },
   }
 }
