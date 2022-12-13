@@ -3,13 +3,13 @@ import { computed, ref } from "vue"
 import { Plus } from "@element-plus/icons-vue"
 import { useCanvasStore } from "@/store/canvasStore"
 import type { allSlotsKey } from "@/models/slots"
-import { allSlots, containerSlots } from "@/models/slots"
+import { containerSlots } from "@/models/slots"
 import { Slots } from "@/slots"
 import type { NewSlotDragger } from "@/models/drags"
 import MonacoEditor from "@/components/MonacoEditor.vue"
 import { useFuncStore } from "@/store/funcStore"
 import { clearableReactive } from "@/composables/clearableReactive"
-
+import nameMap from "@/models/SlotToNameMap"
 const { nameToIdMap } = useFuncStore()
 const { setFunc, funcMap } = useFuncStore()
 
@@ -72,7 +72,7 @@ function modify(scope: any) {
             @dragstart="dragHandler($event, name)"
             @dragend="clearDragEffect()"
           >
-            {{ allSlots[name] }}
+            {{ nameMap[name] }}
           </button>
         </template>
       </el-tab-pane>
@@ -146,12 +146,14 @@ function modify(scope: any) {
           language="json"
         ></MonacoEditor>
       </el-form-item>
-      <el-form-item v-else label="绑定目标地址">
-        <el-input v-model="form.baseUrl"></el-input>
-      </el-form-item>
-      <el-form-item label="是否直连">
-        <el-checkbox v-model="form.isDirect"></el-checkbox>
-      </el-form-item>
+      <template v-else>
+        <el-form-item label="绑定目标地址">
+          <el-input v-model="form.baseUrl"></el-input>
+        </el-form-item>
+        <el-form-item label="是否直连">
+          <el-checkbox v-model="form.isDirect"></el-checkbox>
+        </el-form-item>
+      </template>
     </el-form>
     <template #footer>
       <span>
