@@ -50,9 +50,9 @@ export function dragOverComp(ev: DragEvent, comp: DslBaseElement, storeUtilities
     } else {
       // 竖者算 TODO: 待测试
       if (ev.clientY - top < height / 2) {
-        setPosPrompt({ left, top, width, height: 3, type: "bottom" })
+        setPosPrompt({ left, top, width, height: 3, type: "top" })
       } else {
-        setPosPrompt({ left, top: top + height, width, height: 3, type: "top" })
+        setPosPrompt({ left, top: top + height, width, height: 3, type: "bottom" })
       }
     }
   } else {
