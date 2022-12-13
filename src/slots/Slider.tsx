@@ -23,6 +23,7 @@ export function Prop(): CommonOptions {
   return {
     "style": {
       ...BaseStyleImpl(),
+      "width": "80%",
     },
     "max": 100,
     "min": 0,

@@ -13,7 +13,7 @@ export const Component = defineComponent({
   ) {
     return () => {
       return (
-        <div class={isProd ? "" : "important-min-h-10px important-border-2px important-m-5px"} {...prop}>
+        <div class={isProd ? "" : "important-min-h-10px important-border-2px"} {...prop}>
           {slots.default?.()[0].children}
         </div>
       )
@@ -26,6 +26,8 @@ export function Prop(): EFlexOptions {
     style: {
       ...BaseStyleImpl(),
       ...BaseFlexStyleImpl(),
+      "align-items": "center",
+      "justify-content": "center",
     },
   }
 }

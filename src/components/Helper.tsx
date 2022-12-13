@@ -35,7 +35,7 @@ export default defineComponent(() => {
           "transition-property": isShowSelectorPos.value ? "all" : "none",
         }}
       >
-        <div absolute right-0 top--24px pointer-events-initial class={helperCss["click-helper"]}>
+        <div absolute right-0 top--24px pointer-events-initial w-60px class={helperCss["click-helper"]}>
           <button class={helperCss["click-helper-parent"]} onClick={toParent}></button>
           <button
           class={helperCss["click-helper-move"]}
