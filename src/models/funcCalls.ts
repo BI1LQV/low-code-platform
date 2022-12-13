@@ -3,7 +3,7 @@ export interface FuncBase {
   name: string
   args: Record<string, "number" | "string">
   inputs: string[]
-  receiver?: string
+  receivers: string[]
 }
 export interface JsFunc extends FuncBase {
   type: "js"

@@ -34,10 +34,11 @@ const [form, setForm, clearForm] = clearableReactive(() => ({
   name: "",
   impl: "",
   baseUrl: "",
-  receiver: "",
   inputTmp: "",
+  receiverTmp: "",
   isDirect: false,
   inputs: [] as string[],
+  receivers: [] as string[],
 }))
 
 function handleClose() {
@@ -116,9 +117,21 @@ function modify(scope: any) {
         />
       </el-form-item>
       <el-form-item label="输出绑定">
-        <el-select v-model="form.receiver">
+        <el-button
+          v-for="receiver of form.receivers" :key="receiver"
+          type="warning"
+          round
+          disabled
+        >
+          {{ receiver }}
+        </el-button>
+        <el-select v-model="form.receiverTmp">
           <el-option v-for="name of nameList" :key="name" :label="name" :value="name"></el-option>
         </el-select>
+        <el-button
+          type="primary" :icon="Plus" circle
+          @click="() => { form.receivers.push(form.receiverTmp);form.receiverTmp = '' }"
+        />
       </el-form-item>
       <el-form-item label="绑定函数类型">
         <el-select v-model="form.type">

@@ -29,8 +29,15 @@ export const useFuncStore = defineStore("funcStore", () => {
         return binderList.get(nameToIdMap[bindName])!.value
       }))
     }
-    if (func.receiver) {
-      binderList.get(nameToIdMap[func.receiver])!.value = res
+
+    if (func.receivers.length) {
+      if (Array.isArray(res)) {
+        func.receivers.forEach((receiverId, idx) => {
+          binderList.get(nameToIdMap[receiverId])!.value = res[idx]
+        })
+      } else {
+        binderList.get(nameToIdMap[func.receivers[0]])!.value = res
+      }
     }
   }
   function registerWatcher(name: string, inputs: string[]) {
@@ -40,17 +47,17 @@ export const useFuncStore = defineStore("funcStore", () => {
   }
 
   function setFunc(form:
-  Record<"name" | "type" | "impl" | "baseUrl" | "receiver", string>
-  & { inputs: string[]; isDirect: boolean },
+  Record<"name" | "type" | "impl" | "baseUrl", string>
+  & { inputs: string[];receivers: string[]; isDirect: boolean },
   ) {
-    const { name, type, impl, baseUrl, inputs, receiver, isDirect } = form
+    const { name, type, impl, baseUrl, inputs, receivers, isDirect } = form
     if (type === "js") {
       funcMap[name] = {
         name,
         type,
         impl,
         inputs,
-        receiver,
+        receivers,
       } as JsFunc
     } else {
       funcMap[name] = {
@@ -58,7 +65,7 @@ export const useFuncStore = defineStore("funcStore", () => {
         type,
         baseUrl,
         inputs,
-        receiver,
+        receivers,
         isDirect,
       } as PyFunc
     }
