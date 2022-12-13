@@ -7,6 +7,7 @@ export enum functionalSlots {
   "ESelect",
   "ESlider",
   "ELabel",
+  "EColorPicker",
 }
 export enum containerSlots {
   "EFlex" = 100,
