@@ -33,6 +33,9 @@ const { selectedProp: prop } = toRefs(props)
         <el-form-item label="右间距">
           <NumberWithUnit v-model="prop.style['margin-right']" :units="['%', 'px']"></NumberWithUnit>
         </el-form-item>
+        <el-form-item label="字体大小">
+          <NumberWithUnit v-model="prop.style['font-size']" :units="['px', 'rem']"></NumberWithUnit>
+        </el-form-item>
         <Component :is="props.optionalPanel" :prop="prop"></Component>
       </el-form>
     </div>
