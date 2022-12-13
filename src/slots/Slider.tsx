@@ -1,7 +1,8 @@
 import type { Ref } from "vue"
 import { Fragment, defineComponent, ref } from "vue"
-import { ElFormItem, ElInput, ElSlider, ElSwitch } from "element-plus"
+import { ElColorPicker, ElFormItem, ElInput, ElSlider, ElSwitch } from "element-plus"
 import "element-plus/es/components/slider/style/css"
+import "element-plus/es/components/color-picker/style/css"
 import type { CommonOptions, SlotOptions } from "@/models/slots"
 import { BaseStyleImpl } from "@/models/slots"
 
@@ -24,6 +25,7 @@ export function Prop(): CommonOptions {
     "style": {
       ...BaseStyleImpl(),
       "width": "80%",
+      "--el-slider-main-bg-color": "#409eff",
     },
     "max": 100,
     "min": 0,
@@ -49,6 +51,22 @@ export const AttrPanel = defineComponent({
     }
   },
 })
+
+export const StylePanel = defineComponent({
+  props: ["prop"],
+  setup(p) {
+    return () => {
+      return (
+        <Fragment>
+          <ElFormItem label="颜色">
+          <ElColorPicker v-model={p.prop.style["--el-slider-main-bg-color"]} />
+          </ElFormItem>
+        </Fragment>
+      )
+    }
+  },
+})
+
 export function Binder() {
   return ref(0)
 }
