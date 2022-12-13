@@ -35,19 +35,19 @@ export function Prop(): EFlexOptions {
 
 export const StylePanel = defineComponent({
   props: ["prop"],
-  setup({ prop }: { prop: EFlexOptions }) {
+  setup(p) {
     return () => {
-      const mainRotate = prop.style["flex-direction"] === "row" ? "rotate-270deg" : ""
-      const crossRotate = prop.style["flex-direction"] === "row" ? "rotate-90deg" : ""
+      const mainRotate = p.prop.style["flex-direction"] === "row" ? "rotate-270deg" : ""
+      const crossRotate = p.prop.style["flex-direction"] === "row" ? "rotate-90deg" : ""
       return (<Fragment>
         <ElFormItem label="元素方向">
-          <ElRadioGroup class="override-el-radio-button" v-model={prop.style["flex-direction"]}>
+          <ElRadioGroup class="override-el-radio-button" v-model={p.prop.style["flex-direction"]}>
             <ElRadioButton label="column"><img width="24" rotate-90deg src={PngDirection}></img>竖向布局</ElRadioButton>
             <ElRadioButton label="row"><img width="24" src={PngDirection}></img>横向布局</ElRadioButton>
           </ElRadioGroup>
         </ElFormItem>
         <ElFormItem label="主轴对齐">
-          <ElRadioGroup class="override-el-radio-button" v-model={prop.style["justify-content"]}>
+          <ElRadioGroup class="override-el-radio-button" v-model={p.prop.style["justify-content"]}>
             <ElRadioButton label="flex-start"><img width="24" class={mainRotate} src={PngJustifyStart}></img>从头开始</ElRadioButton>
             <ElRadioButton label="flex-end"><img width="24" class={mainRotate} src={PngJustifyEnd}></img>从尾开始</ElRadioButton>
             <ElRadioButton label="center"><img width="24" class={mainRotate} src={PngJustifyCenter}></img>居中对齐</ElRadioButton>
@@ -56,7 +56,7 @@ export const StylePanel = defineComponent({
           </ElRadioGroup>
         </ElFormItem>
         <ElFormItem label="副轴对齐">
-          <ElRadioGroup class="override-el-radio-button" v-model={prop.style["align-items"]}>
+          <ElRadioGroup class="override-el-radio-button" v-model={p.prop.style["align-items"]}>
             <ElRadioButton label="flex-start"><img width="24" class={crossRotate} src={PngItemsStart}></img>从头开始</ElRadioButton>
             <ElRadioButton label="flex-end"><img width="24" class={crossRotate} src={PngItemsEnd}></img>从尾开始</ElRadioButton>
             <ElRadioButton label="center"><img width="24" class={crossRotate} src={PngItemsCenter}></img>居中对齐</ElRadioButton>
