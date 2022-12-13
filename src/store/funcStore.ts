@@ -83,14 +83,22 @@ export const useFuncStore = defineStore("funcStore", () => {
   function saveFunc() {
     nameIdMapStore.value = JSON.stringify(nameToIdMap)
     funcStore.value = JSON.stringify(funcMap)
+    return {
+      nameIdMap: nameIdMapStore.value,
+      func: funcStore.value,
+    }
   }
-  function loadFunc() {
-    const nameToIdEntires = Object.entries<string>(JSON.parse(nameIdMapStore.value))
+  function loadFunc(funcString?: ReturnType<typeof saveFunc>) {
+    const nameToIdEntires = Object.entries<string>(
+      JSON.parse(funcString ? funcString.nameIdMap : nameIdMapStore.value),
+    )
     nameToIdEntires.forEach(([name, id]) => {
       nameToIdMap[name] = id
       idToNameMap[id] = name
     })
-    Object.entries<FuncType>(JSON.parse(funcStore.value)).forEach(([name, func]) => {
+    Object.entries<FuncType>(JSON.parse(
+      funcString ? funcString.func : funcStore.value),
+    ).forEach(([name, func]) => {
       funcMap[name] = func
       registerWatcher(name, func.inputs)
     })

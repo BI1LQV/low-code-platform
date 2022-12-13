@@ -4,9 +4,15 @@ import CanvasPanel from "@/components/CanvasPanel"
 import PropertyPanel from "@/components/PropertyPanel.vue"
 import ControlPanel from "@/components/ControlPanel.vue"
 import Preview from "@/components/Preview"
-import { load, save } from "@/store"
+import { exportString, importString, load, save } from "@/store"
 
 const [isPreview, togglePreview] = useToggle(false)
+function exportDsl() {
+  navigator.clipboard.writeText(exportString())
+}
+async function importDsl() {
+  importString(await navigator.clipboard.readText())
+}
 </script>
 
 <template>
@@ -14,6 +20,8 @@ const [isPreview, togglePreview] = useToggle(false)
     <el-button type="primary" @click="save">保存</el-button>
     <el-button type="primary" @click="load">载入</el-button>
     <el-button type="primary" @click="() => { save(); togglePreview() }">{{ isPreview ? "进入编辑" : "进入预览" }}</el-button>
+    <el-button type="primary" @click="exportDsl">导出</el-button>
+    <el-button type="primary" @click="importDsl">导入</el-button>
   </header>
   <div flex flex-row h="[calc(100%-40px)]" justify-between>
     <ControlPanel></ControlPanel>

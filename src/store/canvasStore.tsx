@@ -102,11 +102,21 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     childrenStorage.value = JSON.stringify(root.children, ["id", "type", "children"])
     propListStorage.value = JSON.stringify(Array.from(propList))
     binderListStorage.value = JSON.stringify(Array.from(binderList).map(([key, value]) => [key, value.value]))
+    return {
+      children: childrenStorage.value,
+      propList: propListStorage.value,
+      binderList: binderListStorage.value,
+    }
   }
-  function loadDSL() {
-    const loadedPropList = JSON.parse(propListStorage.value)
-    const loadedBinderList = JSON.parse(binderListStorage.value)
-
+  function loadDSL(dslString?: ReturnType<typeof saveDSL>) {
+    let loadedPropList = JSON.parse(propListStorage.value)
+    let loadedBinderList = JSON.parse(binderListStorage.value)
+    let loadedChildren = JSON.parse(childrenStorage.value)
+    if (dslString) {
+      loadedPropList = JSON.parse(dslString.propList)
+      loadedBinderList = JSON.parse(dslString.binderList)
+      loadedChildren = JSON.parse(dslString.children)
+    }
     propList.clear()
     binderList.clear()
     dslList.clear()
@@ -120,7 +130,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
       binderList.set(key, ref(value))
     })
 
-    const children = reactive(JSON.parse(childrenStorage.value))
+    const children = reactive(loadedChildren)
     setParent(root, children, sun => dslList.set(sun.id, sun))
     root.children = children
   }
