@@ -12,7 +12,14 @@ export const Component = defineComponent({
   setup({ binder, prop, isProd }: { binder: Ref<any>; prop: SlotOptions; isProd: boolean }) {
     return () => {
       if (!isProd) {
-        const newProp = { ...prop, disabled: true }
+        const newProp = {
+          ...prop,
+          disabled: true,
+          style: {
+            ...prop.style,
+            "--el-slider-disabled-color": prop.style["--el-slider-main-bg-color"],
+          },
+        }
         return <ElSlider v-model={binder.value} {...newProp} />
       }
       return <ElSlider v-model={binder.value} {...prop} />
