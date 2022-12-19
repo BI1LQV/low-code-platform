@@ -1,11 +1,7 @@
 # 低代码python开发框架
 
-<a href="https://wakatime.com/badge/user/2f4644bc-9c2c-4ef4-a45b-54ad90d38434/project/f3bc974d-3424-41e4-bfbe-05eea6acf185"><img src="https://wakatime.com/badge/user/2f4644bc-9c2c-4ef4-a45b-54ad90d38434/project/f3bc974d-3424-41e4-bfbe-05eea6acf185.svg" alt="wakatime"></a>
+主项目: <a href="https://wakatime.com/badge/user/2f4644bc-9c2c-4ef4-a45b-54ad90d38434/project/f3bc974d-3424-41e4-bfbe-05eea6acf185"><img src="https://wakatime.com/badge/user/2f4644bc-9c2c-4ef4-a45b-54ad90d38434/project/f3bc974d-3424-41e4-bfbe-05eea6acf185.svg" alt="wakatime"></a>
 
-TODO:
+Python RPC: <a href="https://wakatime.com/badge/user/2f4644bc-9c2c-4ef4-a45b-54ad90d38434/project/3891ec78-2923-4459-8dd1-d733dc1306a1"><img src="https://wakatime.com/badge/user/2f4644bc-9c2c-4ef4-a45b-54ad90d38434/project/3891ec78-2923-4459-8dd1-d733dc1306a1.svg" alt="wakatime"></a>
 
-
-1. 完善样式panel
-2. 提供组件其他props设置
-3. 美化组件panel
-4. 增加实用组件
+报告: <a href="https://wakatime.com/badge/user/2f4644bc-9c2c-4ef4-a45b-54ad90d38434/project/2e58d267-24db-491d-98c6-f40d12f6be44"><img src="https://wakatime.com/badge/user/2f4644bc-9c2c-4ef4-a45b-54ad90d38434/project/2e58d267-24db-491d-98c6-f40d12f6be44.svg" alt="wakatime"></a>
