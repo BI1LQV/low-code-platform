@@ -13,6 +13,10 @@ function exportDsl() {
 async function importDsl() {
   importString(await navigator.clipboard.readText())
 }
+
+async function importDemo() {
+  importString((await import("@/assets/demo.json?raw")).default)
+}
 </script>
 
 <template>
@@ -22,6 +26,7 @@ async function importDsl() {
     <el-button type="primary" @click="() => { save(); togglePreview() }">{{ isPreview ? "进入编辑" : "进入预览" }}</el-button>
     <el-button type="primary" @click="exportDsl">导出</el-button>
     <el-button type="primary" @click="importDsl">导入</el-button>
+    <el-button type="primary" @click="importDemo">导入Demo</el-button>
   </header>
   <div flex flex-row h="[calc(100%-40px)]" justify-between>
     <ControlPanel></ControlPanel>
