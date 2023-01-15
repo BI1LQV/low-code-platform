@@ -1,11 +1,19 @@
 <script lang="ts" setup>
 import { storeToRefs } from "pinia"
 import { Plus } from "@element-plus/icons-vue"
+import { useRouter } from "vue-router"
 import { useTemplateListStore } from "@/store/templateList"
 const props = defineProps<{ isEditor: boolean }>()
 const templateStore = useTemplateListStore()
+const router = useRouter()
 const { loading, templates, loadError } = storeToRefs(templateStore)
 templateStore.getTemplates()
+
+function toPreview(jump: boolean, id: number) {
+  if (jump) {
+    router.push(`/preview/${id}`)
+  }
+}
 </script>
 
 <template>
@@ -15,20 +23,38 @@ templateStore.getTemplates()
       应用列表
     </div>
     <div v-loading.fullscreen.lock="loading" w-full flex flex-row gap-5 flex-wrap>
-      <el-card v-for="item of templates" :key="item.id" w-400px flex-shrink-0 shadow="hover">
+      <el-card
+        v-for="item of templates"
+        :key="item.id" w-400px flex-shrink-0
+        :class="props.isEditor ? '' : 'cursor-pointer'"
+        :shadow="props.isEditor ? 'always' : 'hover'"
+        @click="toPreview(!props.isEditor, item.id)"
+      >
         <div>
-          <span>{{ item.name }}</span>
-          <div class="bottom">
-            <el-button text class="button">Operating</el-button>
+          <div flex justify-between items-end>
+            <span text-20px>{{ item.name }}</span>
+            <span>{{ item.id }}</span>
+          </div>
+          <div v-if="props.isEditor" flex justify-end>
+            <el-button text bg @click="toPreview(true, item.id)">查看</el-button>
+            <el-button text bg>复制</el-button>
+            <el-button text bg>编辑</el-button>
+            <el-button text bg type="danger">删除</el-button>
           </div>
         </div>
       </el-card>
-      <el-card v-if="!props.isEditor" w-400px flex-shrink-0 shadow="hover">
+      <el-card v-if="props.isEditor" w-400px flex-shrink-0>
         <div>
-          <el-button text>
-            <el-icon><Plus /></el-icon>
-            添加应用
-          </el-button>
+          <div flex justify-between items-end>
+            <span text-20px>新的应用</span>
+            <span>b</span>
+          </div>
+          <div flex justify-end>
+            <el-button text bg>
+              <el-icon><Plus /></el-icon>
+              添加
+            </el-button>
+          </div>
         </div>
       </el-card>
     </div>
