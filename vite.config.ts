@@ -30,11 +30,7 @@ export default defineConfig({
     }),
     Inspect(),
     // https://github.com/hannoeru/vite-plugin-pages
-    Pages({
-      importMode(_filepath, _options) {
-        return "sync"
-      },
-    }),
+    Pages(),
 
     // https://github.com/antfu/unocss
     // see unocss.config.ts for config
