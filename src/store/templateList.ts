@@ -1,19 +1,20 @@
 import { defineStore } from "pinia"
 import { ref } from "vue"
 import type { TemplateItem } from "@/models/lists"
+import { wrappedFetch } from "@/utils/wrappedFetch"
 
 export const useTemplateListStore = defineStore("templateList", () => {
   const loading = ref(true)
-  const loadError = ref(false)
-  const templates = ref<TemplateItem[]>([])
+  const loadError = ref("")
+  const templateList = ref<TemplateItem[]>([])
 
-  function getTemplates() {
+  function getTemplateList() {
     loading.value = true
-    fetch("/api/getTemplates")
-      .then(res => res.json())
-      .then(res => templates.value = res).catch((err) => {
-        loadError.value = true
-        console.log(err)
+    wrappedFetch("/api/getTemplateList")
+      .then((res) => {
+        templateList.value = res
+      }).catch((err) => {
+        loadError.value = err
       }).then(() => {
         loading.value = false
       })
@@ -22,7 +23,7 @@ export const useTemplateListStore = defineStore("templateList", () => {
   return {
     loading,
     loadError,
-    templates,
-    getTemplates,
+    templateList,
+    getTemplateList,
   }
 })

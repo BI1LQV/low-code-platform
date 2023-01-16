@@ -4,4 +4,5 @@ export interface TemplateItem {
   author: string
   createTime: number
   updateTime: number
+  data: string
 }

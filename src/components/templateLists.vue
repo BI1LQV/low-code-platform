@@ -6,8 +6,8 @@ import { useTemplateListStore } from "@/store/templateList"
 const props = defineProps<{ isEditor: boolean }>()
 const templateStore = useTemplateListStore()
 const router = useRouter()
-const { loading, templates, loadError } = storeToRefs(templateStore)
-templateStore.getTemplates()
+const { loading, templateList, loadError } = storeToRefs(templateStore)
+templateStore.getTemplateList()
 
 function toPreview(jump: boolean, id: number) {
   if (jump) {
@@ -17,14 +17,14 @@ function toPreview(jump: boolean, id: number) {
 </script>
 
 <template>
-  <el-alert v-if="loadError" title="加载应用列表时出错" type="error" effect="dark" important-absolute />
+  <el-alert v-if="loadError !== ''" center show-icon title="加载出错" :description="loadError" type="error" effect="dark" important-absolute />
   <div m-40px>
     <div text-34px mb-20px>
       应用列表
     </div>
     <div v-loading.fullscreen.lock="loading" w-full flex flex-row gap-5 flex-wrap>
       <el-card
-        v-for="item of templates"
+        v-for="item of templateList"
         :key="item.id" w-400px flex-shrink-0
         :class="props.isEditor ? '' : 'cursor-pointer'"
         :shadow="props.isEditor ? 'always' : 'hover'"
