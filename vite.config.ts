@@ -13,6 +13,7 @@ import BuildInfo from "vite-plugin-info"
 import Inspect from "vite-plugin-inspect"
 import VueMacros from "unplugin-vue-macros/vite"
 import HotExport from "vite-plugin-hot-export"
+import { visualizer } from "rollup-plugin-visualizer"
 
 export default defineConfig({
   resolve: {
@@ -30,7 +31,17 @@ export default defineConfig({
     }),
     Inspect(),
     // https://github.com/hannoeru/vite-plugin-pages
-    Pages(),
+    Pages({
+      importMode(filepath) {
+        // if (
+        //   filepath === "/src/pages/preview/index.vue"
+        // || filepath === "/src/pages/editor/index.vue"
+        // ) {
+        //   return "async"
+        // }
+        return "sync"
+      },
+    }),
 
     // https://github.com/antfu/unocss
     // see unocss.config.ts for config
@@ -43,6 +54,7 @@ export default defineConfig({
       dirs: [],
     }),
     HotExport(),
+    visualizer(),
   ],
 
   // https://github.com/vitest-dev/vitest

@@ -1,17 +1,22 @@
 <script lang="ts" setup>
-import { computed, ref } from "vue"
+import { computed, defineAsyncComponent, ref } from "vue"
 import { Plus } from "@element-plus/icons-vue"
 import { useCanvasStore } from "@/store/canvasStore"
 import type { allSlotsKey } from "@/models/slots"
 import { containerSlots } from "@/models/slots"
 import { Slots } from "@/slots"
 import type { NewSlotDragger } from "@/models/drags"
-import MonacoEditor from "@/components/MonacoEditor.vue"
 import { useFuncStore } from "@/store/funcStore"
 import { clearableReactive } from "@/composables/clearableReactive"
 import nameMap from "@/models/SlotToNameMap"
 const { nameToIdMap } = useFuncStore()
 const { setFunc, funcMap } = useFuncStore()
+
+const AsyncMonacoEditor = defineAsyncComponent(() => {
+  return import("@/components/MonacoEditor.vue").then((res) => {
+    return res.default
+  })
+})
 
 const activeName = ref("comps")
 
@@ -140,11 +145,11 @@ function modify(scope: any) {
         </el-select>
       </el-form-item>
       <el-form-item v-if="form.type === 'js'" label="绑定函数实现体">
-        <MonacoEditor
+        <AsyncMonacoEditor
           v-model="form.impl"
           height="300px"
           language="json"
-        ></MonacoEditor>
+        ></AsyncMonacoEditor>
       </el-form-item>
       <template v-else>
         <el-form-item label="绑定目标地址">
