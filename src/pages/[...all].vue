@@ -4,7 +4,7 @@ import { DataLine, Edit } from "@element-plus/icons-vue"
 
 <template>
   <div h-full flex flex-row justify-center gap-50px items-center>
-    <div text-42px m-l-50px m-t-50px>
+    <div text-42px>
       人工智能低代码开发平台
     </div>
     <router-link to="/editor">
