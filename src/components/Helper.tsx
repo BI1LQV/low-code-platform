@@ -24,7 +24,7 @@ export default defineComponent(() => {
     ev.dataTransfer!.setData("text/plain", JSON.stringify({ type: "moveSlot", id: selectedElementId.value } as MoveSlotDragger))
   }
   return () => (
-    <Teleport to={"#app"}>
+    <Teleport to={"body"}>
     {/* click helper */}
       <div
         border-5px border-green
