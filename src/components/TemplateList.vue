@@ -62,9 +62,9 @@ function confirmAdd() {
         <div>
           <div flex justify-between items-end>
             <span text-20px>{{ item.name }}</span>
-            <span>{{ item.id }}</span>
+            <span>{{ item.author }}</span>
           </div>
-          <div v-if="props.isEditor" flex justify-end>
+          <div v-if="props.isEditor" flex justify-end mt-20px>
             <el-button text bg @click="toPreview(true, item.id)">查看</el-button>
             <el-button text bg>复制</el-button>
             <el-button text bg @click="toEdit(item.id)">编辑</el-button>
@@ -94,9 +94,8 @@ function confirmAdd() {
         <div>
           <div flex justify-between items-end>
             <span text-20px>新的应用</span>
-            <span>b</span>
           </div>
-          <div flex justify-end>
+          <div flex justify-end mt-20px>
             <el-button text bg @click="addTemplate">
               <el-icon><Plus /></el-icon>
               添加
