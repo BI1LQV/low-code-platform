@@ -15,10 +15,18 @@ export function importString(str: string) {
   useFuncStore().loadFunc(dsl)
 }
 
+function resetStores() {
+  useCanvasStore().reset()
+  useFuncStore().reset()
+}
+
 export function downloadString(id: number | string, loading?: Ref<boolean>) {
+  resetStores()
   return wrappedFetch(loading, `/api/getTemplate?id=${id}`).then((res) => {
-    // eslint-disable-next-line no-throw-literal
-    if (!res.data) { throw ("空模板") }
+    if (!res.data) {
+      // eslint-disable-next-line no-throw-literal
+      throw "空模板"
+    }
     importString(res.data)
   })
 }

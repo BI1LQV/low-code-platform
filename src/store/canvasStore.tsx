@@ -171,6 +171,11 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     clearHoverHelper()
   }
 
+  const INIT_STORE = saveDSL()
+  function reset() {
+    loadDSL(INIT_STORE)
+  }
+
   return {
     root,
     appendElement,
@@ -194,5 +199,6 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     implList,
     dslList,
     clearMap,
+    reset,
   }
 })

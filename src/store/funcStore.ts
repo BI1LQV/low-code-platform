@@ -98,6 +98,11 @@ export const useFuncStore = defineStore("funcStore", () => {
     })
   }
 
+  const INIT_STORE = saveFunc()
+  function reset() {
+    loadFunc(INIT_STORE)
+  }
+
   return {
     callFunc,
     setFunc,
@@ -107,5 +112,6 @@ export const useFuncStore = defineStore("funcStore", () => {
     nameToIdMap,
     saveFunc,
     loadFunc,
+    reset,
   }
 })
