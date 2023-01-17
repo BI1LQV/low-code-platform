@@ -20,10 +20,18 @@ export const useTemplateListStore = defineStore("templateList", () => {
       })
   }
 
+  function deleteTemplate(id: number) {
+    return wrappedFetch(`/api/deleteTemplate?id=${id}`).then((res) => {
+      getTemplateList()
+      return res
+    })
+  }
+
   return {
     loading,
     loadError,
     templateList,
     getTemplateList,
+    deleteTemplate,
   }
 })

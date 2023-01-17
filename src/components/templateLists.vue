@@ -2,6 +2,7 @@
 import { storeToRefs } from "pinia"
 import { Plus } from "@element-plus/icons-vue"
 import { useRouter } from "vue-router"
+import { ElMessage } from "element-plus"
 import { useTemplateListStore } from "@/store/templateList"
 const props = defineProps<{ isEditor: boolean }>()
 const templateStore = useTemplateListStore()
@@ -13,6 +14,20 @@ function toPreview(jump: boolean, id: number) {
   if (jump) {
     router.push(`/preview/${id}`)
   }
+}
+
+function toEdit(id: number) {
+  router.push(`/editor/${id}`)
+}
+
+function confirmDelete(id: number) {
+  templateStore.deleteTemplate(id).catch((err) => {
+    ElMessage.error(`删除失败，错误原因为${err}`)
+  })
+}
+
+function addTemplate() {
+
 }
 </script>
 
@@ -38,8 +53,21 @@ function toPreview(jump: boolean, id: number) {
           <div v-if="props.isEditor" flex justify-end>
             <el-button text bg @click="toPreview(true, item.id)">查看</el-button>
             <el-button text bg>复制</el-button>
-            <el-button text bg>编辑</el-button>
-            <el-button text bg type="danger">删除</el-button>
+            <el-button text bg @click="toEdit(item.id)">编辑</el-button>
+            <el-popover
+              :width="240"
+              trigger="click"
+            >
+              <template #reference>
+                <el-button text bg type="danger">删除</el-button>
+              </template>
+              <div>
+                <div>您确认要删除应用 {{ item.name }} 吗？</div>
+                <div flex justify-end mt-20px>
+                  <el-button type="danger" @click="confirmDelete(item.id)">确认删除</el-button>
+                </div>
+              </div>
+            </el-popover>
           </div>
         </div>
       </el-card>
@@ -50,7 +78,7 @@ function toPreview(jump: boolean, id: number) {
             <span>b</span>
           </div>
           <div flex justify-end>
-            <el-button text bg>
+            <el-button text bg @click="addTemplate">
               <el-icon><Plus /></el-icon>
               添加
             </el-button>

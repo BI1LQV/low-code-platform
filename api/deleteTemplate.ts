@@ -15,11 +15,11 @@ export default async (request: VercelRequest, response: VercelResponse) => {
     database: process.env.DB_NAME as string,
   })
     .then(connection => connection.query(
-      "SELECT * FROM template_data WHERE id=?", [id],
+      "UPDATE template_data SET deleted=true WHERE id=?", [id],
     ))
-    .then(([[res]]: any) => {
-      if (res) {
-        response.status(200).send({ status: "OK", data: JSON.stringify(res) })
+    .then(([res]: any) => {
+      if (res.changedRows > 0) {
+        response.status(200).send({ status: "OK", data: 0 })
       } else {
         throw new Error("no such template")
       }

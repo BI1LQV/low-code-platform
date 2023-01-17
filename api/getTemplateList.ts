@@ -8,7 +8,7 @@ export default async (request: VercelRequest, response: VercelResponse) => {
     password: process.env.DB_PASSWD as string,
     database: process.env.DB_NAME as string,
   })
-    .then(connection => connection.query("SELECT * FROM test_1"))
+    .then(connection => connection.query("SELECT * FROM template_data WHERE deleted=false"))
     .then((res) => {
       response.status(200).send({ status: "OK", data: JSON.stringify(res[0]) })
     }).catch((err) => {
