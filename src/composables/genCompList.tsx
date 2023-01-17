@@ -2,12 +2,12 @@ import { clickComp, dragOverComp, dropComp } from "./editEventHandle"
 import type { DslBaseElement } from "@/models/slots"
 
 import { Slots } from "@/slots"
-import { binderList, implList, propList, useCanvasStore } from "@/store/canvasStore"
+import { useCanvasStore } from "@/store/canvasStore"
 
 export function renderComp(comp: DslBaseElement, editing: boolean) {
   const { type, id, children } = comp
   const canvasStore = useCanvasStore()
-
+  const { binderList, implList, propList } = canvasStore
   const editEventHandlers = editing
     ? {
         onClick: (ev: MouseEvent) => clickComp(ev, comp, canvasStore),

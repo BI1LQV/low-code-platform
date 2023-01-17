@@ -3,6 +3,3 @@
 //   const component: DefineComponent<{}, {}, any>
 //   export default component
 // }
-declare interface Window {
-  store:any
-}

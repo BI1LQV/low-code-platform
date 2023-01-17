@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 import type { Ref } from "vue"
-import { reactive, ref, watch, watchEffect } from "vue"
+import { reactive, ref, shallowReactive, watch, watchEffect } from "vue"
 import { useElementBounding, useToggle } from "@vueuse/core"
 import type { DslBaseElement, DslContainerElement, DslRootElement, DslSunElement, MaybeParent, SlotOptions, allSlotsKey } from "@/models/slots"
 import { containerSlots, rootID } from "@/models/slots"
@@ -9,28 +9,26 @@ import { Binders, Props } from "@/slots"
 import type { MoveSlotDragger, NewSlotDragger, StyleLike } from "@/models/drags"
 import { clearableReactive } from "@/composables/clearableReactive"
 
-export const binderList: Map<string, Ref<any>> = new Map()
-export const propList: Map<string, SlotOptions> = new Map()
-export const implList: Map<string, JSX.Element> = new Map()
-export const dslList: Map<string, DslContainerElement | DslSunElement | DslBaseElement> = new Map()
-
-function clearMap(id: string) {
-  dslList.delete(id)
-  implList.delete(id)
-  propList.delete(id)
-  binderList.delete(id)
-}
-
-window.store = { binderList, propList, implList, dslList }
-
 export const useCanvasStore = defineStore("canvasStore", () => {
+  const binderList: Map<string, Ref<any>> = shallowReactive(new Map())
+  const propList: Map<string, SlotOptions> = shallowReactive(new Map())
+  const implList: Map<string, JSX.Element> = shallowReactive(new Map())
+  const dslList: Map<string, DslContainerElement | DslSunElement | DslBaseElement> = shallowReactive(new Map())
+
+  function clearMap(id: string) {
+    dslList.delete(id)
+    implList.delete(id)
+    propList.delete(id)
+    binderList.delete(id)
+  }
+
   // dsl tree
   const root: DslRootElement = reactive({
     children: [],
     type: containerSlots.ERoot,
     id: rootID,
   })
-  window.store.root = root
+
   propList.set(rootID, Props.get(containerSlots.ERoot)!())
   dslList.set(rootID, root)
   function Base(
@@ -191,5 +189,10 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     saveDSL,
     loadDSL,
     clearDragEffect,
+    binderList,
+    propList,
+    implList,
+    dslList,
+    clearMap,
   }
 })

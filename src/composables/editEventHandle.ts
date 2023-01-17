@@ -1,6 +1,5 @@
 import { nextTick } from "vue"
 import type { useCanvasStore } from "@/store/canvasStore"
-import { dslList, implList, propList } from "@/store/canvasStore"
 import { containerSlots, isParent, isParentAndSun, isSun } from "@/models/slots"
 import type { MoveSlotDragger, NewSlotDragger } from "@/models/drags"
 import type { DslBaseElement, DslSunElement, EFlexOptions } from "@/models/slots"
@@ -11,6 +10,7 @@ export function dropComp(ev: DragEvent, comp: DslBaseElement, storeUtilities: Re
   const {
     insertElement, appendElement,
     posPrompt, setSelectedElement,
+    dslList,
   } = storeUtilities
   const data: NewSlotDragger | MoveSlotDragger = JSON.parse(ev.dataTransfer!.getData("text/plain"))
 
@@ -34,7 +34,7 @@ export function dragOverComp(ev: DragEvent, comp: DslBaseElement, storeUtilities
   ev.preventDefault()
   ev.stopPropagation()
   const {
-    setHoverHelper, setPosPrompt, clearPosPrompt,
+    setHoverHelper, setPosPrompt, clearPosPrompt, implList, propList,
   } = storeUtilities
   const { left, top, width, height } = (implList.get(comp.id)!.el as HTMLElement).getBoundingClientRect()
   setHoverHelper({ left, top, width, height })

@@ -4,10 +4,11 @@ import type { Component } from "vue"
 import { computed, ref } from "vue"
 import StylePanel from "./StylePanel.vue"
 import AttrPanel from "./AttrPanel.vue"
-import { binderList, dslList, propList, useCanvasStore } from "@/store/canvasStore"
+import { useCanvasStore } from "@/store/canvasStore"
 import { AttrPanels, StylePanels } from "@/slots"
 const canvasStore = useCanvasStore()
 const { selectedElementId } = storeToRefs(canvasStore)
+const { binderList, dslList, propList } = canvasStore
 const activeName = ref("style")
 const selectedProp = computed(() => propList.get(selectedElementId.value))
 const selectedBinder = computed(() => binderList.get(selectedElementId.value))

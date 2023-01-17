@@ -1,14 +1,14 @@
 import { Teleport, computed, defineComponent } from "vue"
 import { storeToRefs } from "pinia"
 import helperCss from "@/styles/helper.module.css"
-import { dslList, useCanvasStore } from "@/store/canvasStore"
+import { useCanvasStore } from "@/store/canvasStore"
 import { renderStyle } from "@/utils"
 import { isRoot, isSun } from "@/models/slots"
 import type { MoveSlotDragger } from "@/models/drags"
 
 export default defineComponent(() => {
   const canvasStore = useCanvasStore()
-  const { selectorPos, posPrompt, hoverHelper, removeElement, setSelectedElement, clearDragEffect } = canvasStore
+  const { selectorPos, posPrompt, hoverHelper, removeElement, setSelectedElement, clearDragEffect, dslList } = canvasStore
   const { isShowSelectorPos, selectedElementId } = storeToRefs(canvasStore)
   const selectedDslComp = computed(() => dslList.get(selectedElementId.value))
   function toParent() {

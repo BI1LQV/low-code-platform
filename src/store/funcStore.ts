@@ -1,9 +1,10 @@
 import { shallowReactive, watch } from "vue"
 import { defineStore } from "pinia"
-import { binderList } from "./canvasStore"
+import { useCanvasStore } from "./canvasStore"
 import type { FuncType, JsFunc, PyFunc } from "@/models/funcCalls"
 import { pyCall } from "@/utils/globalCall"
 export const useFuncStore = defineStore("funcStore", () => {
+  const { binderList } = useCanvasStore()
   const funcMap: Record<string, FuncType> = shallowReactive({})
 
   const nameToIdMap: Record<string, string> = shallowReactive({})
