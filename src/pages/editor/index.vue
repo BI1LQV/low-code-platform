@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import TemplateLists from "@/components/templateLists.vue"
+import TemplateList from "@/components/TemplateList.vue"
 </script>
 
 <template>
-  <TemplateLists :is-editor="true"></TemplateLists>
+  <TemplateList :is-editor="true"></TemplateList>
 </template>
