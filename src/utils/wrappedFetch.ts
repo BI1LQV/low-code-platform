@@ -6,7 +6,6 @@ export function wrappedFetch(loading?: Ref<boolean>, ...args: Parameters<typeof 
   return fetch(...args)
     .then(res => res.json())
     .then((res) => {
-      if (isRef(loading)) { loading.value = false }
       if (res.status === "OK") {
         return JSON.parse(res.data)
       } else {
@@ -14,7 +13,6 @@ export function wrappedFetch(loading?: Ref<boolean>, ...args: Parameters<typeof 
       }
     }).catch((err) => {
       console.log(err)
-      if (isRef(loading)) { loading.value = false }
       if (typeof err === "string") {
         throw err
       } else if (err instanceof Error) {
@@ -23,5 +21,7 @@ export function wrappedFetch(loading?: Ref<boolean>, ...args: Parameters<typeof 
         // eslint-disable-next-line no-throw-literal
         throw "内部异常"
       }
+    }).finally(() => {
+      if (isRef(loading)) { loading.value = false }
     })
 }

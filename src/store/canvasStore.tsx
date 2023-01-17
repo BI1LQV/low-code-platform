@@ -1,7 +1,7 @@
 import { defineStore } from "pinia"
 import type { Ref } from "vue"
 import { reactive, ref, watch, watchEffect } from "vue"
-import { useElementBounding, useLocalStorage, useToggle } from "@vueuse/core"
+import { useElementBounding, useToggle } from "@vueuse/core"
 import type { DslBaseElement, DslContainerElement, DslRootElement, DslSunElement, MaybeParent, SlotOptions, allSlotsKey } from "@/models/slots"
 import { containerSlots, rootID } from "@/models/slots"
 import { genId, setParent } from "@/utils"
@@ -94,29 +94,17 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     }
   }
 
-  const childrenStorage = useLocalStorage("children", "")
-  const propListStorage = useLocalStorage("propList", "")
-  const binderListStorage = useLocalStorage("binderList", "")
-
   function saveDSL() {
-    childrenStorage.value = JSON.stringify(root.children, ["id", "type", "children"])
-    propListStorage.value = JSON.stringify(Array.from(propList))
-    binderListStorage.value = JSON.stringify(Array.from(binderList).map(([key, value]) => [key, value.value]))
     return {
-      children: childrenStorage.value,
-      propList: propListStorage.value,
-      binderList: binderListStorage.value,
+      children: JSON.stringify(root.children, ["id", "type", "children"]),
+      propList: JSON.stringify(Array.from(propList)),
+      binderList: JSON.stringify(Array.from(binderList).map(([key, value]) => [key, value.value])),
     }
   }
-  function loadDSL(dslString?: ReturnType<typeof saveDSL>) {
-    let loadedPropList = JSON.parse(propListStorage.value)
-    let loadedBinderList = JSON.parse(binderListStorage.value)
-    let loadedChildren = JSON.parse(childrenStorage.value)
-    if (dslString) {
-      loadedPropList = JSON.parse(dslString.propList)
-      loadedBinderList = JSON.parse(dslString.binderList)
-      loadedChildren = JSON.parse(dslString.children)
-    }
+  function loadDSL(dslString: ReturnType<typeof saveDSL>) {
+    const loadedPropList = JSON.parse(dslString.propList)
+    const loadedBinderList = JSON.parse(dslString.binderList)
+    const loadedChildren = JSON.parse(dslString.children)
     propList.clear()
     binderList.clear()
     dslList.clear()

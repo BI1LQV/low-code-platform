@@ -1,14 +1,10 @@
 import { shallowReactive, watch } from "vue"
 import { defineStore } from "pinia"
-import { useLocalStorage } from "@vueuse/core"
 import { binderList } from "./canvasStore"
 import type { FuncType, JsFunc, PyFunc } from "@/models/funcCalls"
 import { pyCall } from "@/utils/globalCall"
 export const useFuncStore = defineStore("funcStore", () => {
   const funcMap: Record<string, FuncType> = shallowReactive({})
-
-  const nameIdMapStore = useLocalStorage("namIdMap", "")
-  const funcStore = useLocalStorage("funcStore", "")
 
   const nameToIdMap: Record<string, string> = shallowReactive({})
   const idToNameMap: Record<string, string> = shallowReactive({})
@@ -81,23 +77,20 @@ export const useFuncStore = defineStore("funcStore", () => {
   }
 
   function saveFunc() {
-    nameIdMapStore.value = JSON.stringify(nameToIdMap)
-    funcStore.value = JSON.stringify(funcMap)
     return {
-      nameIdMap: nameIdMapStore.value,
-      func: funcStore.value,
+      nameIdMap: JSON.stringify(nameToIdMap),
+      func: JSON.stringify(funcMap),
     }
   }
-  function loadFunc(funcString?: ReturnType<typeof saveFunc>) {
+  function loadFunc(funcString: ReturnType<typeof saveFunc>) {
     const nameToIdEntires = Object.entries<string>(
-      JSON.parse(funcString ? funcString.nameIdMap : nameIdMapStore.value),
+      JSON.parse(funcString.nameIdMap),
     )
     nameToIdEntires.forEach(([name, id]) => {
       nameToIdMap[name] = id
       idToNameMap[id] = name
     })
-    Object.entries<FuncType>(JSON.parse(
-      funcString ? funcString.func : funcStore.value),
+    Object.entries<FuncType>(JSON.parse(funcString.func),
     ).forEach(([name, func]) => {
       funcMap[name] = func
       registerWatcher(name, func.inputs)
