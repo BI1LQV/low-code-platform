@@ -31,20 +31,14 @@ function exportDsl() {
 async function importDsl() {
   importString(await navigator.clipboard.readText())
 }
-
-async function importDemo() {
-  importString((await import("@/assets/demo.json?raw")).default)
-}
 </script>
 
 <template>
   <header h-40px>
     <el-button type="primary" :loading="uploading" @click="save">保存</el-button>
     <el-button type="primary" @click="() => { togglePreview() }">{{ isPreview ? "进入编辑" : "进入预览" }}</el-button>
-
-    <el-button type="primary" @click="importDemo">导入Demo</el-button>
     <el-button type="primary" @click="exportDsl">导出到剪切板</el-button>
-    <el-button type="primary" @click="importDsl">导入到剪切板</el-button>
+    <el-button type="primary" @click="importDsl">从剪切板导入</el-button>
   </header>
   <div v-loading.fullscreen.lock="loading" flex flex-row h="[calc(100%-40px)]" justify-between>
     <ControlPanel></ControlPanel>

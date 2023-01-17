@@ -66,7 +66,7 @@ function confirmAdd() {
           </div>
           <div v-if="props.isEditor" flex justify-end mt-20px>
             <el-button text bg @click="toPreview(true, item.id)">查看</el-button>
-            <el-button text bg>复制</el-button>
+            <!-- <el-button text bg>复制</el-button> -->
             <el-button text bg @click="toEdit(item.id)">编辑</el-button>
             <el-popover
               :width="240"
@@ -122,7 +122,7 @@ function confirmAdd() {
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="displayAddTemplateDialog = false">Cancel</el-button>
+        <el-button @click="displayAddTemplateDialog = false">取消</el-button>
         <el-button :loading="addLoading" type="primary" @click="confirmAdd">
           确定
         </el-button>
