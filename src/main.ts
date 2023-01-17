@@ -8,6 +8,7 @@ import now from "~build/time"
 import { sha } from "~build/info"
 
 import "./styles/main.css"
+import "element-plus/es/components/message/style/css"
 import "uno.css"
 
 if (!import.meta.env.DEV) {

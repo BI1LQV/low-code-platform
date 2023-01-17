@@ -1,7 +1,12 @@
-export function wrappedFetch(...args: Parameters<typeof fetch>) {
+import type { Ref } from "vue"
+import { isRef } from "vue"
+
+export function wrappedFetch(loading?: Ref<boolean>, ...args: Parameters<typeof fetch>) {
+  if (isRef(loading)) { loading.value = true }
   return fetch(...args)
     .then(res => res.json())
     .then((res) => {
+      if (isRef(loading)) { loading.value = false }
       if (res.status === "OK") {
         return JSON.parse(res.data)
       } else {
@@ -9,6 +14,7 @@ export function wrappedFetch(...args: Parameters<typeof fetch>) {
       }
     }).catch((err) => {
       console.log(err)
+      if (isRef(loading)) { loading.value = false }
       if (typeof err === "string") {
         throw err
       } else if (err instanceof Error) {

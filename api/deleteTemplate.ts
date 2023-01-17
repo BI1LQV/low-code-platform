@@ -3,7 +3,7 @@ import mysql from "mysql2/promise"
 export default async (request: VercelRequest, response: VercelResponse) => {
   const { id } = request.query
   if (isNaN(Number(id))) {
-    response.status(200).send({ status: "ERR", message: "invalid id" })
+    response.status(200).send({ status: "ERR", data: "invalid id" })
     return
   }
 
@@ -24,6 +24,6 @@ export default async (request: VercelRequest, response: VercelResponse) => {
         throw new Error("no such template")
       }
     }).catch((err) => {
-      response.status(200).send({ status: "ERR", message: JSON.stringify(err?.stack) || "db error" })
+      response.status(200).send({ status: "ERR", data: JSON.stringify(err?.stack) || "db error" })
     })
 }
