@@ -1,7 +1,7 @@
 <script lang='ts'>
 import { defineComponent, ref } from "vue"
 import { ElTooltip } from "element-plus"
-import useMonaco from "./useMonaco"
+import useMonaco from "@/composables/useMonaco"
 
 export default defineComponent({
   components: {
