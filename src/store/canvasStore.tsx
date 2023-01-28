@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 import type { Ref } from "vue"
-import { reactive, ref, shallowReactive, watch, watchEffect } from "vue"
+import { reactive, ref, shallowReactive, watch } from "vue"
 import { useElementBounding, useToggle } from "@vueuse/core"
 import type { DslBaseElement, DslContainerElement, DslRootElement, DslSunElement, MaybeParent, SlotOptions, allSlotsKey } from "@/models/slots"
 import { containerSlots, rootID } from "@/models/slots"
@@ -141,19 +141,21 @@ export const useCanvasStore = defineStore("canvasStore", () => {
     selectedElement.value = implList.get(selectedElementId.value)?.el as HTMLElement | undefined
   }, { immediate: true })
 
-  const selectedElementBounding = useElementBounding(selectedElement)
-  watchEffect(() => {
-    if (selectedElementBounding.left.value === 0 && selectedElementBounding.top.value === 0) {
-      clearSelectorPos()
-    } else {
-      setSelectorPos({
-        left: selectedElementBounding.left.value - 6,
-        top: selectedElementBounding.top.value - 6,
-        height: selectedElementBounding.height.value + 12,
-        width: selectedElementBounding.width.value + 12,
-      })
-    }
-  })
+  {
+    const { left, top, height, width } = useElementBounding(selectedElement)
+    watch([left, top, height, width], () => {
+      if (left.value === 0 && top.value === 0) {
+        clearSelectorPos()
+      } else {
+        setSelectorPos({
+          left: left.value - 6,
+          top: top.value - 6,
+          height: height.value + 12,
+          width: width.value + 12,
+        })
+      }
+    })
+  }
 
   // posPrompt
   type PosPrompt = StyleLike & { type: "left" | "right" | "top" | "bottom" }

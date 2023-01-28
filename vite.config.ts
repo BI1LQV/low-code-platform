@@ -32,7 +32,7 @@ export default defineConfig({
     Inspect(),
     // https://github.com/hannoeru/vite-plugin-pages
     Pages({
-      importMode(filepath) {
+      importMode(_filepath) {
         // if (
         //   filepath === "/src/pages/preview/index.vue"
         // || filepath === "/src/pages/editor/index.vue"
