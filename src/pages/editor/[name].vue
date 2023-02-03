@@ -27,9 +27,11 @@ function save() {
 
 function exportDsl() {
   navigator.clipboard.writeText(exportString())
+  ElMessage.success("已复制到剪切板")
 }
 async function importDsl() {
   importString(await navigator.clipboard.readText())
+  ElMessage.success("已从剪切板导入")
 }
 </script>
 

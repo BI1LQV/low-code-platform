@@ -16,7 +16,6 @@ export const Component = defineComponent({
         if (el && !("empty" in binder.value)) {
           el.innerHTML = ""
           const { width, height } = el.getBoundingClientRect()
-          console.log(width, height)
           mpld3.draw_figure(id, { ...binder.value, width, height })
         }
       })

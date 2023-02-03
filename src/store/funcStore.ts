@@ -70,6 +70,9 @@ export const useFuncStore = defineStore("funcStore", () => {
   }
 
   function setBindMap(name: string, id: string) {
+    if (id in idToNameMap) {
+      delete nameToIdMap[idToNameMap[id]]
+    }
     nameToIdMap[name] = id
     idToNameMap[id] = name
   }
