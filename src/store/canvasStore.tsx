@@ -76,7 +76,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
   ) {
     const childImpl = getMaybeImpl(data, posElement.parent)
     const children = posElement.parent.children
-    const insertPlace = children.findIndex(originEle => originEle === posElement)
+    const insertPlace = children.findIndex(originEle => originEle.id === posElement.id)
     const offset = pos === "after" ? 1 : 0
     children.splice(insertPlace + offset, 0, childImpl)
     return childImpl
@@ -84,7 +84,7 @@ export const useCanvasStore = defineStore("canvasStore", () => {
 
   function removeElement(child: DslSunElement, isTemp = false) {
     const siblings = child.parent.children
-    const delIdx = siblings.findIndex(originEle => originEle === child)
+    const delIdx = siblings.findIndex(originEle => originEle.id === child.id)
     siblings.splice(delIdx, 1)
     if (!isTemp) {
       clearMap(child.id)

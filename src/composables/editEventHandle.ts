@@ -18,7 +18,7 @@ export function dropComp(ev: DragEvent, comp: DslBaseElement, storeUtilities: Re
     return
   }
   let curComp: DslSunElement
-  if (isParent(comp)) {
+  if (isParent(comp) && comp.children.length === 0) {
     curComp = insertElement(data, comp)
   } else if (isSun(comp)) {
     const pos = ["left", "top"].includes(posPrompt.type) ? "before" : "after"
@@ -38,7 +38,10 @@ export function dragOverComp(ev: DragEvent, comp: DslBaseElement, storeUtilities
   } = storeUtilities
   const { left, top, width, height } = (implList.get(comp.id)!.el as HTMLElement).getBoundingClientRect()
   setHoverHelper({ left, top, width, height })
-  if (!isParent(comp) && isSun(comp)) {
+  if (isParent(comp) && comp.children.length === 0) {
+    // 在container parent上
+    clearPosPrompt()
+  } else if (isSun(comp)) {
     const parentDirection = (propList.get(comp.parent.id) as EFlexOptions).style["flex-direction"]
     if (parentDirection === "row") {
       // 横着算
@@ -55,9 +58,6 @@ export function dragOverComp(ev: DragEvent, comp: DslBaseElement, storeUtilities
         setPosPrompt({ left, top: top + height, width, height: 3, type: "bottom" })
       }
     }
-  } else {
-    // 在container parent上
-    clearPosPrompt()
   }
 }
 export function clickComp(ev: MouseEvent, comp: DslBaseElement, storeUtilities: ReturnType<typeof useCanvasStore>) {
