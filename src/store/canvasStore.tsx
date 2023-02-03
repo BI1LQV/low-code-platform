@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 import type { Ref } from "vue"
-import { reactive, ref, shallowReactive, watch } from "vue"
+import { reactive, ref, watch } from "vue"
 import { useElementBounding, useToggle } from "@vueuse/core"
 import type { DslBaseElement, DslContainerElement, DslRootElement, DslSunElement, MaybeParent, SlotOptions, allSlotsKey } from "@/models/slots"
 import { containerSlots, rootID } from "@/models/slots"
@@ -10,10 +10,10 @@ import type { MoveSlotDragger, NewSlotDragger, StyleLike } from "@/models/drags"
 import { clearableReactive } from "@/composables/clearableReactive"
 
 export const useCanvasStore = defineStore("canvasStore", () => {
-  const binderList: Map<string, Ref<any>> = shallowReactive(new Map())
-  const propList: Map<string, SlotOptions> = shallowReactive(new Map())
-  const implList: Map<string, JSX.Element> = shallowReactive(new Map())
-  const dslList: Map<string, DslContainerElement | DslSunElement | DslBaseElement> = shallowReactive(new Map())
+  const binderList: Map<string, Ref<any>> = new Map()
+  const propList: Map<string, SlotOptions> = new Map()
+  const implList: Map<string, JSX.Element> = new Map()
+  const dslList: Map<string, DslContainerElement | DslSunElement | DslBaseElement> = new Map()
 
   function clearMap(id: string) {
     dslList.delete(id)
