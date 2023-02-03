@@ -1,6 +1,5 @@
 import type * as Slot from "./EFlex"
 import type { allSlotsKey } from "@/models/slots"
-import { allSlots } from "@/models/slots"
 
 let c: Record<string, typeof Slot> = import.meta.glob("./*.tsx", { eager: true })
 
@@ -14,13 +13,13 @@ Object.entries(c).forEach(([name, { Component, Prop, StylePanel, AttrPanel, Bind
   // @ts-expect-error let me do
   const compName = /(?<compName>E\w+).tsx/[Symbol.match](name).groups.compName
   // @ts-expect-error let me do
-  Slots.set(allSlots[compName], Component)
+  Slots.set(compName, Component)
   // @ts-expect-error let me do
-  Props.set(allSlots[compName], Prop)
+  Props.set(compName, Prop)
   // @ts-expect-error let me do
-  Binders.set(allSlots[compName], Binder)
+  Binders.set(compName, Binder)
   // @ts-expect-error let me do
-  StylePanels.set(allSlots[compName], StylePanel)
+  StylePanels.set(compName, StylePanel)
   // @ts-expect-error let me do
-  AttrPanels.set(allSlots[compName], AttrPanel)
+  AttrPanels.set(compName, AttrPanel)
 })

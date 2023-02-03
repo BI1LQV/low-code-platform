@@ -48,7 +48,7 @@ export function dragOverComp(ev: DragEvent, comp: DslBaseElement, storeUtilities
         setPosPrompt({ left: left + width, top, width: 3, height, type: "right" })
       }
     } else {
-      // 竖者算 TODO: 待测试
+      // 竖者算
       if (ev.clientY - top < height / 2) {
         setPosPrompt({ left, top, width, height: 3, type: "top" })
       } else {

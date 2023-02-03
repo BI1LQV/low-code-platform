@@ -3,15 +3,15 @@ export interface SlotOptions {
 }
 
 export enum functionalSlots {
-  "EInput" = 0,
+  "EInput",
   "ESelect",
   "ESlider",
   "ELabel",
   "EColorPicker",
 }
 export enum containerSlots {
-  "EFlex" = 100,
-  ERoot,
+  EFlex = "EFlex",
+  ERoot = "ERoot",
 }
 export const allSlots = {
   ...functionalSlots, ...containerSlots,
