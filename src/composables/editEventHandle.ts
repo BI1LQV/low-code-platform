@@ -1,6 +1,6 @@
 import { nextTick } from "vue"
 import type { useCanvasStore } from "@/store/canvasStore"
-import { containerSlots, isParent, isParentAndSun, isSun } from "@/models/slots"
+import { containerSlots, isParent, isParentAndSun, isRoot, isSun } from "@/models/slots"
 import type { MoveSlotDragger, NewSlotDragger } from "@/models/drags"
 import type { DslBaseElement, DslSunElement, EFlexOptions } from "@/models/slots"
 
@@ -18,7 +18,7 @@ export function dropComp(ev: DragEvent, comp: DslBaseElement, storeUtilities: Re
     return
   }
   let curComp: DslSunElement
-  if (isParent(comp) && comp.children.length === 0) {
+  if (isParent(comp) && (comp.children.length === 0 || isRoot(comp))) {
     curComp = insertElement(data, comp)
   } else if (isSun(comp)) {
     const pos = ["left", "top"].includes(posPrompt.type) ? "before" : "after"
