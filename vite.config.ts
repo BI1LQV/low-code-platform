@@ -16,6 +16,14 @@ import HotExport from "vite-plugin-hot-export"
 import { visualizer } from "rollup-plugin-visualizer"
 
 export default defineConfig({
+  server: {
+    proxy: {
+      "/api": {
+        target: "https://lowcode.birdu.net",
+        changeOrigin: true,
+      },
+    },
+  },
   resolve: {
     alias: {
       "@/": `${path.resolve(__dirname, "src")}/`,

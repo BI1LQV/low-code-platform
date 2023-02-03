@@ -6,7 +6,7 @@ import type { CommonOptions, SlotOptions } from "@/models/slots"
 import { BaseStyleImpl } from "@/models/slots"
 
 export const Component = defineComponent({
-  name: "EColorPicker",
+  name: "颜色选择器",
   props: ["binder", "prop", "isProd"],
   setup({ binder, prop, isProd: _isProd }: { binder: Ref<any>; prop: SlotOptions; isProd: boolean }) {
     return () => {

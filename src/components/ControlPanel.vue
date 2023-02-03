@@ -8,7 +8,6 @@ import { Slots } from "@/slots"
 import type { NewSlotDragger } from "@/models/drags"
 import { useFuncStore } from "@/store/funcStore"
 import { clearableReactive } from "@/composables/clearableReactive"
-import nameMap from "@/models/SlotToNameMap"
 const { nameToIdMap } = useFuncStore()
 const { setFunc, funcMap } = useFuncStore()
 
@@ -77,7 +76,7 @@ function modify(scope: any) {
             @dragstart="dragHandler($event, name)"
             @dragend="clearDragEffect()"
           >
-            {{ nameMap[name] }}
+            {{ Slots.get(name)!.name }}
           </button>
         </template>
       </el-tab-pane>

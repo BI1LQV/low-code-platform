@@ -5,7 +5,7 @@ import type { EFlexOptions, SlotOptions } from "@/models/slots"
 import { BaseFlexStyleImpl, BaseStyleImpl } from "@/models/slots"
 import { PngDirection, PngItemsCenter, PngItemsEnd, PngItemsStart, PngJustifyAround, PngJustifyBetween, PngJustifyCenter, PngJustifyEnd, PngJustifyStart } from "@/assets/stylePanel"
 export const Component = defineComponent({
-  name: "EFlex",
+  name: "Flex布局",
   props: ["binder", "prop", "isProd"],
   setup(
     { prop, isProd }: { binder: Ref<any>; prop: SlotOptions; isProd: boolean },
