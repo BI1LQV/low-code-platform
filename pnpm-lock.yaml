@@ -18,6 +18,7 @@ specifiers:
   jsdom: ^20.0.3
   less: ^4.1.3
   monaco-editor: ^0.34.1
+  mpld3: ^0.5.9
   mysql2: ^3.0.1
   node-fetch: 2.6.1
   picocolors: ^1.0.0
@@ -44,6 +45,7 @@ dependencies:
   '@vueuse/core': 9.6.0_vue@3.2.45
   element-plus: 2.2.26_vue@3.2.45
   monaco-editor: 0.34.1
+  mpld3: 0.5.9
   pinia: 2.0.27_mgnvym7yiazkylwwogi5r767ue
   vue: 3.2.45
   vue-router: 4.1.6_vue@3.2.45
@@ -4196,6 +4198,10 @@ packages:
 
   /monaco-editor/0.34.1:
     resolution: {integrity: sha512-FKc80TyiMaruhJKKPz5SpJPIjL+dflGvz4CpuThaPMc94AyN7SeC9HQ8hrvaxX7EyHdJcUY5i4D0gNyJj1vSZQ==}
+    dev: false
+
+  /mpld3/0.5.9:
+    resolution: {integrity: sha512-BQdqwqZ5kkkJbJZxSK9zsU6cks0EoBlzNKF3Q2JoaFR2qfoIW39QqeL8COPz19Hm+kvc696jjcMzbE7DuRG2eA==}
     dev: false
 
   /mri/1.2.0:

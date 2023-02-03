@@ -3,3 +3,7 @@
 //   const component: DefineComponent<{}, {}, any>
 //   export default component
 // }
+
+declare module "mpld3" {
+  export default any;
+}
