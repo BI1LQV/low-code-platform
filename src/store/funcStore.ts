@@ -10,7 +10,7 @@ export const useFuncStore = defineStore("funcStore", () => {
   const nameToIdMap: Record<string, string> = shallowReactive({})
   const idToNameMap: Record<string, string> = shallowReactive({})
 
-  async function callFunc(id: string) {
+  async function callFunc(id: string, signal: AbortSignal) {
     const func = funcMap[id]
     if (func == null) {
       return
@@ -24,10 +24,10 @@ export const useFuncStore = defineStore("funcStore", () => {
     } else {
       res = await pyCall(func.baseUrl, func.name, func.isDirect, func.inputs.map((bindName: string) => {
         return binderList.get(nameToIdMap[bindName])!.value
-      }))
+      }), signal)
     }
 
-    if (func.receivers.length) {
+    if (func.receivers.length && !signal.aborted) {
       if (Array.isArray(res)) {
         func.receivers.forEach((receiverId, idx) => {
           binderList.get(nameToIdMap[receiverId])!.value = res[idx]
@@ -38,8 +38,10 @@ export const useFuncStore = defineStore("funcStore", () => {
     }
   }
   function registerWatcher(name: string, inputs: string[]) {
-    watch(inputs.map(name => binderList.get(nameToIdMap[name])), () => {
-      callFunc(name)
+    watch(inputs.map(name => binderList.get(nameToIdMap[name])), (_1, _2, onCleanUp) => {
+      const { signal, abort } = new AbortController()
+      onCleanUp(() => abort())
+      callFunc(name, signal)
     })
   }
 
