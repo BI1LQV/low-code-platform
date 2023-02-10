@@ -28,14 +28,14 @@ export default defineComponent(() => {
     {/* click helper */}
       <div
         border-5px border-green
-        absolute pointer-events-none
+        fixed pointer-events-none
         duration-200
         style={{
           ...renderStyle(selectorPos),
           "transition-property": isShowSelectorPos.value ? "all" : "none",
         }}
       >
-        <div absolute right-0 top--24px pointer-events-initial w-60px class={helperCss["click-helper"]}>
+        <div fixed right-0 top--24px pointer-events-initial w-60px class={helperCss["click-helper"]}>
           <button class={helperCss["click-helper-parent"]} onClick={toParent}></button>
           <button
           class={helperCss["click-helper-move"]}
@@ -47,13 +47,13 @@ export default defineComponent(() => {
       </div>
       {/* insert helper */}
       <div
-        bg-blue absolute pointer-events-none
+        bg-blue fixed pointer-events-none
         style={renderStyle(posPrompt)}
       ></div>
       {/* hover helper */}
       <div
         border-3px border-gray border-dashed
-        absolute pointer-events-none
+        fixed pointer-events-none
         style={renderStyle(hoverHelper)}
       ></div>
     </Teleport>
