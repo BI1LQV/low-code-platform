@@ -1,13 +1,12 @@
-import { defineComponent } from "vue"
+import { computed, defineComponent } from "vue"
 import Helper from "./Helper"
 import { useCanvasStore } from "@/store/canvasStore"
 
 import { renderComp } from "@/composables/genCompList"
-import { watchComputed } from "@/utils"
 export default defineComponent(() => {
   const { root } = useCanvasStore()
 
-  let renderedRoot = watchComputed(root, () => renderComp(root, true))
+  let renderedRoot = computed(() => renderComp(root, true))
   return () => (
     <div h-full w-full>
       <Helper></Helper>

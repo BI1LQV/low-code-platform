@@ -1,5 +1,3 @@
-import type { Ref } from "vue"
-import { ref, watch } from "vue"
 import type { StyleLike } from "@/models/drags"
 import type { DslSunElement, MaybeParent } from "@/models/slots"
 import { isParent } from "@/models/slots"
@@ -14,14 +12,6 @@ export function genId() {
   return crypto.randomUUID?.()
 }
 
-// TODO: 考虑组件生命周期
-export function watchComputed<T>(toWatches: (Ref | {})[]|(Ref | {}), cb: () => T): Readonly<Ref<T>> {
-  let bucket = ref()
-  watch(toWatches, () => {
-    bucket.value = cb()
-  }, { immediate: true })
-  return bucket
-}
 export function renderStyle(styleLike: StyleLike) {
   return {
     "height": `${styleLike.height}px`,
