@@ -34,14 +34,15 @@ export function dragOverComp(ev: DragEvent, comp: DslBaseElement, storeUtilities
   ev.preventDefault()
   ev.stopPropagation()
   const {
-    setHoverHelper, setPosPrompt, clearPosPrompt, implList, propList,
+    setHoverHelper, setPosPrompt, clearPosPrompt, implList, propList, clearHoverHelper,
   } = storeUtilities
   const { left, top, width, height } = (implList.get(comp.id)!.el as HTMLElement).getBoundingClientRect()
-  setHoverHelper({ left, top, width, height })
-  if (isParent(comp) && comp.children.length === 0) {
+  if (isParent(comp) && (comp.children.length === 0 || isRoot(comp))) {
     // 在container parent上
     clearPosPrompt()
+    setHoverHelper({ left, top, width, height })
   } else if (isSun(comp)) {
+    clearHoverHelper()
     const parentDirection = (propList.get(comp.parent.id) as EFlexOptions).style["flex-direction"]
     if (parentDirection === "row") {
       // 横着算
