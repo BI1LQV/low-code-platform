@@ -4,7 +4,7 @@ function fetchMaybeRelay(isDirect: boolean, ...[url, req]: Parameters<typeof wra
   if (!isDirect) {
     url = `/api/relay?baseUrl=${encodeURIComponent(url)}`
   }
-  return wrappedFetch(url, req).then(res => res.json()).then(res => res.res)
+  return wrappedFetch(url, req)
 }
 
 export function pyCall(baseUrl: string, funcName: string, isDirect: boolean, args: any[], signal: AbortSignal) {

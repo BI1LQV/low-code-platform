@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { ref } from "vue"
 
-import FnlBinderGbcall from "@/components/FnlBinderGbcall.vue"
-import FnlBinderJs from "@/components/FnBinderJs.vue"
+import FnBinderGbcall from "@/components/FnBinderGbcall.vue"
+import FnBinderJs from "@/components/FnBinderJs.vue"
 import { useCanvasStore } from "@/store/canvasStore"
 import type { allSlotsKey } from "@/models/slots"
 import { containerSlots } from "@/models/slots"
@@ -91,8 +91,8 @@ function modify(scope: any) {
           <el-option label="Python云函数" value="py" />
         </el-select>
       </el-form-item>
-      <FnlBinderGbcall v-if="form.type === 'py'"></FnlBinderGbcall>
-      <FnlBinderJs v-if="form.type === 'js'"></FnlBinderJs>
+      <FnBinderGbcall v-if="form.type === 'py'"></FnBinderGbcall>
+      <FnBinderJs v-if="form.type === 'js'"></FnBinderJs>
     </el-form>
     <template #footer>
       <span>
