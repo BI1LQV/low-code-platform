@@ -3,7 +3,7 @@ import mysql from "mysql2/promise"
 export default async (request: VercelRequest, response: VercelResponse) => {
   const { name = "", author = "" } = request.query
   if (name === "" || author === "") {
-    response.status(200).send({ status: "ERR", data: "invalid query" })
+    response.status(200).send({ status: "ERR", res: "invalid query" })
     return
   }
 
@@ -19,6 +19,6 @@ export default async (request: VercelRequest, response: VercelResponse) => {
     ))
     .then((res) => {
       // @ts-expect-error it's okay
-      response.status(200).send({ status: "OK", data: res[0].insertId })
+      response.status(200).send({ status: "OK", res: res[0].insertId })
     })
 }

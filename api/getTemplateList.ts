@@ -10,8 +10,8 @@ export default async (request: VercelRequest, response: VercelResponse) => {
   })
     .then(connection => connection.query("SELECT * FROM template_data WHERE deleted=false"))
     .then((res) => {
-      response.status(200).send({ status: "OK", data: JSON.stringify(res[0]) })
+      response.status(200).send({ status: "OK", res: JSON.stringify(res[0]) })
     }).catch((err) => {
-      response.status(200).send({ status: "ERR", data: JSON.stringify(err?.stack) })
+      response.status(200).send({ status: "ERR", res: JSON.stringify(err?.stack) })
     })
 }
