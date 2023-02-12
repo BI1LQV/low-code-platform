@@ -1,28 +1,15 @@
 import { computed, shallowReactive, watch } from "vue"
 import { defineStore } from "pinia"
 import { useCanvasStore } from "./canvasStore"
-import type { FuncType, JsFunc, PyFunc } from "@/models/funcCalls"
+import type { FuncType } from "@/models/funcCalls"
 import { pyCall } from "@/utils/globalCall"
-import { clearableReactive } from "@/composables/clearableReactive"
+
 export const useFuncStore = defineStore("funcStore", () => {
   const { binderList } = useCanvasStore()
   const funcMap: Record<string, FuncType> = shallowReactive({})
 
   const nameToIdMap: Record<string, string> = shallowReactive({})
   const idToNameMap: Record<string, string> = shallowReactive({})
-
-  const [form, setForm, clearForm] = clearableReactive(() => ({
-    type: "js",
-    name: "",
-    pyName: "",
-    impl: "",
-    baseUrl: "",
-    inputTmp: "",
-    receiverTmp: "",
-    isDirect: false,
-    inputs: [] as string[],
-    receivers: [] as string[],
-  }))
 
   const funcList = computed(() => Object.values(funcMap))
   const nameList = computed(() => Object.keys(nameToIdMap))
@@ -63,10 +50,16 @@ export const useFuncStore = defineStore("funcStore", () => {
   }
 
   function setFunc(form:
-  Record<"name" | "type" | "impl" | "baseUrl", string>
-  & { inputs: string[];receivers: string[]; isDirect: boolean },
+  Record<"name" | "type" | "impl" | "baseUrl" | "pyName", string>
+  & {
+    inputs: string[]
+    receivers: string[]
+    inputTypes: string[]
+    outputTypes: string[]
+    isDirect: boolean
+  },
   ) {
-    const { name, type, impl, baseUrl, inputs, receivers, isDirect } = form
+    const { name, type, impl, baseUrl, inputs, receivers, isDirect, pyName, inputTypes, outputTypes } = form
     if (type === "js") {
       funcMap[name] = {
         name,
@@ -74,8 +67,8 @@ export const useFuncStore = defineStore("funcStore", () => {
         impl,
         inputs,
         receivers,
-      } as JsFunc
-    } else {
+      }
+    } else if (type === "py") {
       funcMap[name] = {
         name,
         type,
@@ -83,7 +76,10 @@ export const useFuncStore = defineStore("funcStore", () => {
         inputs,
         receivers,
         isDirect,
-      } as PyFunc
+        pyName,
+        inputTypes,
+        outputTypes,
+      }
     }
     registerWatcher(name, inputs)
   }
@@ -135,9 +131,6 @@ export const useFuncStore = defineStore("funcStore", () => {
     saveFunc,
     loadFunc,
     reset,
-    form,
-    setForm,
-    clearForm,
     funcList,
     nameList,
   }

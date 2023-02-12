@@ -9,9 +9,11 @@ import { containerSlots } from "@/models/slots"
 import { Slots } from "@/slots"
 import type { NewSlotDragger } from "@/models/drags"
 import { useFuncStore } from "@/store/funcStore"
+import { useAddFuncStore } from "@/store/addFuncStore"
 const funcStore = useFuncStore()
 
-const { setFunc, funcMap, form, clearForm, setForm } = useFuncStore()
+const { setFunc, funcMap } = useFuncStore()
+const { form, clearForm, setForm } = useAddFuncStore()
 
 const activeName = ref("comps")
 
@@ -29,11 +31,6 @@ function dragHandler(ev: DragEvent, type: allSlotsKey) {
 }
 
 const showAddBind = ref(false)
-
-function handleClose() {
-  clearForm()
-  showAddBind.value = false
-}
 
 function addFunc() {
   setFunc(form)
@@ -63,7 +60,7 @@ function modify(scope: any) {
         </template>
       </el-tab-pane>
       <el-tab-pane label="数据绑定" name="binds">
-        <el-button type="primary" size="small" @click="showAddBind = true">添加</el-button>
+        <el-button type="primary" size="small" @click="clearForm();showAddBind = true">添加</el-button>
         <el-table :data="funcStore.funcList" stripe style="width: 100%">
           <el-table-column prop="name" />
           <el-table-column>
@@ -80,7 +77,6 @@ function modify(scope: any) {
     v-model="showAddBind"
     title="添加数据绑定"
     width="50%"
-    :before-close="handleClose"
   >
     <el-form :model="form" label-width="120px">
       <el-form-item label="绑定函数名称">

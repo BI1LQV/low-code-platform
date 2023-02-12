@@ -2,10 +2,12 @@
 import { defineAsyncComponent } from "vue"
 import { Plus } from "@element-plus/icons-vue"
 import { useFuncStore } from "@/store/funcStore"
+import { useAddFuncStore } from "@/store/addFuncStore"
 const AsyncMonacoEditor = defineAsyncComponent(() => {
   return import("@/components/MonacoEditor.vue").then(res => res.default)
 })
-const { form, nameList } = useFuncStore()
+const { nameList } = useFuncStore()
+const { form } = useAddFuncStore()
 </script>
 
 <template>
