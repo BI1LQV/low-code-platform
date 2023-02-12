@@ -84,6 +84,10 @@ export const useFuncStore = defineStore("funcStore", () => {
     registerWatcher(name, inputs)
   }
 
+  function deleteFunc(name: string) {
+    delete funcMap[name]
+  }
+
   function setBindMap(name: string, id: string) {
     if (id in idToNameMap) {
       delete nameToIdMap[idToNameMap[id]]
@@ -124,6 +128,7 @@ export const useFuncStore = defineStore("funcStore", () => {
   return {
     callFunc,
     setFunc,
+    deleteFunc,
     funcMap,
     setBindMap,
     getBindMap,

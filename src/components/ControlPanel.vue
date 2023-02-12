@@ -2,6 +2,7 @@
 import { ref } from "vue"
 
 import { ElMessage } from "element-plus"
+import { Delete, Edit } from "@element-plus/icons-vue"
 import FnBinderGbcall from "@/components/FnBinderGbcall.vue"
 import FnBinderJs from "@/components/FnBinderJs.vue"
 import { useCanvasStore } from "@/store/canvasStore"
@@ -13,7 +14,7 @@ import { useFuncStore } from "@/store/funcStore"
 import { useAddFuncStore } from "@/store/addFuncStore"
 const funcStore = useFuncStore()
 
-const { setFunc, funcMap } = useFuncStore()
+const { setFunc, funcMap, deleteFunc } = useFuncStore()
 const { form, clearForm, setForm } = useAddFuncStore()
 
 const activeName = ref("comps")
@@ -47,6 +48,10 @@ function modify(scope: any) {
   setForm(funcMap[scope.row.name])
   showAddBind.value = true
 }
+
+function del(scope: any) {
+  deleteFunc(scope.row.name)
+}
 </script>
 
 <template>
@@ -70,7 +75,12 @@ function modify(scope: any) {
           <el-table-column prop="name" />
           <el-table-column>
             <template #default="scope">
-              <el-button @click="modify(scope)">修改</el-button>
+              <el-button :icon="Edit" circle size="small" @click="modify(scope)"></el-button>
+              <el-popconfirm :width="200" :title="`您确定要删除绑定函数${scope.row.name}吗?`" @confirm="del(scope)">
+                <template #reference>
+                  <el-button :icon="Delete" circle size="small"></el-button>
+                </template>
+              </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
