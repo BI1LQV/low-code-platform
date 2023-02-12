@@ -5,5 +5,9 @@ export default defineExportConfig({
       targetDir: "./src/assets/stylePanel",
       autoPrefix: true,
     },
+    {
+      targetDir: "./src/assets/status",
+      autoPrefix: true,
+    },
   ],
 })
