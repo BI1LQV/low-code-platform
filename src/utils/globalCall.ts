@@ -21,3 +21,10 @@ export function pyCallTest(baseUrl: string, isDirect: boolean, signal?: AbortSig
     signal,
   })
 }
+
+export function pyCallGetInfo(baseUrl: string, isDirect: boolean, funcName: string, signal?: AbortSignal) {
+  return fetchMaybeRelay(isDirect, `${baseUrl}/info/${funcName}`, {
+    method: "get",
+    signal,
+  })
+}
