@@ -7,7 +7,7 @@ export function wrappedFetch(url: string, req: RequestInit & { loading?: Ref<boo
     .then(res => res.json())
     .then((res) => {
       if (res.status === "OK") {
-        return JSON.parse(res.res)
+        if (typeof res.res === "string") { return JSON.parse(res.res) } else { return res.res }
       } else {
         throw res.res
       }
