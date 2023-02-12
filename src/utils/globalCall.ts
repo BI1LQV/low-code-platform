@@ -2,7 +2,7 @@ import { wrappedFetch } from "./wrappedFetch"
 
 function fetchMaybeRelay(isDirect: boolean, ...[url, req]: Parameters<typeof wrappedFetch>) {
   if (!isDirect) {
-    url = `/api/relay?baseUrl=${encodeURIComponent(url)}`
+    url = `/api/relay?baseUrl=${encodeURIComponent(url)}&method=${req.method}`
   }
   return wrappedFetch(url, req)
 }
