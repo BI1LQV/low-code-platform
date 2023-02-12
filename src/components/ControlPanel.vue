@@ -9,7 +9,8 @@ import { containerSlots } from "@/models/slots"
 import { Slots } from "@/slots"
 import type { NewSlotDragger } from "@/models/drags"
 import { useFuncStore } from "@/store/funcStore"
-const { funcList } = useFuncStore()
+const funcStore = useFuncStore()
+
 const { setFunc, funcMap, form, clearForm, setForm } = useFuncStore()
 
 const activeName = ref("comps")
@@ -63,7 +64,7 @@ function modify(scope: any) {
       </el-tab-pane>
       <el-tab-pane label="数据绑定" name="binds">
         <el-button type="primary" size="small" @click="showAddBind = true">添加</el-button>
-        <el-table :data="funcList" stripe style="width: 100%">
+        <el-table :data="funcStore.funcList" stripe style="width: 100%">
           <el-table-column prop="name" />
           <el-table-column>
             <template #default="scope">
