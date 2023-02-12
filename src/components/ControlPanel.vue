@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref } from "vue"
 
+import { ElMessage } from "element-plus"
 import FnBinderGbcall from "@/components/FnBinderGbcall.vue"
 import FnBinderJs from "@/components/FnBinderJs.vue"
 import { useCanvasStore } from "@/store/canvasStore"
@@ -33,6 +34,10 @@ function dragHandler(ev: DragEvent, type: allSlotsKey) {
 const showAddBind = ref(false)
 
 function addFunc() {
+  if (form.name in funcMap) {
+    ElMessage.error("函数名已存在")
+    return
+  }
   setFunc(form)
   showAddBind.value = false
 }
