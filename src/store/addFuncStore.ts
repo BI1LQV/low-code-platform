@@ -34,21 +34,30 @@ export const useAddFuncStore = defineStore("addFuncStore", () => {
     })
   })
 
-  watch(() => [form.baseUrl, form.isDirect, form.pyName], async (_1, _2, onCleanUp) => {
+  const refreshTypes = (onCleanUp?: (cb: () => void) => void) => {
     if (!/^http(s)?:\/\/[a-zA-Z0-9.\-]+(:\d+)?$/.test(form.baseUrl)) { return }
     if (!form.pyName) { return }
     const aborter = new AbortController()
-    onCleanUp(() => aborter.abort())
+    onCleanUp?.(() => aborter.abort())
     funcStatus.value = "LOAD"
-    pyCallGetInfo(form.baseUrl, form.isDirect, form.pyName, aborter.signal).then(({ input, output }) => {
+    return pyCallGetInfo(form.baseUrl, form.isDirect, form.pyName, aborter.signal).then(({ input, output }) => {
       form.inputTypes = input
       form.outputTypes = output
       funcStatus.value = "OK"
+      serverStatus.value = "OK"
     }).catch(() => {
       funcStatus.value = "ERR"
+      throw new Error("fail")
     })
+  }
+
+  watch(() => [form.baseUrl, form.isDirect, form.pyName], (_1: any, _2: any, onCleanUp) => {
+    if (form.inputTypes.length || form.outputTypes.length) {
+      return
+    }
+    refreshTypes(onCleanUp)
   })
   return {
-    form, setForm, clearForm, serverStatus, funcStatus,
+    form, setForm, clearForm, serverStatus, funcStatus, refreshTypes,
   }
 })
