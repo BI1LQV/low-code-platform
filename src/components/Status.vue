@@ -1,14 +1,26 @@
 <script lang="ts" setup>
+import { computed } from "vue"
 import { SvgErr, SvgLoading, SvgOk } from "@/assets/status"
 
 const props = defineProps<{ size: number;status: "OK" | "ERR" | "LOAD" }>()
+
+const imgPath = computed(() => {
+  switch (props.status) {
+    case "OK":
+      return SvgOk
+    case "ERR":
+      return SvgErr
+    case "LOAD":
+      return SvgLoading
+    default:
+      return null as never
+  }
+})
 </script>
 
 <template>
   <span>
-    <img v-if="props.status === 'OK'" :width="props.size" :src="SvgOk" />
-    <img v-if="props.status === 'LOAD'" class="loading-spin" :width="props.size" :src="SvgLoading" />
-    <img v-if="props.status === 'ERR'" :width="props.size" :src="SvgErr" />
+    <img :class="{ 'loading-spin': props.status === 'LOAD' }" :width="props.size" :src="imgPath" />
   </span>
 </template>
 
