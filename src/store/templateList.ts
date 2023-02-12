@@ -11,7 +11,7 @@ export const useTemplateListStore = defineStore("templateList", () => {
   const templateList = ref<TemplateItem[]>([])
 
   function getTemplateList() {
-    wrappedFetch(loading, "/api/getTemplateList")
+    wrappedFetch("/api/getTemplateList", { loading })
       .then((res) => {
         templateList.value = res
       }).catch((err) => {
@@ -20,7 +20,7 @@ export const useTemplateListStore = defineStore("templateList", () => {
   }
 
   function deleteTemplate(id: number, loading?: Ref<boolean>) {
-    return wrappedFetch(loading, `/api/deleteTemplate?id=${id}`).then((res) => {
+    return wrappedFetch(`/api/deleteTemplate?id=${id}`, { loading }).then((res) => {
       getTemplateList()
       return res
     })
@@ -29,8 +29,8 @@ export const useTemplateListStore = defineStore("templateList", () => {
   const author = useLocalStorage("author", "")
 
   function addTemplate(name: string, author: string, loading?: Ref<boolean>) {
-    return wrappedFetch(loading,
-      `/api/addTemplate?name=${name}&author=${author}`).then((res) => {
+    return wrappedFetch(
+      `/api/addTemplate?name=${name}&author=${author}`, { loading }).then((res) => {
       getTemplateList()
       return res
     })

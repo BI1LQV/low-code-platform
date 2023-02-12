@@ -22,7 +22,7 @@ function resetStores() {
 
 export function downloadString(id: number | string, loading?: Ref<boolean>) {
   resetStores()
-  return wrappedFetch(loading, `/api/getTemplate?id=${id}`).then((res) => {
+  return wrappedFetch(`/api/getTemplate?id=${id}`, { loading }).then((res) => {
     if (!res.data) {
       // eslint-disable-next-line no-throw-literal
       throw "空模板"
@@ -32,8 +32,9 @@ export function downloadString(id: number | string, loading?: Ref<boolean>) {
 }
 
 export function uploadString(id: number | string, data: string, loading?: Ref<boolean>) {
-  return wrappedFetch(loading, `/api/updateTemplate?id=${id}`, {
+  return wrappedFetch(`/api/updateTemplate?id=${id}`, {
     method: "post",
     body: data,
+    loading,
   })
 }
