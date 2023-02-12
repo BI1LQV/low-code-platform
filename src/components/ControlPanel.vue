@@ -1,21 +1,16 @@
 <script lang="ts" setup>
-import { computed, defineAsyncComponent, ref } from "vue"
-import { Plus } from "@element-plus/icons-vue"
+import { ref } from "vue"
+
+import FnlBinderGbcall from "@/components/FnlBinderGbcall.vue"
+import FnlBinderJs from "@/components/FnBinderJs.vue"
 import { useCanvasStore } from "@/store/canvasStore"
 import type { allSlotsKey } from "@/models/slots"
 import { containerSlots } from "@/models/slots"
 import { Slots } from "@/slots"
 import type { NewSlotDragger } from "@/models/drags"
 import { useFuncStore } from "@/store/funcStore"
-import { clearableReactive } from "@/composables/clearableReactive"
-const { nameToIdMap } = useFuncStore()
-const { setFunc, funcMap } = useFuncStore()
-
-const AsyncMonacoEditor = defineAsyncComponent(() => {
-  return import("@/components/MonacoEditor.vue").then((res) => {
-    return res.default
-  })
-})
+const { funcList } = useFuncStore()
+const { setFunc, funcMap, form, clearForm, setForm } = useFuncStore()
 
 const activeName = ref("comps")
 
@@ -33,17 +28,6 @@ function dragHandler(ev: DragEvent, type: allSlotsKey) {
 }
 
 const showAddBind = ref(false)
-const [form, setForm, clearForm] = clearableReactive(() => ({
-  type: "js",
-  name: "",
-  impl: "",
-  baseUrl: "",
-  inputTmp: "",
-  receiverTmp: "",
-  isDirect: false,
-  inputs: [] as string[],
-  receivers: [] as string[],
-}))
 
 function handleClose() {
   clearForm()
@@ -54,9 +38,6 @@ function addFunc() {
   setFunc(form)
   showAddBind.value = false
 }
-
-const funcList = computed(() => Object.values(funcMap))
-const nameList = computed(() => Object.keys(nameToIdMap))
 
 function modify(scope: any) {
   // @ts-expect-error okay
@@ -93,6 +74,7 @@ function modify(scope: any) {
       </el-tab-pane>
     </el-tabs>
   </div>
+
   <el-dialog
     v-model="showAddBind"
     title="添加数据绑定"
@@ -103,61 +85,14 @@ function modify(scope: any) {
       <el-form-item label="绑定函数名称">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="输入绑定列表">
-        <el-button
-          v-for="input of form.inputs" :key="input"
-          type="warning"
-          round
-          disabled
-        >
-          {{ input }}
-        </el-button>
-        <el-select v-model="form.inputTmp">
-          <el-option v-for="name of nameList" :key="name" :label="name" :value="name"></el-option>
-        </el-select>
-        <el-button
-          type="primary" :icon="Plus" circle
-          @click="() => { form.inputs.push(form.inputTmp);form.inputTmp = '' }"
-        />
-      </el-form-item>
-      <el-form-item label="输出绑定">
-        <el-button
-          v-for="receiver of form.receivers" :key="receiver"
-          type="warning"
-          round
-          disabled
-        >
-          {{ receiver }}
-        </el-button>
-        <el-select v-model="form.receiverTmp">
-          <el-option v-for="name of nameList" :key="name" :label="name" :value="name"></el-option>
-        </el-select>
-        <el-button
-          type="primary" :icon="Plus" circle
-          @click="() => { form.receivers.push(form.receiverTmp);form.receiverTmp = '' }"
-        />
-      </el-form-item>
       <el-form-item label="绑定函数类型">
         <el-select v-model="form.type">
           <el-option label="JavaScript函数" value="js" />
           <el-option label="Python云函数" value="py" />
         </el-select>
       </el-form-item>
-      <el-form-item v-if="form.type === 'js'" label="绑定函数实现体">
-        <AsyncMonacoEditor
-          v-model="form.impl"
-          height="300px"
-          language="json"
-        ></AsyncMonacoEditor>
-      </el-form-item>
-      <template v-else>
-        <el-form-item label="绑定目标地址">
-          <el-input v-model="form.baseUrl"></el-input>
-        </el-form-item>
-        <el-form-item label="是否直连">
-          <el-checkbox v-model="form.isDirect"></el-checkbox>
-        </el-form-item>
-      </template>
+      <FnlBinderGbcall v-if="form.type === 'py'"></FnlBinderGbcall>
+      <FnlBinderJs v-if="form.type === 'js'"></FnlBinderJs>
     </el-form>
     <template #footer>
       <span>

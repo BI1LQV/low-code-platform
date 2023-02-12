@@ -1,14 +1,31 @@
-import { shallowReactive, watch } from "vue"
+import { computed, shallowReactive, watch } from "vue"
 import { defineStore } from "pinia"
 import { useCanvasStore } from "./canvasStore"
 import type { FuncType, JsFunc, PyFunc } from "@/models/funcCalls"
 import { pyCall } from "@/utils/globalCall"
+import { clearableReactive } from "@/composables/clearableReactive"
 export const useFuncStore = defineStore("funcStore", () => {
   const { binderList } = useCanvasStore()
   const funcMap: Record<string, FuncType> = shallowReactive({})
 
   const nameToIdMap: Record<string, string> = shallowReactive({})
   const idToNameMap: Record<string, string> = shallowReactive({})
+
+  const [form, setForm, clearForm] = clearableReactive(() => ({
+    type: "js",
+    name: "",
+    pyName: "",
+    impl: "",
+    baseUrl: "",
+    inputTmp: "",
+    receiverTmp: "",
+    isDirect: false,
+    inputs: [] as string[],
+    receivers: [] as string[],
+  }))
+
+  const funcList = computed(() => Object.values(funcMap))
+  const nameList = computed(() => Object.keys(nameToIdMap))
 
   async function callFunc(id: string, signal: AbortSignal) {
     const func = funcMap[id]
@@ -118,5 +135,10 @@ export const useFuncStore = defineStore("funcStore", () => {
     saveFunc,
     loadFunc,
     reset,
+    form,
+    setForm,
+    clearForm,
+    funcList,
+    nameList,
   }
 })
