@@ -5,7 +5,7 @@ import { pyCallGetInfo, pyCallTest } from "@/utils/globalCall"
 
 export const useAddFuncStore = defineStore("addFuncStore", () => {
   const [form, setForm, clearForm] = clearableReactive(() => ({
-    type: "js",
+    type: "py",
     name: "",
     pyName: "",
     impl: "",
