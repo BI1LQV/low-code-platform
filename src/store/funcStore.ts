@@ -43,9 +43,9 @@ export const useFuncStore = defineStore("funcStore", () => {
   }
   function registerWatcher(name: string, inputs: string[]) {
     watch(inputs.map(name => binderList.get(nameToIdMap[name])), (_1, _2, onCleanUp) => {
-      const { signal, abort } = new AbortController()
-      onCleanUp(() => abort())
-      callFunc(name, signal)
+      const aborter = new AbortController()
+      onCleanUp(() => aborter.abort())
+      callFunc(name, aborter.signal)
     })
   }
 
