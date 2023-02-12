@@ -26,7 +26,7 @@ export const useFuncStore = defineStore("funcStore", () => {
         ...func.inputs,
         func.impl)(...func.inputs.map(name => binderList.get(nameToIdMap[name])?.value))
     } else {
-      res = await pyCall(func.baseUrl, func.name, func.isDirect, func.inputs.map((bindName: string) => {
+      res = await pyCall(func.baseUrl, func.pyName, func.isDirect, func.inputs.map((bindName: string) => {
         return binderList.get(nameToIdMap[bindName])!.value
       }), signal)
     }
