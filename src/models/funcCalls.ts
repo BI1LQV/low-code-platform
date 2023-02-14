@@ -24,4 +24,5 @@ export interface PyodideFunc extends FuncBase {
   outputTypes: string[]
   impl: string
   deps: string[]
+  pyName: string
 }

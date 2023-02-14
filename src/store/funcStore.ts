@@ -57,10 +57,11 @@ export const useFuncStore = defineStore("funcStore", () => {
     receivers: string[]
     inputTypes: string[]
     outputTypes: string[]
+    deps: string[]
     isDirect: boolean
   },
   ) {
-    const { name, type, impl, baseUrl, inputs, receivers, isDirect, pyName, inputTypes, outputTypes } = form
+    const { name, type, impl, baseUrl, inputs, receivers, isDirect, pyName, inputTypes, outputTypes, deps } = form
     if (type === "js") {
       funcMap[name] = {
         name,
@@ -80,6 +81,18 @@ export const useFuncStore = defineStore("funcStore", () => {
         pyName,
         inputTypes,
         outputTypes,
+      }
+    } else if (type === "pyodide") {
+      funcMap[name] = {
+        name,
+        type,
+        inputs,
+        receivers,
+        pyName,
+        inputTypes,
+        outputTypes,
+        deps,
+        impl,
       }
     }
     registerWatcher(name, inputs)

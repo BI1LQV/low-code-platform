@@ -18,6 +18,8 @@ export const useAddFuncStore = defineStore("addFuncStore", () => {
     receivers: [] as string[],
     inputTypes: [] as string[],
     outputTypes: [] as string[],
+    deps: [] as string[],
+    depTmp: "",
   }))
 
   const serverStatus = ref<"OK" | "ERR" | "LOAD">("ERR")

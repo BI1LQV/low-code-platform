@@ -1,9 +1,12 @@
 <script lang="ts" setup>
-import { defineAsyncComponent } from "vue"
+import { defineAsyncComponent, ref } from "vue"
+import { Plus } from "@element-plus/icons-vue"
 
+import { ElMessage } from "element-plus"
 import Status from "./Status.vue"
 import { useFuncStore } from "@/store/funcStore"
 import { useAddFuncStore } from "@/store/addFuncStore"
+import { pyodide } from "@/utils/pyodide/asyncPyodide"
 const { nameList } = useFuncStore()
 
 const addFuncStore = useAddFuncStore()
@@ -12,12 +15,39 @@ const AsyncMonacoEditor = defineAsyncComponent(() => {
   return import("@/components/MonacoEditor.vue").then(res => res.default)
 })
 const { form } = addFuncStore
+
+const addingDep = ref(false)
+async function addDep() {
+  addingDep.value = true
+  try {
+    await pyodide.installDeps([form.depTmp])
+    form.deps.push(form.depTmp)
+    form.depTmp = ""
+  } catch {
+    ElMessage.error(`无法载入依赖 ${form.depTmp}`)
+  }
+  addingDep.value = false
+}
 </script>
 
 <template>
   <el-form-item label="绑定目标函数">
     <el-input v-model="form.pyName" disabled class="w-70%"></el-input>
     <Status m-l-17px :size="20" :status="form.pyName ? 'OK' : 'ERR'"></Status>
+  </el-form-item>
+
+  <el-form-item label="绑定函数依赖">
+    <el-tag v-for="dep of form.deps" :key="dep" class="mr-20px" type="warning">{{ dep }}</el-tag>
+    <el-input v-model="form.depTmp" size="small" class="w-80px"></el-input>
+    <el-button
+      :loading="addingDep"
+      type="primary" :icon="Plus"
+      m-l-10px
+      size="small"
+      @click="addDep"
+    >
+      添加
+    </el-button>
   </el-form-item>
 
   <el-form-item label="绑定函数实现体">
