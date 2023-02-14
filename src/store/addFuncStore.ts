@@ -5,7 +5,7 @@ import { pyCallGetInfo, pyCallTest } from "@/utils/globalCall"
 import { pyodide } from "@/utils/pyodide/asyncPyodide"
 
 export const useAddFuncStore = defineStore("addFuncStore", () => {
-  const [form, setForm, clearForm] = clearableReactive(() => ({
+  const [form, setForm, clearForm] = clearableReactive(() => ({ // TODO: 切换type时清空form
     type: "py",
     name: "",
     pyName: "",
@@ -20,6 +20,7 @@ export const useAddFuncStore = defineStore("addFuncStore", () => {
     outputTypes: [] as string[],
     deps: [] as string[],
     depTmp: "",
+    isModify: false,
   }))
 
   const serverStatus = ref<"OK" | "ERR" | "LOAD">("ERR")

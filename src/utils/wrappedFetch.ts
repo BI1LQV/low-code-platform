@@ -1,6 +1,7 @@
 import type { Ref } from "vue"
 import { isRef } from "vue"
 export function wrappedFetch(url: string, req: RequestInit & { loading?: Ref<boolean> }) {
+  // TODO: 处理abortsignal
   const { loading } = req
   if (isRef(loading)) { loading.value = true }
   return fetch(url, req)

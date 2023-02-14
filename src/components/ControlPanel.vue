@@ -36,7 +36,7 @@ function dragHandler(ev: DragEvent, type: allSlotsKey) {
 const showAddBind = ref(false)
 
 function addFunc() {
-  if (form.name in funcMap) {
+  if (form.name in funcMap && !form.isModify) {
     ElMessage.error("函数名已存在")
     return
   }
@@ -47,6 +47,7 @@ function addFunc() {
 function modify(scope: any) {
   // @ts-expect-error okay
   setForm(funcMap[scope.row.name])
+  form.isModify = true
   showAddBind.value = true
 }
 
@@ -113,7 +114,7 @@ function del(scope: any) {
       <span>
         <el-button @click="showAddBind = false">取消</el-button>
         <el-button type="primary" @click="addFunc">
-          添加绑定
+          {{ form.isModify ? "修改" : "添加" }}绑定
         </el-button>
       </span>
     </template>

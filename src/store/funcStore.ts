@@ -147,7 +147,7 @@ export const useFuncStore = defineStore("funcStore", () => {
   const pyodideDeps = computed(() => {
     return Object.values(funcMap).reduce((pre, func) => {
       if (func.type === "pyodide") {
-        return [...new Set(...pre, ...func.deps)]
+        return [...new Set([...pre, ...func.deps])]
       } else { return pre }
     }, [] as string[])
   })
