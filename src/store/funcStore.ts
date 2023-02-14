@@ -4,6 +4,7 @@ import { useRouter } from "vue-router"
 import { useCanvasStore } from "./canvasStore"
 import type { FuncType } from "@/models/funcCalls"
 import { pyCall } from "@/utils/globalCall"
+import { pyodide } from "@/utils/pyodide/asyncPyodide"
 
 export const useFuncStore = defineStore("funcStore", () => {
   const { binderList } = useCanvasStore()
@@ -30,6 +31,10 @@ export const useFuncStore = defineStore("funcStore", () => {
       res = await pyCall(func.baseUrl, func.pyName, func.isDirect, func.inputs.map((bindName: string) => {
         return binderList.get(nameToIdMap[bindName])!.value
       }), signal)
+    } else if (func.type === "pyodide") {
+      res = await pyodide.callFunc(func.pyName, func.impl, func.inputs.map((bindName: string) => {
+        return binderList.get(nameToIdMap[bindName])!.value
+      }))
     }
 
     if (func.receivers.length && !signal.aborted) {
