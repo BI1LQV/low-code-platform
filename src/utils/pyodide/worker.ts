@@ -19,10 +19,10 @@ const scanner = pyodide.pyimport("gbcall.scanner").scanner
 export const scanTypes = exports.scanTypes = async (code: string) => {
   const pyRes = scanner(code)
   const res = pyRes.toJs()
-  res.destroy()
+  pyRes.destroy()
   return res
 }
 self.postMessage({ id: "loaded" })
 self.onmessage = async ({ data: { id, funcName, data } }) => {
-  self.postMessage({ id, data: await exports[funcName](data) })
+  self.postMessage({ id, data: await exports[funcName](...data) })
 }
