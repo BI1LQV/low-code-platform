@@ -1,4 +1,4 @@
-export type FuncType = JsFunc | PyFunc
+export type FuncType = JsFunc | PyFunc | PyodideFunc
 export interface FuncBase {
   name: string
   inputs: string[]
@@ -16,4 +16,12 @@ export interface PyFunc extends FuncBase {
   pyName: string
   inputTypes: string[]
   outputTypes: string[]
+}
+
+export interface PyodideFunc extends FuncBase {
+  type: "pyodide"
+  inputTypes: string[]
+  outputTypes: string[]
+  impl: string
+  deps: string[]
 }

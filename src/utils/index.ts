@@ -45,3 +45,9 @@ export function setParent(root: MaybeParent, children: DslSunElement[], cb: (sun
     }
   })
 }
+
+export function Locker() {
+  let release: (i: unknown) => void
+  const lock = new Promise(resolve => release = resolve)
+  return [() => { release(null) }, lock] as const
+}

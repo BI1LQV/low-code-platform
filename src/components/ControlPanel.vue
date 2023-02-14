@@ -3,6 +3,7 @@ import { ref } from "vue"
 
 import { ElMessage } from "element-plus"
 import { Delete, Edit } from "@element-plus/icons-vue"
+import FnBinderPyodide from "./FnBinderPyodide.vue"
 import FnBinderGbcall from "@/components/FnBinderGbcall.vue"
 import FnBinderJs from "@/components/FnBinderJs.vue"
 import { useCanvasStore } from "@/store/canvasStore"
@@ -99,12 +100,14 @@ function del(scope: any) {
       </el-form-item>
       <el-form-item label="绑定函数类型">
         <el-select v-model="form.type">
-          <el-option label="JavaScript函数" value="js" />
           <el-option label="Python云函数" value="py" />
+          <el-option label="Python本地函数" value="pyodide" />
+          <el-option label="JavaScript函数" value="js" />
         </el-select>
       </el-form-item>
       <FnBinderGbcall v-if="form.type === 'py'"></FnBinderGbcall>
       <FnBinderJs v-if="form.type === 'js'"></FnBinderJs>
+      <FnBinderPyodide v-if="form.type === 'pyodide'"></FnBinderPyodide>
     </el-form>
     <template #footer>
       <span>

@@ -1,5 +1,6 @@
 import { computed, shallowReactive, watch } from "vue"
 import { defineStore } from "pinia"
+import { useRouter } from "vue-router"
 import { useCanvasStore } from "./canvasStore"
 import type { FuncType } from "@/models/funcCalls"
 import { pyCall } from "@/utils/globalCall"
@@ -25,7 +26,7 @@ export const useFuncStore = defineStore("funcStore", () => {
       res = new Function(
         ...func.inputs,
         func.impl)(...func.inputs.map(name => binderList.get(nameToIdMap[name])?.value))
-    } else {
+    } else if (func.type === "py") {
       res = await pyCall(func.baseUrl, func.pyName, func.isDirect, func.inputs.map((bindName: string) => {
         return binderList.get(nameToIdMap[bindName])!.value
       }), signal)
@@ -125,6 +126,21 @@ export const useFuncStore = defineStore("funcStore", () => {
     loadFunc(INIT_STORE)
   }
 
+  const pyodideDeps = computed(() => {
+    return Object.values(funcMap).reduce((pre, func) => {
+      if (func.type === "pyodide") {
+        return [...new Set(...pre, ...func.deps)]
+      } else { return pre }
+    }, [] as string[])
+  })
+  const router = useRouter()
+  const requirePyodide = computed(() => {
+    return router.currentRoute.value.name === "editor-name"
+    || Object.values(funcMap).some((func) => {
+      return func.type === "pyodide"
+    })
+  })
+
   return {
     callFunc,
     setFunc,
@@ -138,5 +154,7 @@ export const useFuncStore = defineStore("funcStore", () => {
     reset,
     funcList,
     nameList,
+    pyodideDeps,
+    requirePyodide,
   }
 })

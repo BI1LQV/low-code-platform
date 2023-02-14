@@ -1,4 +1,7 @@
-const pyodide = await window.loadPyodide()
+import "https://cdn.jsdelivr.net/pyodide/v0.22.1/full/pyodide.js"
+
+const pyodide = await self.loadPyodide()
+const exports: any = {}
 
 // init global-call-browser
 await pyodide.loadPackage("micropip")
@@ -13,9 +16,13 @@ console.log(`loaded global-call version ${gbcallVersion}`)
 
 const scanner = pyodide.pyimport("gbcall.scanner").scanner
 
-export function scanTypes(code: string) {
+export const scanTypes = exports.scanTypes = async (code: string) => {
   const pyRes = scanner(code)
   const res = pyRes.toJs()
   res.destroy()
   return res
+}
+self.postMessage({ id: "loaded" })
+self.onmessage = async ({ data: { id, funcName, data } }) => {
+  self.postMessage({ id, data: await exports[funcName](data) })
 }

@@ -23,6 +23,7 @@ export const useAddFuncStore = defineStore("addFuncStore", () => {
   const funcStatus = ref<"OK" | "ERR" | "LOAD">("ERR")
 
   watch(() => [form.baseUrl, form.isDirect], async (_1, _2, onCleanUp) => {
+    if (form.type !== "py") { return }
     if (!/^http(s)?:\/\/[a-zA-Z0-9.\-]+(:\d+)?$/.test(form.baseUrl)) { return }
     const aborter = new AbortController()
     onCleanUp(() => aborter.abort())
@@ -52,10 +53,16 @@ export const useAddFuncStore = defineStore("addFuncStore", () => {
   }
 
   watch(() => [form.baseUrl, form.isDirect, form.pyName], (_1: any, _2: any, onCleanUp) => {
+    if (form.type !== "py") { return }
     if (form.inputTypes.length || form.outputTypes.length) {
       return
     }
     refreshTypes(onCleanUp)
+  })
+
+  watch(() => form.impl, async () => {
+    if (form.type !== "pyodide") { return }
+    console.log()// TODO:
   })
   return {
     form, setForm, clearForm, serverStatus, funcStatus, refreshTypes,
