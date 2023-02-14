@@ -14,16 +14,25 @@ export function load() {
     loaded: () => { loaded = true; release() },
   }
 
-  worker.onmessage = ({ data: { id, data } }) => {
-    callbacks[id](data)
+  const rejects: Record<string, Function> = {}
+
+  worker.onmessage = ({ data: { id, data, err } }) => {
+    if (err) {
+      rejects[id](err)
+    } else {
+      callbacks[id](data)
+    }
+    delete callbacks[id]
+    delete rejects[id]
   }
   // @ts-expect-error safe
   pyodide = new Proxy({}, {
     get(_, p) {
-      return (...args: any) => new Promise((resolve) => {
+      return (...args: any) => new Promise((resolve, reject) => {
         const id = genId()
         worker.postMessage({ id, funcName: p, data: args })
         callbacks[id] = resolve
+        rejects[id] = reject
       })
     },
   })

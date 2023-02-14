@@ -24,5 +24,9 @@ export const scanTypes = exports.scanTypes = async (code: string) => {
 }
 self.postMessage({ id: "loaded" })
 self.onmessage = async ({ data: { id, funcName, data } }) => {
-  self.postMessage({ id, data: await exports[funcName](...data) })
+  try {
+    self.postMessage({ id, data: await exports[funcName](...data) })
+  } catch (e) {
+    self.postMessage({ id, err: JSON.stringify(e) })
+  }
 }
