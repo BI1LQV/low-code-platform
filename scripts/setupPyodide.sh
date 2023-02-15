@@ -6,4 +6,5 @@ if [ ! -f ./.pyodide.tar.bz2 ]; then
 else
   echo "pyodide.tbz2 exsist"
 fi
-  tar -jxf .pyodide.tar.bz2 -C ../public/pyodide
+
+tar -jxf .pyodide.tar.bz2 -C ../public/
