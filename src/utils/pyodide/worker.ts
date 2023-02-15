@@ -1,6 +1,7 @@
-import "~~~/pyodide.js"
 import type { PyProxy } from "pyodide"
-
+// @ts-expect-error TODO: no choice
+import * as s from "~~~/pyodide.js"
+console.log(s)
 let pyodide: Awaited<ReturnType<typeof self.loadPyodide>>
 const exports: any = {}
 let micropip: any

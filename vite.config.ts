@@ -77,4 +77,21 @@ export default defineConfig({
   test: {
     environment: "jsdom",
   },
+
+  worker: {
+    format: "es",
+    rollupOptions: {
+      external: [/^\/pyodide/],
+    },
+    plugins: [
+      {
+        name: "transform-pyodide",
+        resolveId(id) {
+          if (/~~~/.test(id)) {
+            return id.replace(/~~~/, "/pyodide")
+          }
+        },
+      },
+    ],
+  },
 })
