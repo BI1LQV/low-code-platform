@@ -1,15 +1,9 @@
 #! bash
-if [ ! -d ./node_modules/.pyodide ]; then
-  echo "download pyodide"
-  cd ./node_modules/
-  curl -L -o .pyodide.tar.bz2 https://github.com/pyodide/pyodide/releases/download/0.22.1/pyodide-0.22.1.tar.bz2
-  tar -jxf .pyodide.tar.bz2
-  rm .pyodide.tar.bz2
-  cd ..
+cd ./node_modules/
+if [ ! -f ./.pyodide.tar.bz2 ]; then
+  echo "download pyodide.tbz2"
+  curl -L -o .pyodide.tar.bz2 https://github.com/pyodide/pyodide/releases/download/0.22.1/pyodide-core-0.22.1.tar.bz2
+else
+  echo "pyodide.tbz2 exsist"
 fi
-
-if [ ! -d ./public/pyodide ]; then
-  echo "mkdir public/pyodide"
-  mkdir ./public/pyodide
-fi
-cp -r ./node_modules/.pyodide/* ./public/pyodide/
+  tar -jxf .pyodide.tar.bz2 -C ../public/pyodide
