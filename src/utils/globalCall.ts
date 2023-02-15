@@ -1,6 +1,6 @@
 import { wrappedFetch } from "./wrappedFetch"
 
-function fetchMaybeRelay(isDirect: boolean, ...[url, req]: Parameters<typeof wrappedFetch>) {
+function fetchMaybeRelay(isDirect: boolean, url: string, req: RequestInit) {
   if (!isDirect) {
     url = `/api/relay?baseUrl=${encodeURIComponent(url)}&method=${req.method}`
   }

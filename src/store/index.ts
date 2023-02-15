@@ -20,9 +20,9 @@ function resetStores() {
   useFuncStore().reset()
 }
 
-export function downloadString(id: number | string, loading?: Ref<boolean>) {
+export function downloadString(id: number | string) {
   resetStores()
-  return wrappedFetch(`/api/getTemplate?id=${id}`, { loading }).then((res) => {
+  return wrappedFetch(`/api/getTemplate?id=${id}`).then((res) => {
     if (!res.data) {
       // eslint-disable-next-line no-throw-literal
       throw "空模板"

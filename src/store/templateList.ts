@@ -8,20 +8,18 @@ import { wrappedFetch } from "@/utils/wrappedFetch"
 
 export const useTemplateListStore = defineStore("templateList", () => {
   const loadingStore = useLoadingStore()
-  const loading = ref(true)
   const loadError = ref("")
   const templateList = ref<TemplateItem[]>([])
 
   function getTemplateList() {
-    wrappedFetch("/api/getTemplateList", { loading })
-      .then((res) => {
-        templateList.value = res
-      }).catch((err) => {
-        loadError.value = err
-      })
+    loadingStore.setGlobalLoader("template_list_load",
+      wrappedFetch("/api/getTemplateList")
+        .then((res) => {
+          templateList.value = res
+        }).catch((err) => {
+          loadError.value = err
+        }))
   }
-
-  loadingStore.setGlobalLoader("template_list_load", loading)
 
   function deleteTemplate(id: number, loading?: Ref<boolean>) {
     return wrappedFetch(`/api/deleteTemplate?id=${id}`, { loading }).then((res) => {
@@ -40,7 +38,6 @@ export const useTemplateListStore = defineStore("templateList", () => {
     })
   }
   return {
-    loading,
     loadError,
     templateList,
     getTemplateList,
