@@ -12,3 +12,4 @@ components.d.ts
 .vercel
 .env
 public/pyodide/*
+.pyodide.tar.bz2
