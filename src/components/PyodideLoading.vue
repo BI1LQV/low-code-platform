@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import Status from "@/components/Status.vue"
-import { useLoadingStore } from "@/store/loadController"
+import { useLoadingStore } from "@/store/loadingStore"
 
 const loadingStore = useLoadingStore()
 const { pyodideLoaders } = loadingStore

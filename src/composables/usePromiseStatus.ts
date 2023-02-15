@@ -6,7 +6,8 @@ export function usePromiseStatus<T>(promise: Promise<T>) {
   return [status, promise.then((res) => {
     status.value = LoadStatus.OK
     return res
-  }).catch(() => {
+  }).catch((err) => {
     status.value = LoadStatus.ERR
+    throw err
   })] as const
 }
