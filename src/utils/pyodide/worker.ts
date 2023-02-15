@@ -1,4 +1,4 @@
-import "https://cdn.jsdelivr.net/pyodide/v0.22.1/full/pyodide.js"
+import "~~~/pyodide.js"
 import type { PyProxy } from "pyodide"
 
 let pyodide: Awaited<ReturnType<typeof self.loadPyodide>>

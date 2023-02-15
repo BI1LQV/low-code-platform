@@ -63,6 +63,14 @@ export default defineConfig({
     }),
     HotExport(),
     visualizer(),
+    {
+      name: "transform-pyodide",
+      resolveId(id) {
+        if (/~~~/.test(id)) {
+          return id.replace(/~~~/, "/pyodide")
+        }
+      },
+    },
   ],
 
   // https://github.com/vitest-dev/vitest
