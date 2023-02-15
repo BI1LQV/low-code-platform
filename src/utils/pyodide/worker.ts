@@ -45,6 +45,10 @@ export const callFunc = exports.callFunc = async (funcName: string, impl: string
   }
 }
 
+export const getLoadedPackages = exports.getLoadedPackages = async () => {
+  return pyodide.loadedPackages
+}
+
 self.onmessage = async ({ data: { id, funcName, data } }) => {
   try {
     self.postMessage({ id, data: await exports[funcName](...data) })

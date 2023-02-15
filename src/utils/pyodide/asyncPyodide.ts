@@ -1,8 +1,9 @@
 /* eslint-disable import/no-mutable-exports */
+import { ref } from "vue"
 import type * as main from "./worker"
 import { genId } from "@/utils"
 
-export let loaded = false
+export let loaded = ref(false)
 let worker: Worker
 export let pyodide: typeof main
 
@@ -34,5 +35,5 @@ export function load() {
     delete rejects[id]
   }
 
-  return pyodide._load().then(() => loaded = true)
+  return pyodide._load().then(() => loaded.value = true)
 }

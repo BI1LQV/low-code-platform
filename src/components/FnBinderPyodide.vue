@@ -7,6 +7,7 @@ import Status from "./Status.vue"
 import { useFuncStore } from "@/store/funcStore"
 import { useAddFuncStore } from "@/store/addFuncStore"
 import { pyodide } from "@/utils/pyodide/asyncPyodide"
+import { LoadStatus } from "@/models/status"
 const { nameList } = useFuncStore()
 
 const addFuncStore = useAddFuncStore()
@@ -33,7 +34,7 @@ async function addDep() {
 <template>
   <el-form-item label="绑定目标函数">
     <el-input v-model="form.pyName" disabled class="w-70%"></el-input>
-    <Status m-l-17px :size="20" :status="form.pyName ? 'OK' : 'ERR'"></Status>
+    <Status m-l-17px :size="20" :status="form.pyName ? LoadStatus.OK : LoadStatus.ERR"></Status>
   </el-form-item>
 
   <el-form-item label="绑定函数依赖">

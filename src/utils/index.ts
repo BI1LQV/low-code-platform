@@ -1,3 +1,4 @@
+import type { Ref } from "vue"
 import type { StyleLike } from "@/models/drags"
 import type { DslSunElement, MaybeParent } from "@/models/slots"
 import { isParent } from "@/models/slots"
@@ -50,4 +51,11 @@ export function Locker() {
   let release: (i: unknown) => void
   const lock = new Promise(resolve => release = resolve)
   return [() => { release(null) }, lock] as const
+}
+
+export function setRefToReactive<T>(
+  obj: Record<string, T>, key: string, val: Ref<T>,
+) {
+  // @ts-expect-error it's vue specific
+  obj[key] = val
 }

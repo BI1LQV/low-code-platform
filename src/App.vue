@@ -1,37 +1,43 @@
 <script lang="ts" setup>
-import { computed, ref, watchEffect } from "vue"
+import { computed, watchEffect } from "vue"
 import Status from "./components/Status.vue"
+import { pyodideLoading } from "./utils/loadController"
+import { LoadStatus } from "./models/status"
+import { usePromiseStatus } from "./composables/usePromiseStatus"
+import { setRefToReactive } from "./utils"
 import { load, loaded, pyodide } from "@/utils/pyodide/asyncPyodide"
 import { useFuncStore } from "@/store/funcStore"
 const funcStore = useFuncStore()
 
-const pyodideLoading = ref<"ERR" | "OK" | "LOAD">("LOAD")
-const depsLoading = ref<("ERR" | "OK" | "LOAD")[]>([])
 const showLoading = computed(() => {
   return funcStore.requirePyodide
-  && pyodideLoading.value !== "OK"
-  && depsLoading.value.some(dep => dep !== "OK")// TODO: fix it
+  && Object.values(pyodideLoading).some(status => status !== LoadStatus.OK)
+})
+
+let loadWorking = false
+
+watchEffect(() => {
+  if (loadWorking) {
+    return
+  }
+  if (funcStore.requirePyodide && !loaded.value) {
+    loadWorking = true
+    setRefToReactive(pyodideLoading, "加载Pyodide", usePromiseStatus(load()
+      .then(() => {
+        loadWorking = false
+      }))[0])
+  }
 })
 
 watchEffect(() => {
-  if (funcStore.requirePyodide && !loaded) {
-    pyodideLoading.value = "LOAD"
-    depsLoading.value = Array.from({ length: funcStore.pyodideDeps.length }, () => "LOAD")
-    load()
-      .then(() => pyodideLoading.value = "OK")
-      .catch(() => {
-        pyodideLoading.value = "ERR"
-      })
-      .then(() => {
-        return Promise.all(funcStore.pyodideDeps.map((dep, index) => { // TODO: fix it
-          return pyodide.installDeps([dep]).then(() => {
-            depsLoading.value[index] = "OK"
-          }).catch(() => {
-            depsLoading.value[index] = "ERR"
-          })
-        }))
-      })
-  }
+  if (!loaded.value) { return }
+  funcStore.pyodideDeps.forEach(async (dep) => {
+    if ((await pyodide.getLoadedPackages())[dep] || pyodideLoading[`加载依赖${dep}`]) {
+      return
+    }
+    setRefToReactive(pyodideLoading, `加载依赖${dep}`,
+      usePromiseStatus(pyodide.installDeps([dep]))[0])
+  })
 })
 </script>
 
@@ -39,9 +45,8 @@ watchEffect(() => {
   <router-view />
   <teleport v-if="showLoading" to="body">
     <div class="flex flex-col justify-center items-center text-24px text-white w-full h-full bg-[rgba(0,0,0,0.7)] absolute left-0 top-0 z-2000">
-      <div flex flex-row items-center>加载Pyodide<Status :size="24" :status="pyodideLoading"></Status></div>
-      <div v-for="dep, idx in funcStore.pyodideDeps" :key="dep" items-center flex flex-row>
-        <span>加载依赖{{ dep }}</span><Status :size="24" :status="depsLoading[idx]"></Status>
+      <div v-for=" entire in Object.entries(pyodideLoading)" :key="entire[0]" flex flex-row items-center>
+        {{ entire[0] }}<Status :size="24" :status="entire[1]"></Status>
       </div>
     </div>
   </teleport>

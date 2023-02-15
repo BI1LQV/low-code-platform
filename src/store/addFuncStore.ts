@@ -3,6 +3,7 @@ import { ref, watch } from "vue"
 import { clearableReactive } from "@/composables/clearableReactive"
 import { pyCallGetInfo, pyCallTest } from "@/utils/globalCall"
 import { pyodide } from "@/utils/pyodide/asyncPyodide"
+import { LoadStatus } from "@/models/status"
 
 export const useAddFuncStore = defineStore("addFuncStore", () => {
   const [form, setForm, clearForm] = clearableReactive(() => ({ // TODO: 切换type时清空form
@@ -23,19 +24,19 @@ export const useAddFuncStore = defineStore("addFuncStore", () => {
     isModify: false,
   }))
 
-  const serverStatus = ref<"OK" | "ERR" | "LOAD">("ERR")
-  const funcStatus = ref<"OK" | "ERR" | "LOAD">("ERR")
+  const serverStatus = ref(LoadStatus.ERR)
+  const funcStatus = ref(LoadStatus.ERR)
 
   watch(() => [form.baseUrl, form.isDirect], async (_1, _2, onCleanUp) => {
     if (form.type !== "py") { return }
     if (!/^http(s)?:\/\/[a-zA-Z0-9.\-]+(:\d+)?$/.test(form.baseUrl)) { return }
     const aborter = new AbortController()
     onCleanUp(() => aborter.abort())
-    serverStatus.value = "LOAD"
+    serverStatus.value = LoadStatus.LOAD
     pyCallTest(form.baseUrl, form.isDirect, aborter.signal).then(() => {
-      serverStatus.value = "OK"
+      serverStatus.value = LoadStatus.OK
     }).catch(() => {
-      serverStatus.value = "ERR"
+      serverStatus.value = LoadStatus.ERR
     })
   })
 
@@ -44,14 +45,14 @@ export const useAddFuncStore = defineStore("addFuncStore", () => {
     if (!form.pyName) { return }
     const aborter = new AbortController()
     onCleanUp?.(() => aborter.abort())
-    funcStatus.value = "LOAD"
+    funcStatus.value = LoadStatus.LOAD
     return pyCallGetInfo(form.baseUrl, form.isDirect, form.pyName, aborter.signal).then(({ input, output }) => {
       form.inputTypes = input
       form.outputTypes = output
-      funcStatus.value = "OK"
-      serverStatus.value = "OK"
+      funcStatus.value = LoadStatus.OK
+      serverStatus.value = LoadStatus.OK
     }).catch(() => {
-      funcStatus.value = "ERR"
+      funcStatus.value = LoadStatus.ERR
       throw new Error("fail")
     })
   }
