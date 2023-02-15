@@ -7,12 +7,16 @@ import PropertyPanel from "@/components/PropertyPanel.vue"
 import ControlPanel from "@/components/ControlPanel.vue"
 import Preview from "@/components/Preview"
 import { downloadString, exportString, importString, uploadString } from "@/store"
+import { useLoadingStore } from "@/store/loadingStore"
 
 const props = defineProps<{ name: string }>()
-const loading = ref(false)
-downloadString(props.name, loading).catch((err) => {
-  if (err !== "空模板") { ElMessage.error(err) }
-})
+
+const loadingStore = useLoadingStore()
+
+loadingStore.setGlobalLoader("editor_template_load",
+  downloadString(props.name).catch((err) => {
+    if (err !== "空模板") { ElMessage.error(err) }
+  }))
 
 const [isPreview, togglePreview] = useToggle(false)
 
@@ -42,7 +46,7 @@ async function importDsl() {
     <el-button type="primary" @click="exportDsl">导出到剪切板</el-button>
     <el-button type="primary" @click="importDsl">从剪切板导入</el-button>
   </header>
-  <div v-loading.fullscreen.lock="loading" flex flex-row h="[calc(100%-40px)]" justify-between>
+  <div flex flex-row h="[calc(100%-40px)]" justify-between>
     <ControlPanel></ControlPanel>
     <div w-800px border-3px>
       <Preview v-if="isPreview"></Preview> <CanvasPanel v-else></CanvasPanel>

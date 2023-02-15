@@ -8,7 +8,7 @@ import { useTemplateListStore } from "@/store/templateList"
 const props = defineProps<{ isEditor: boolean }>()
 const templateStore = useTemplateListStore()
 const router = useRouter()
-const { loading, templateList, loadError, author } = storeToRefs(templateStore)
+const { templateList, loadError, author } = storeToRefs(templateStore)
 templateStore.getTemplateList()
 
 function toPreview(jump: boolean, id: number) {
@@ -51,7 +51,7 @@ function confirmAdd() {
     <div text-34px mb-20px>
       应用列表
     </div>
-    <div v-loading.fullscreen.lock="loading" w-full flex flex-row gap-5 flex-wrap>
+    <div w-full flex flex-row gap-5 flex-wrap>
       <el-card
         v-for="item of templateList"
         :key="item.id" w-400px flex-shrink-0

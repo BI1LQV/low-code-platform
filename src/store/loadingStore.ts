@@ -1,14 +1,18 @@
 import { computed, reactive, watchEffect } from "vue"
 import { defineStore } from "pinia"
+import type { MaybeStatus } from "@/models/status"
 import { LoadStatus } from "@/models/status"
 import { useFuncStore } from "@/store/funcStore"
-import { usePromiseStatus } from "@/composables/usePromiseStatus"
-import { setRefToReactive } from "@/utils"
 import { load, loaded, pyodide } from "@/utils/pyodide/asyncPyodide"
+import { setStatusToStore } from "@/utils/setStatusToStore"
 
 export const useLoadingStore = defineStore("loadingStore", () => {
   const funcStore = useFuncStore()
   const pyodideLoaders = reactive<Record<string, LoadStatus >>({})
+
+  function setPyodideLoader(name: string, status: MaybeStatus) {
+    setStatusToStore(pyodideLoaders, name, status)
+  }
 
   const showPyodideLoading = computed(() => {
     return funcStore.requirePyodide
@@ -20,8 +24,7 @@ export const useLoadingStore = defineStore("loadingStore", () => {
       if (pyodideLoaders["加载Pyodide"]) {
         return
       }
-      setRefToReactive(pyodideLoaders, "加载Pyodide", usePromiseStatus(
-        load())[0])
+      setPyodideLoader("加载Pyodide", load())
     }
   })
 
@@ -31,13 +34,26 @@ export const useLoadingStore = defineStore("loadingStore", () => {
       if ((await pyodide.getLoadedPackages())[dep] || pyodideLoaders[`加载依赖${dep}`]) {
         return
       }
-      setRefToReactive(pyodideLoaders, `加载依赖${dep}`,
-        usePromiseStatus(pyodide.installDeps([dep]))[0])
+      setPyodideLoader (`加载依赖${dep}`, pyodide.installDeps([dep]))
     })
+  })
+
+  const globalLoaders = reactive<Record<string, LoadStatus >>({})
+
+  function setGlobalLoader(name: string, status: MaybeStatus) {
+    setStatusToStore(globalLoaders, name, status)
+  }
+
+  const showGlobalLoading = computed(() => {
+    return !showPyodideLoading.value && Object.values(globalLoaders).some(status => status !== LoadStatus.OK)
   })
 
   return {
     pyodideLoaders,
+    globalLoaders,
+    showGlobalLoading,
     showPyodideLoading,
+    setGlobalLoader,
+    setPyodideLoader,
   }
 })
