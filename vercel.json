@@ -1,7 +1,7 @@
 {
   "rewrites": [
     {
-      "source": "/((?!api/|src/|node_modules/|@|__uno.css|plugin-define-model.*).*)",
+      "source": "/((?!api/|src/|node_modules/|@|__uno.css|plugin-define-model|pyodide/.*).*)",
       "destination": "/index.html"
     }
   ]
