@@ -13,6 +13,7 @@ Python RPC: <a href="https://wakatime.com/badge/user/2f4644bc-9c2c-4ef4-a45b-54a
 3. 事件设置
 4. 拆分 webworker sender和receiver
 5. img组件
+6. pyodide 重复加载控制
 
 ## py
 1. scanner改为运行时
