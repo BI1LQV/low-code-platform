@@ -6,7 +6,7 @@ import { worker } from "@/utils/pyodide/asyncPyodide"
 import { LoadStatus } from "@/models/status"
 
 export const useAddFuncStore = defineStore("addFuncStore", () => {
-  const [form, setForm, clearForm] = clearableReactive(() => ({ // TODO: 切换type时清空form
+  const [form, setForm, clearForm] = clearableReactive(() => ({
     type: "py",
     name: "",
     pyName: "",
@@ -21,7 +21,7 @@ export const useAddFuncStore = defineStore("addFuncStore", () => {
     outputTypes: [] as string[],
     deps: [] as string[],
     depTmp: "",
-    isModify: false,
+    isModify: false as false | string,
     serverStatus: LoadStatus.ERR,
     funcStatus: LoadStatus.ERR,
   }))
@@ -76,6 +76,10 @@ export const useAddFuncStore = defineStore("addFuncStore", () => {
       form.inputTypes = []
       form.outputTypes = []
     }
+  })
+
+  watch(() => form.type, () => {
+    clearForm(["name", "type"])
   })
   return {
     form, setForm, clearForm, refreshTypes,

@@ -36,7 +36,10 @@ function dragHandler(ev: DragEvent, type: allSlotsKey) {
 const showAddBind = ref(false)
 
 function addFunc() {
-  if (form.name in funcMap && !form.isModify) {
+  if (form.isModify) {
+    deleteFunc(form.isModify)
+  }
+  if (form.name in funcMap) {
     ElMessage.error("函数名已存在")
     return
   }
@@ -47,7 +50,7 @@ function addFunc() {
 function modify(scope: any) {
   // @ts-expect-error okay
   setForm(funcMap[scope.row.name])
-  form.isModify = true
+  form.isModify = scope.row.name
   showAddBind.value = true
 }
 

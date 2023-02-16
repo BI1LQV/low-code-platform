@@ -11,9 +11,10 @@ export function clearableReactive<T extends object>(
     options?.onSet?.()
     copyAttr(toSet, bucket, keys)
   }
-  const clearBucket = () => {
+  const clearBucket = (excludes?: string[]) => {
     options?.onClear?.()
-    copyAttr(Initer(), bucket, keys)
+    const data = Initer()
+    copyAttr(data, bucket, keys.filter(val => !excludes?.includes(val)))
   }
   return [bucket, setBucket, clearBucket] as const
 }

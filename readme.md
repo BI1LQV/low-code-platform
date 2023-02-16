@@ -10,8 +10,6 @@ Python RPC: <a href="https://wakatime.com/badge/user/2f4644bc-9c2c-4ef4-a45b-54a
 ## 前端
 1. error console
 2. 事件设置
-3. 拆分 webworker sender和receiver
-4. img组件
 
 ## py
 1. scanner改为运行时
