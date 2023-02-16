@@ -17,7 +17,6 @@
     "types": [
       "vite/client",
       "vite-plugin-pages/client",
-      "vue/macros-global",
       "vite-plugin-info/client",
       "unplugin-vue-macros/macros-global"
     ],

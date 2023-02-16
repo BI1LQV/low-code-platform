@@ -33,7 +33,7 @@ export default defineConfig({
     BuildInfo(),
     VueMacros({
       plugins: {
-        vue: Vue({ reactivityTransform: true }),
+        vue: Vue(),
         vueJsx: VueJsx(),
       },
     }),
