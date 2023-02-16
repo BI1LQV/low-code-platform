@@ -2,11 +2,12 @@
 import { RefreshRight } from "@element-plus/icons-vue"
 import { ref } from "vue"
 import { ElMessage } from "element-plus"
+import { storeToRefs } from "pinia"
 import Status from "./Status.vue"
 import { useFuncStore } from "@/store/funcStore"
 import { useAddFuncStore } from "@/store/addFuncStore"
-const { nameList } = useFuncStore()
-
+const funcStore = useFuncStore()
+const { nameList } = storeToRefs(funcStore)
 const addFuncStore = useAddFuncStore()
 const { form, refreshTypes } = addFuncStore
 const refreshLoading = ref(false)
@@ -26,11 +27,11 @@ function refreshType() {
   <el-form-item label="绑定目标地址">
     <el-input v-model="form.baseUrl" class="w-70%"></el-input>
     <el-checkbox v-model="form.isDirect" class="m-l-20px"></el-checkbox><span m-l-5px>直连</span>
-    <Status m-l-10px :size="20" :status="addFuncStore.serverStatus"></Status>
+    <Status m-l-10px :size="20" :status="form.serverStatus"></Status>
   </el-form-item>
   <el-form-item label="绑定目标函数">
     <el-input v-model="form.pyName" class="w-70%"></el-input>
-    <Status m-l-17px :size="20" :status="addFuncStore.funcStatus"></Status>
+    <Status m-l-17px :size="20" :status="form.funcStatus"></Status>
     <el-button v-if="form.inputTypes.length || form.outputTypes.length" :loading="refreshLoading" m-l-20px size="small" type="warning" :icon="RefreshRight" @click="refreshType">刷新类型</el-button>
   </el-form-item>
 

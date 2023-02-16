@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { ref, watch } from "vue"
+import { watch } from "vue"
 import { clearableReactive } from "@/composables/clearableReactive"
 import { pyCallGetInfo, pyCallTest } from "@/utils/globalCall"
 import { worker } from "@/utils/pyodide/asyncPyodide"
@@ -11,10 +11,10 @@ export const useAddFuncStore = defineStore("addFuncStore", () => {
     name: "",
     pyName: "",
     impl: "",
-    baseUrl: "",
+    baseUrl: "http://localhost:23330",
     inputTmp: "",
     receiverTmp: "",
-    isDirect: false,
+    isDirect: true,
     inputs: [] as string[],
     receivers: [] as string[],
     inputTypes: [] as string[],
@@ -22,37 +22,36 @@ export const useAddFuncStore = defineStore("addFuncStore", () => {
     deps: [] as string[],
     depTmp: "",
     isModify: false,
+    serverStatus: LoadStatus.ERR,
+    funcStatus: LoadStatus.ERR,
   }))
-
-  const serverStatus = ref(LoadStatus.ERR)
-  const funcStatus = ref(LoadStatus.ERR)
 
   watch(() => [form.baseUrl, form.isDirect], async (_1, _2, onCleanUp) => {
     if (form.type !== "py") { return }
     if (!/^http(s)?:\/\/[a-zA-Z0-9.\-]+(:\d+)?$/.test(form.baseUrl)) { return }
     const aborter = new AbortController()
     onCleanUp(() => aborter.abort())
-    serverStatus.value = LoadStatus.LOAD
+    form.serverStatus = LoadStatus.LOAD
     pyCallTest(form.baseUrl, form.isDirect, aborter.signal).then(() => {
-      serverStatus.value = LoadStatus.OK
+      form.serverStatus = LoadStatus.OK
     }).catch(() => {
-      serverStatus.value = LoadStatus.ERR
+      form.serverStatus = LoadStatus.ERR
     })
-  })
+  }, { immediate: true })
 
   const refreshTypes = (onCleanUp?: (cb: () => void) => void) => {
     if (!/^http(s)?:\/\/[a-zA-Z0-9.\-]+(:\d+)?$/.test(form.baseUrl)) { return }
     if (!form.pyName) { return }
     const aborter = new AbortController()
     onCleanUp?.(() => aborter.abort())
-    funcStatus.value = LoadStatus.LOAD
+    form.funcStatus = LoadStatus.LOAD
     return pyCallGetInfo(form.baseUrl, form.isDirect, form.pyName, aborter.signal).then(({ input, output }) => {
       form.inputTypes = input
       form.outputTypes = output
-      funcStatus.value = LoadStatus.OK
-      serverStatus.value = LoadStatus.OK
+      form.funcStatus = LoadStatus.OK
+      form.serverStatus = LoadStatus.OK
     }).catch(() => {
-      funcStatus.value = LoadStatus.ERR
+      form.funcStatus = LoadStatus.ERR
       throw new Error("fail")
     })
   }
@@ -79,6 +78,6 @@ export const useAddFuncStore = defineStore("addFuncStore", () => {
     }
   })
   return {
-    form, setForm, clearForm, serverStatus, funcStatus, refreshTypes,
+    form, setForm, clearForm, refreshTypes,
   }
 })

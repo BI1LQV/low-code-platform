@@ -12,13 +12,13 @@ export const Component = defineComponent({
   name: "图片",
   props: ["binder", "prop", "isProd"],
   setup({ binder, prop, isProd }: { binder: Ref<any>; prop: SlotOptions; isProd: boolean }) {
-    if (isProd) {
-      return () => {
+    return () => {
+      if (isProd) {
         const newProp = { ...prop, "preview-src-list": prop.enableBig ? [binder.value] : undefined }
-        return () => <ElImage src={binder.value} {...newProp}></ElImage>
+        return <ElImage src={binder.value} {...newProp}></ElImage>
+      } else {
+        return <ElImage src={binder.value} {...prop}></ElImage>
       }
-    } else {
-      return () => <ElImage src={binder.value} {...prop}></ElImage>
     }
   },
 })
