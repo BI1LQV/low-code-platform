@@ -2,7 +2,6 @@ import type { Ref } from "vue"
 import { isRef } from "vue"
 
 export function wrappedFetch(url: string, req: RequestInit & { loading?: Ref<boolean> } = {}) {
-  // TODO: 处理abortsignal
   const { loading } = req
   if (isRef(loading)) { loading.value = true }
   return fetch(url, req)
@@ -14,8 +13,9 @@ export function wrappedFetch(url: string, req: RequestInit & { loading?: Ref<boo
         throw res.res
       }
     }).catch((err) => {
-      console.log(err)
-      if (typeof err === "string") {
+      if (err instanceof DOMException) {
+        // abort controller do nothing
+      } else if (typeof err === "string") {
         throw err
       } else if (err instanceof Error) {
         throw JSON.stringify(err?.stack || "内部异常")
