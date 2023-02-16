@@ -43,5 +43,3 @@ export async function callFunc(funcName: string, impl: string, args: any[]) {
 export async function getLoadedPackages() {
   return pyodide.loadedPackages
 }
-console.log("loaded")
-// self.postMessage("loaded")

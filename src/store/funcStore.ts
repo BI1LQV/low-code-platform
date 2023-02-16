@@ -1,4 +1,4 @@
-import { computed, shallowReactive, watch } from "vue"
+import { computed, reactive, shallowReactive, watch } from "vue"
 import { defineStore } from "pinia"
 import { useRouter } from "vue-router"
 import { useCanvasStore } from "./canvasStore"
@@ -8,7 +8,7 @@ import { worker } from "@/utils/pyodide/asyncPyodide"
 
 export const useFuncStore = defineStore("funcStore", () => {
   const { binderList } = useCanvasStore()
-  const funcMap: Record<string, FuncType> = shallowReactive({})
+  const funcMap: Record<string, FuncType> = reactive({})
 
   const nameToIdMap: Record<string, string> = shallowReactive({})
   const idToNameMap: Record<string, string> = shallowReactive({})
@@ -139,9 +139,10 @@ export const useFuncStore = defineStore("funcStore", () => {
     })
   }
 
-  const INIT_STORE = saveFunc()
   function reset() {
-    loadFunc(INIT_STORE)
+    Object.keys(funcMap).forEach(key => delete funcMap[key])
+    Object.keys(nameToIdMap).forEach(key => delete nameToIdMap[key])
+    Object.keys(idToNameMap).forEach(key => delete idToNameMap[key])
   }
 
   const pyodideDeps = computed(() => {

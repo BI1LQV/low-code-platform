@@ -12,8 +12,11 @@ const { nameList } = useFuncStore()
 
 const addFuncStore = useAddFuncStore()
 
-const AsyncMonacoEditor = defineAsyncComponent(() => {
-  return import("@/components/MonacoEditor.vue").then(res => res.default)
+const AsyncMonacoEditor = defineAsyncComponent({
+  loader: () => import("@/components/MonacoEditor.vue"),
+  loadingComponent: {
+    template: "<div>加载组件中</div>",
+  },
 })
 const { form } = addFuncStore
 
