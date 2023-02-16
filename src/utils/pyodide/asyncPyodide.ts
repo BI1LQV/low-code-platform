@@ -1,39 +1,15 @@
-/* eslint-disable import/no-mutable-exports */
+import { wrap } from "comlink"
 import { ref } from "vue"
-import type * as main from "./worker"
-import { genId } from "@/utils"
+import type { PyodideWorker } from "./PyodideWorker"
 
-export let loaded = ref(false)
-let worker: Worker
-export let pyodide: typeof main
+export const loaded = ref(false)
+type ConstructorTypeOf<T> = new (...args: any[]) => T
+const _PyodideWorker = wrap<ConstructorTypeOf<PyodideWorker>>(
+  new Worker(new URL("./PyodideWorker", import.meta.url), { type: "module" }),
+)
+export const worker = await new _PyodideWorker()
 
-export function load() {
-  worker = new Worker(new URL("./worker", import.meta.url), { type: "module" })
-
-  const callbacks: Record<string, Function> = {}
-  const rejects: Record<string, Function> = {}
-
-  // @ts-expect-error safe
-  pyodide = new Proxy({}, {
-    get(_, p) {
-      return (...args: any) => new Promise((resolve, reject) => {
-        const id = genId()
-        worker.postMessage({ id, funcName: p, data: args })
-        callbacks[id] = resolve
-        rejects[id] = reject
-      })
-    },
-  })
-
-  worker.onmessage = ({ data: { id, data, err } }) => {
-    if (err) {
-      rejects[id](err)
-    } else {
-      callbacks[id](data)
-    }
-    delete callbacks[id]
-    delete rejects[id]
-  }
-
-  return pyodide._load().then(() => loaded.value = true)
+export async function load() {
+  return worker._load().then(() => loaded.value = true)
 }
+

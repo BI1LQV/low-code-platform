@@ -14,7 +14,6 @@ import Inspect from "vite-plugin-inspect"
 import VueMacros from "unplugin-vue-macros/vite"
 import HotExport from "vite-plugin-hot-export"
 import { visualizer } from "rollup-plugin-visualizer"
-
 export default defineConfig({
   server: {
     proxy: {
@@ -63,35 +62,12 @@ export default defineConfig({
     }),
     HotExport(),
     visualizer(),
-    {
-      name: "transform-pyodide",
-      resolveId(id) {
-        if (/~~~/.test(id)) {
-          return id.replace(/~~~/, "/pyodide")
-        }
-      },
-    },
   ],
-
+  worker: {
+    format: "es",
+  },
   // https://github.com/vitest-dev/vitest
   test: {
     environment: "jsdom",
-  },
-
-  worker: {
-    format: "es",
-    rollupOptions: {
-      external: [/^\/pyodide/],
-    },
-    plugins: [
-      {
-        name: "transform-pyodide",
-        resolveId(id) {
-          if (/~~~/.test(id)) {
-            return id.replace(/~~~/, "/pyodide")
-          }
-        },
-      },
-    ],
   },
 })

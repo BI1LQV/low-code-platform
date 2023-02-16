@@ -2,7 +2,7 @@ import { defineStore } from "pinia"
 import { ref, watch } from "vue"
 import { clearableReactive } from "@/composables/clearableReactive"
 import { pyCallGetInfo, pyCallTest } from "@/utils/globalCall"
-import { pyodide } from "@/utils/pyodide/asyncPyodide"
+import { worker } from "@/utils/pyodide/asyncPyodide"
 import { LoadStatus } from "@/models/status"
 
 export const useAddFuncStore = defineStore("addFuncStore", () => {
@@ -68,7 +68,7 @@ export const useAddFuncStore = defineStore("addFuncStore", () => {
   watch(() => form.impl, async () => {
     if (form.type !== "pyodide") { return }
     try {
-      const [funcName, inputTypes, outputTypes] = await pyodide.scanTypes(form.impl)
+      const [funcName, inputTypes, outputTypes] = await worker.scanTypes(form.impl)
       form.pyName = funcName
       form.inputTypes = inputTypes
       form.outputTypes = outputTypes

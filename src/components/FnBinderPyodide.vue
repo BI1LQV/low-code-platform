@@ -6,7 +6,7 @@ import { ElMessage } from "element-plus"
 import Status from "./Status.vue"
 import { useFuncStore } from "@/store/funcStore"
 import { useAddFuncStore } from "@/store/addFuncStore"
-import { pyodide } from "@/utils/pyodide/asyncPyodide"
+import { worker } from "@/utils/pyodide/asyncPyodide"
 import { LoadStatus } from "@/models/status"
 const { nameList } = useFuncStore()
 
@@ -21,7 +21,7 @@ const addingDep = ref(false)
 async function addDep() {
   addingDep.value = true
   try {
-    await pyodide.installDeps([form.depTmp])
+    await worker.installDeps([form.depTmp])
     form.deps.push(form.depTmp)
     form.depTmp = ""
   } catch {

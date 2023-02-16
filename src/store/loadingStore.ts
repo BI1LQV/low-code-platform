@@ -3,7 +3,7 @@ import { defineStore } from "pinia"
 import type { MaybeStatus } from "@/models/status"
 import { LoadStatus } from "@/models/status"
 import { useFuncStore } from "@/store/funcStore"
-import { load, loaded, pyodide } from "@/utils/pyodide/asyncPyodide"
+import { load, loaded, worker } from "@/utils/pyodide/asyncPyodide"
 import { setStatusToStore } from "@/utils/setStatusToStore"
 
 export const useLoadingStore = defineStore("loadingStore", () => {
@@ -31,10 +31,10 @@ export const useLoadingStore = defineStore("loadingStore", () => {
   watchEffect(() => {
     if (!loaded.value) { return }
     funcStore.pyodideDeps.forEach(async (dep) => {
-      if ((await pyodide.getLoadedPackages())[dep] || pyodideLoaders[`加载依赖${dep}`]) {
+      if ((await worker.getLoadedPackages())[dep] || pyodideLoaders[`加载依赖${dep}`]) {
         return
       }
-      setPyodideLoader (`加载依赖${dep}`, pyodide.installDeps([dep]))
+      setPyodideLoader (`加载依赖${dep}`, worker.installDeps([dep]))
     })
   })
 
