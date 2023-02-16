@@ -59,3 +59,12 @@ export function setRefToReactive<T>(
   // @ts-expect-error it's vue specific
   obj[key] = val
 }
+
+export function findAndDelete(array: any[], target: any) {
+  const idx = array.findIndex(item => item === target)
+  if (idx < 0) {
+    return false
+  }
+  array.splice(idx, 1)
+  return true
+}

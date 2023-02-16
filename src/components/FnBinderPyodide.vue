@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script lang="tsx" setup>
 import { defineAsyncComponent, ref } from "vue"
 import { Plus } from "@element-plus/icons-vue"
 
@@ -8,15 +8,14 @@ import { useFuncStore } from "@/store/funcStore"
 import { useAddFuncStore } from "@/store/addFuncStore"
 import { worker } from "@/utils/pyodide/asyncPyodide"
 import { LoadStatus } from "@/models/status"
+import { findAndDelete } from "@/utils"
 const { nameList } = useFuncStore()
 
 const addFuncStore = useAddFuncStore()
 
 const AsyncMonacoEditor = defineAsyncComponent({
   loader: () => import("@/components/MonacoEditor.vue"),
-  loadingComponent: {
-    template: "<div>加载组件中</div>",
-  },
+  loadingComponent: <div>组件加载中</div>,
 })
 const { form } = addFuncStore
 
@@ -41,7 +40,13 @@ async function addDep() {
   </el-form-item>
 
   <el-form-item label="绑定函数依赖">
-    <el-tag v-for="dep of form.deps" :key="dep" class="mr-20px" type="warning">{{ dep }}</el-tag>
+    <el-tag
+      v-for="dep of form.deps"
+      :key="dep" closable class="mr-20px" type="warning"
+      @close="findAndDelete(form.deps, dep)"
+    >
+      {{ dep }}
+    </el-tag>
     <el-input v-model="form.depTmp" size="small" class="w-80px"></el-input>
     <el-button
       :loading="addingDep"
