@@ -9,15 +9,17 @@ export function exportString() {
     ...useFuncStore().saveFunc(),
   })
 }
-export function importString(str: string) {
-  const dsl = JSON.parse(str)
-  useCanvasStore().loadDSL(dsl)
-  useFuncStore().loadFunc(dsl)
-}
 
 function resetStores() {
   useCanvasStore().reset()
   useFuncStore().reset()
+}
+
+export function importString(str: string) {
+  resetStores()
+  const dsl = JSON.parse(str)
+  useCanvasStore().loadDSL(dsl)
+  useFuncStore().loadFunc(dsl)
 }
 
 export function downloadString(id: number | string) {
