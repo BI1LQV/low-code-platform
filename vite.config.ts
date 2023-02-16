@@ -68,4 +68,10 @@ export default defineConfig({
   test: {
     environment: "jsdom",
   },
+  worker: {
+    format: "es",
+  },
+  build: {
+    target: "chrome89",
+  },
 })
