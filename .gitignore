@@ -13,3 +13,4 @@ components.d.ts
 .env
 public/pyodide/*
 .pyodide.tar.bz2
+stats.html

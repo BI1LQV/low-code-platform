@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node"
 import mysql from "mysql2/promise"
 export default async (request: VercelRequest, response: VercelResponse) => {
+  response.setHeader("Access-Control-Allow-Origin", "*")
   mysql.createConnection({
     host: process.env.DB_HOST as string,
     port: Number(process.env.DB_PORT),
