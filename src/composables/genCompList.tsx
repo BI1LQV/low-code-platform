@@ -31,8 +31,6 @@ export function renderComp(comp: DslBaseElement, editing: boolean) {
        return pre
      }, {} as Record<string, () => void>)
 
-  console.log(eventHandler)
-
   const Element = Slots.get(type)!
   const compImpl = <Element
         binder={binderList.get(id)!}
