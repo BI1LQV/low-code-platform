@@ -83,7 +83,7 @@ export const useAddFuncStore = defineStore("addFuncStore", () => {
   })
 
   watch(() => form.type, () => {
-    clearForm(["name", "type"])
+    form.isModify ?? clearForm(["name", "type"])
   })
   return {
     form, setForm, clearForm, refreshTypes,
