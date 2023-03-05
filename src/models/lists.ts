@@ -5,4 +5,5 @@ export interface TemplateItem {
   createTime: number
   updateTime: number
   data: string
+  display: boolean
 }

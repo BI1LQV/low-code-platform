@@ -3,8 +3,9 @@ import { storeToRefs } from "pinia"
 import { Plus } from "@element-plus/icons-vue"
 import { useRouter } from "vue-router"
 import { ElMessage } from "element-plus"
-import { ref } from "vue"
+import { computed, ref } from "vue"
 import { useTemplateListStore } from "@/store/templateList"
+import type { TemplateItem } from "@/models/lists"
 const props = defineProps<{ isEditor: boolean }>()
 const templateStore = useTemplateListStore()
 const router = useRouter()
@@ -43,6 +44,13 @@ function confirmAdd() {
     ElMessage.error(`添加失败，错误原因为${err}`)
   })
 }
+
+const toggleLoading = computed(() => Array.from({ length: templateList.value.length }, () => ref(false)))
+function toggleDisplay(item: TemplateItem, idx: number) {
+  templateStore.toggleDisplay(item.id, toggleLoading.value[idx]).then(() => {
+    item.display = !item.display
+  })
+}
 </script>
 
 <template>
@@ -53,7 +61,7 @@ function confirmAdd() {
     </div>
     <div w-full flex flex-row gap-5 flex-wrap>
       <el-card
-        v-for="item of templateList"
+        v-for="(item, idx) of templateList"
         :key="item.id" w-400px flex-shrink-0
         :class="props.isEditor ? '' : 'cursor-pointer'"
         :shadow="props.isEditor ? 'always' : 'hover'"
@@ -68,6 +76,9 @@ function confirmAdd() {
             <el-button text bg @click="toPreview(true, item.id)">查看</el-button>
             <!-- <el-button text bg>复制</el-button> -->
             <el-button text bg @click="toEdit(item.id)">编辑</el-button>
+            <el-button text bg :loading="toggleLoading[idx].value" @click="toggleDisplay(item, idx)">
+              {{ item.display ? "下线" : "上线" }}
+            </el-button>
             <el-popover
               :width="240"
               trigger="click"

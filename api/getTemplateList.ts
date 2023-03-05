@@ -11,7 +11,7 @@ export default async (request: VercelRequest, response: VercelResponse) => {
   })
     .then(connection => connection.query("SELECT id,name,author,create_time,update_time,display FROM template_data WHERE deleted=false"))
     .then((res) => {
-      response.status(200).send({ status: "OK", res: JSON.stringify(res[0]) })
+      response.status(200).send({ status: "OK", res: res[0] })
     }).catch((err) => {
       response.status(200).send({ status: "ERR", res: JSON.stringify(err?.stack) })
     })

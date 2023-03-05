@@ -37,6 +37,13 @@ export const useTemplateListStore = defineStore("templateList", () => {
       return res
     })
   }
+
+  function toggleDisplay(id: number, loading?: Ref<boolean>) {
+    return wrappedFetch(
+      `/api/toggleDisplay?id=${id}`, { loading }).then((res) => {
+      return res
+    })
+  }
   return {
     loadError,
     templateList,
@@ -44,5 +51,6 @@ export const useTemplateListStore = defineStore("templateList", () => {
     deleteTemplate,
     author,
     addTemplate,
+    toggleDisplay,
   }
 })
