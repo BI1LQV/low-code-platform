@@ -109,6 +109,9 @@ function del(scope: any) {
           <el-option label="JavaScript函数" value="js" />
         </el-select>
       </el-form-item>
+      <el-form-item label="触发机制">
+        <el-checkbox v-model="form.autoTrigger" label="自动触发" />
+      </el-form-item>
       <FnBinderGbcall v-if="form.type === 'py'"></FnBinderGbcall>
       <FnBinderJs v-if="form.type === 'js'"></FnBinderJs>
       <FnBinderPyodide v-if="form.type === 'pyodide'"></FnBinderPyodide>

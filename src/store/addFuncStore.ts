@@ -4,9 +4,8 @@ import { clearableReactive } from "@/composables/clearableReactive"
 import { pyCallGetInfo, pyCallTest } from "@/utils/globalCall"
 import { worker } from "@/utils/pyodide/asyncPyodide"
 import { LoadStatus } from "@/models/status"
-
-export const useAddFuncStore = defineStore("addFuncStore", () => {
-  const [form, setForm, clearForm] = clearableReactive(() => ({
+function formInit() {
+  return {
     type: "py",
     name: "",
     pyName: "",
@@ -24,7 +23,12 @@ export const useAddFuncStore = defineStore("addFuncStore", () => {
     isModify: false as false | string,
     serverStatus: LoadStatus.ERR,
     funcStatus: LoadStatus.ERR,
-  }))
+    autoTrigger: true,
+  }
+}
+export type FormInit = ReturnType<typeof formInit>
+export const useAddFuncStore = defineStore("addFuncStore", () => {
+  const [form, setForm, clearForm] = clearableReactive(formInit)
 
   watch(() => [form.baseUrl, form.isDirect], async (_1, _2, onCleanUp) => {
     if (form.type !== "py") { return }

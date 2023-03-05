@@ -3,6 +3,7 @@ export interface FuncBase {
   name: string
   inputs: string[]
   receivers: string[]
+  autoTrigger: boolean
 }
 export interface JsFunc extends FuncBase {
   type: "js"

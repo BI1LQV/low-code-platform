@@ -2,6 +2,7 @@ import { computed, reactive, shallowReactive, watch } from "vue"
 import { defineStore } from "pinia"
 import { useRouter } from "vue-router"
 import { useCanvasStore } from "./canvasStore"
+import type { FormInit } from "./addFuncStore"
 import type { FuncType } from "@/models/funcCalls"
 import { pyCall } from "@/utils/globalCall"
 import { worker } from "@/utils/pyodide/asyncPyodide"
@@ -49,24 +50,18 @@ export const useFuncStore = defineStore("funcStore", () => {
   }
   function registerWatcher(name: string, inputs: string[]) {
     watch(inputs.map(name => binderList.get(nameToIdMap[name])), (_1, _2, onCleanUp) => {
+      if (!funcMap[name].autoTrigger) {
+        return
+      }
       const aborter = new AbortController()
       onCleanUp(() => aborter.abort())
       callFunc(name, aborter.signal)
     })
   }
 
-  function setFunc(form:
-  Record<"name" | "type" | "impl" | "baseUrl" | "pyName", string>
-  & {
-    inputs: string[]
-    receivers: string[]
-    inputTypes: string[]
-    outputTypes: string[]
-    deps: string[]
-    isDirect: boolean
-  },
+  function setFunc(form: FormInit,
   ) {
-    const { name, type, impl, baseUrl, inputs, receivers, isDirect, pyName, inputTypes, outputTypes, deps } = form
+    const { name, type, impl, baseUrl, inputs, receivers, isDirect, pyName, inputTypes, outputTypes, deps, autoTrigger } = form
     if (type === "js") {
       funcMap[name] = {
         name,
@@ -74,6 +69,7 @@ export const useFuncStore = defineStore("funcStore", () => {
         impl,
         inputs,
         receivers,
+        autoTrigger,
       }
     } else if (type === "py") {
       funcMap[name] = {
@@ -86,6 +82,7 @@ export const useFuncStore = defineStore("funcStore", () => {
         pyName,
         inputTypes,
         outputTypes,
+        autoTrigger,
       }
     } else if (type === "pyodide") {
       funcMap[name] = {
@@ -98,6 +95,7 @@ export const useFuncStore = defineStore("funcStore", () => {
         outputTypes,
         deps,
         impl,
+        autoTrigger,
       }
     }
     registerWatcher(name, inputs)
