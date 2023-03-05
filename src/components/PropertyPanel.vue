@@ -4,6 +4,7 @@ import type { Component } from "vue"
 import { computed, ref } from "vue"
 import StylePanel from "./StylePanel.vue"
 import AttrPanel from "./AttrPanel.vue"
+import EventEditorPanel from "./EventEditorPanel.vue"
 import { useCanvasStore } from "@/store/canvasStore"
 import { AttrPanels, StylePanels } from "@/slots"
 const canvasStore = useCanvasStore()
@@ -42,6 +43,9 @@ const OptionalAttrPanel = computed<Component>(() => {
           :optional-panel="OptionalAttrPanel"
         >
         </AttrPanel>
+      </el-tab-pane>
+      <el-tab-pane label="事件监听" name="event">
+        <EventEditorPanel :selected-prop="selectedProp"></EventEditorPanel>
       </el-tab-pane>
     </el-tabs>
   </div>
