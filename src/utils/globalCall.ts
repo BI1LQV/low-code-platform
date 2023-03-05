@@ -7,7 +7,7 @@ function fetchMaybeRelay(isDirect: boolean, url: string, req: RequestInit) {
   return wrappedFetch(url, req)
 }
 
-export function pyCall(baseUrl: string, funcName: string, isDirect: boolean, args: any[], signal: AbortSignal) {
+export function pyCall(baseUrl: string, funcName: string, isDirect: boolean, args: any[], signal?: AbortSignal) {
   return fetchMaybeRelay(isDirect, `${baseUrl}/call/${funcName}`, {
     method: "post",
     body: JSON.stringify({ args }),

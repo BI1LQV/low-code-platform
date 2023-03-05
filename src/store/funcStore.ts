@@ -17,7 +17,7 @@ export const useFuncStore = defineStore("funcStore", () => {
   const funcList = computed(() => Object.values(funcMap))
   const nameList = computed(() => Object.keys(nameToIdMap))
 
-  async function callFunc(id: string, signal: AbortSignal) {
+  async function callFunc(id: string, signal?: AbortSignal) {
     const func = funcMap[id]
     if (func == null) {
       return
@@ -38,7 +38,7 @@ export const useFuncStore = defineStore("funcStore", () => {
       }))
     }
 
-    if (func.receivers.length && !signal.aborted) {
+    if (func.receivers.length && !signal?.aborted) {
       if (Array.isArray(res)) {
         func.receivers.forEach((receiverId, idx) => {
           binderList.get(nameToIdMap[receiverId])!.value = res[idx]
