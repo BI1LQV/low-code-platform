@@ -24,7 +24,7 @@ export const Component = defineComponent({
           "border-left": `${prop["border-left-width"]}px ${prop["border-left-fill"]} ${prop["border-left-color"]}`,
         },
       }
-      console.log(newProps)
+
       return (
         <div class={isProd ? "" : "important-min-h-10px important-border-2px"} {...newProps}>
           {slots.default?.()[0].children}
