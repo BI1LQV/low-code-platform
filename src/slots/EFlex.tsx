@@ -9,24 +9,24 @@ export const Component = defineComponent({
   name: "Flex布局",
   props: ["binder", "prop", "isProd"],
   setup(
-    { prop, isProd }: { binder: Ref<any>; prop: SlotOptions; isProd: boolean },
+    p: { binder: Ref<any>; prop: SlotOptions; isProd: boolean },
     { slots },
   ) {
     return () => {
       const newProps = {
-        ...prop,
+        ...p.prop,
         style: {
-          ...prop.style,
-          "border-radius": `${Number(prop["border-radius-top"])}px ${Number(prop["border-radius-right"])}px ${Number(prop["border-radius-bottom"])}px ${Number(prop["border-radius-left"])}px`,
-          "border-top": `${prop["border-top-width"]}px ${prop["border-top-fill"]} ${prop["border-top-color"]}`,
-          "border-right": `${prop["border-right-width"]}px ${prop["border-right-fill"]} ${prop["border-right-color"]}`,
-          "border-bottom": `${prop["border-bottom-width"]}px ${prop["border-bottom-fill"]} ${prop["border-bottom-color"]}`,
-          "border-left": `${prop["border-left-width"]}px ${prop["border-left-fill"]} ${prop["border-left-color"]}`,
+          ...p.prop.style,
+          "border-radius": `${Number(p.prop["border-radius-top"])}px ${Number(p.prop["border-radius-right"])}px ${Number(p.prop["border-radius-bottom"])}px ${Number(p.prop["border-radius-left"])}px`,
+          "border-top": `${p.prop["border-top-width"]}px ${p.prop["border-top-fill"]} ${p.prop["border-top-color"]}`,
+          "border-right": `${p.prop["border-right-width"]}px ${p.prop["border-right-fill"]} ${p.prop["border-right-color"]}`,
+          "border-bottom": `${p.prop["border-bottom-width"]}px ${p.prop["border-bottom-fill"]} ${p.prop["border-bottom-color"]}`,
+          "border-left": `${p.prop["border-left-width"]}px ${p.prop["border-left-fill"]} ${p.prop["border-left-color"]}`,
         },
       }
 
       return (
-        <div class={isProd ? "" : "important-min-h-10px important-border-2px"} {...newProps}>
+        <div class={p.isProd ? "" : "important-min-h-10px important-border-2px"} {...newProps}>
           {slots.default?.()[0].children}
         </div>
       )
