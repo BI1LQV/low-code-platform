@@ -1,6 +1,7 @@
 import type { Ref } from "vue"
 import { Fragment, defineComponent, ref } from "vue"
-import { ElFormItem, ElRadioButton, ElRadioGroup } from "element-plus"
+import { ElColorPicker, ElFormItem, ElInputNumber, ElRadioButton, ElRadioGroup } from "element-plus"
+
 import type { EFlexOptions, SlotOptions } from "@/models/slots"
 import { BaseFlexStyleImpl, BaseStyleImpl } from "@/models/slots"
 import { PngDirection, PngItemsCenter, PngItemsEnd, PngItemsStart, PngJustifyAround, PngJustifyBetween, PngJustifyCenter, PngJustifyEnd, PngJustifyStart } from "@/assets/stylePanel"
@@ -12,8 +13,20 @@ export const Component = defineComponent({
     { slots },
   ) {
     return () => {
+      const newProps = {
+        ...prop,
+        style: {
+          ...prop.style,
+          "border-radius": `${Number(prop["border-radius-top"])}px ${Number(prop["border-radius-right"])}px ${Number(prop["border-radius-bottom"])}px ${Number(prop["border-radius-left"])}px`,
+          "border-top": `${prop["border-top-width"]}px ${prop["border-top-fill"]} ${prop["border-top-color"]}`,
+          "border-right": `${prop["border-right-width"]}px ${prop["border-right-fill"]} ${prop["border-right-color"]}`,
+          "border-bottom": `${prop["border-bottom-width"]}px ${prop["border-bottom-fill"]} ${prop["border-bottom-color"]}`,
+          "border-left": `${prop["border-left-width"]}px ${prop["border-left-fill"]} ${prop["border-left-color"]}`,
+        },
+      }
+      console.log(newProps)
       return (
-        <div class={isProd ? "" : "important-min-h-10px important-border-2px"} {...prop}>
+        <div class={isProd ? "" : "important-min-h-10px important-border-2px"} {...newProps}>
           {slots.default?.()[0].children}
         </div>
       )
@@ -61,6 +74,34 @@ export const StylePanel = defineComponent({
             <ElRadioButton label="flex-end"><img width="24" class={crossRotate} src={PngItemsEnd}></img>从尾开始</ElRadioButton>
             <ElRadioButton label="center"><img width="24" class={crossRotate} src={PngItemsCenter}></img>居中对齐</ElRadioButton>
           </ElRadioGroup>
+        </ElFormItem>
+        {
+          [["上边框", "top"], ["下边框", "bottom"],
+            ["左边框", "left"], ["右边框", "right"]]
+            .map(([label, key]) => (
+              <ElFormItem label={label} key={label}>
+              <ElInputNumber v-model={p.prop[`border-${key}-width`]}></ElInputNumber> <span color-gray text-16px m-l-10px>px</span>
+              <br />
+              <ElRadioGroup v-model={p.prop[`border-${key}-fill`]} m-r-10px>
+                <ElRadioButton label="dotted">圆点</ElRadioButton>
+                <ElRadioButton label="dashed">虚线</ElRadioButton>
+                <ElRadioButton label="solid">实线</ElRadioButton>
+              </ElRadioGroup>
+              <ElColorPicker v-model={p.prop[`border-${key}-color`]}></ElColorPicker>
+            </ElFormItem>
+            ))
+        }
+        <ElFormItem label="上边框圆角">
+          <ElInputNumber v-model={p.prop["border-radius-top"]}></ElInputNumber><span color-gray text-16px m-l-10px>px</span>
+        </ElFormItem>
+        <ElFormItem label="下边框圆角">
+          <ElInputNumber v-model={p.prop["border-radius-bottom"]}></ElInputNumber><span color-gray text-16px m-l-10px>px</span>
+        </ElFormItem>
+        <ElFormItem label="左边框圆角">
+          <ElInputNumber v-model={p.prop["border-radius-left"]}></ElInputNumber><span color-gray text-16px m-l-10px>px</span>
+        </ElFormItem>
+        <ElFormItem label="右边框圆角">
+          <ElInputNumber v-model={p.prop["border-radius-right"]}></ElInputNumber><span color-gray text-16px m-l-10px>px</span>
         </ElFormItem>
       </Fragment>)
     }

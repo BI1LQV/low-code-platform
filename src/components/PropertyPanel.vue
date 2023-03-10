@@ -29,7 +29,7 @@ const OptionalAttrPanel = computed<Component>(() => {
 </script>
 
 <template>
-  <div w-400px border-3px>
+  <div w-400px border-3px overflow-scroll>
     <el-tabs v-model="activeName">
       <el-tab-pane label="样式" name="style">
         <StylePanel :selected-prop="selectedProp" :optional-panel="OptionalStylePanel">
