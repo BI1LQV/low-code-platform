@@ -4,7 +4,9 @@ import { isRef } from "vue"
 export function wrappedFetch(url: string, req: RequestInit & { loading?: Ref<boolean> } = {}) {
   const { loading } = req
   if (isRef(loading)) { loading.value = true }
-  return fetch(url, req)
+  return fetch(
+    import.meta.env.VITE_URL_BASE
+    + url, req)
     .then(res => res.json())
     .then((res) => {
       if (res.status === "OK") {
