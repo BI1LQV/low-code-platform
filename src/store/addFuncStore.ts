@@ -1,9 +1,10 @@
 import { defineStore } from "pinia"
-import { watch } from "vue"
+import { ref, watch } from "vue"
 import { clearableReactive } from "@/composables/clearableReactive"
 import { pyCallGetInfo, pyCallTest } from "@/utils/globalCall"
 import { worker } from "@/utils/pyodide/asyncPyodide"
 import { LoadStatus } from "@/models/status"
+import { useDelayedRef } from "@/composables/useDelayedRef"
 function formInit() {
   return {
     type: "py",
@@ -29,6 +30,8 @@ function formInit() {
 export type FormInit = ReturnType<typeof formInit>
 export const useAddFuncStore = defineStore("addFuncStore", () => {
   const [form, setForm, clearForm] = clearableReactive(formInit)
+  const showAddBind = ref(false)
+  const delayedShowAddBind = useDelayedRef(showAddBind)
 
   watch(() => [form.baseUrl, form.isDirect], async (_1, _2, onCleanUp) => {
     if (form.type !== "py") { return }
@@ -83,9 +86,9 @@ export const useAddFuncStore = defineStore("addFuncStore", () => {
   })
 
   watch(() => form.type, () => {
-    form.isModify ?? clearForm(["name", "type"])
+    showAddBind.value && clearForm(["name", "type"])
   })
   return {
-    form, setForm, clearForm, refreshTypes,
+    form, setForm, clearForm, refreshTypes, showAddBind: delayedShowAddBind,
   }
 })

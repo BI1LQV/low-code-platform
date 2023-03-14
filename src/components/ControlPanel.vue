@@ -3,6 +3,7 @@ import { ref } from "vue"
 
 import { ElMessage } from "element-plus"
 import { Delete, Edit } from "@element-plus/icons-vue"
+import { storeToRefs } from "pinia"
 import FnBinderPyodide from "./FnBinderPyodide.vue"
 import FnBinderGbcall from "@/components/FnBinderGbcall.vue"
 import FnBinderJs from "@/components/FnBinderJs.vue"
@@ -17,6 +18,7 @@ const funcStore = useFuncStore()
 
 const { setFunc, funcMap, deleteFunc } = useFuncStore()
 const { form, clearForm, setForm } = useAddFuncStore()
+const { showAddBind } = storeToRefs(useAddFuncStore())
 
 const activeName = ref("comps")
 
@@ -32,8 +34,6 @@ function dragHandler(ev: DragEvent, type: allSlotsKey) {
   ev.dataTransfer!.setData("text/plain", JSON.stringify({ type: "newSlot", slot: type } as NewSlotDragger))
   setSelectedElement({ id: "" })
 }
-
-const showAddBind = ref(false)
 
 function addFunc() {
   if (form.isModify) {
@@ -65,17 +65,13 @@ function del(scope: any) {
       <el-tab-pane label="组件" name="comps">
         <template v-for="name of showedSlots" :key="name">
           <div></div>
-          <button
-            draggable="true"
-            @dragstart="dragHandler($event, name)"
-            @dragend="clearDragEffect()"
-          >
+          <button draggable="true" @dragstart="dragHandler($event, name)" @dragend="clearDragEffect()">
             {{ Slots.get(name)!.name }}
           </button>
         </template>
       </el-tab-pane>
       <el-tab-pane label="数据绑定" name="binds">
-        <el-button type="primary" size="small" @click="clearForm();showAddBind = true">添加</el-button>
+        <el-button type="primary" size="small" @click="clearForm(); showAddBind = true">添加</el-button>
         <el-table :data="funcStore.funcList" stripe style="width: 100%">
           <el-table-column prop="name" />
           <el-table-column>
@@ -93,11 +89,7 @@ function del(scope: any) {
     </el-tabs>
   </div>
 
-  <el-dialog
-    v-model="showAddBind"
-    title="添加数据绑定"
-    width="50%"
-  >
+  <el-dialog v-model="showAddBind" title="添加数据绑定" width="50%">
     <el-form :model="form" label-width="120px">
       <el-form-item label="绑定函数名称">
         <el-input v-model="form.name"></el-input>
