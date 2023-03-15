@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import { ref } from "vue"
-
+import { Check, Close, Delete, Edit } from "@element-plus/icons-vue"
 import { ElMessage } from "element-plus"
-import { Delete, Edit } from "@element-plus/icons-vue"
 import { storeToRefs } from "pinia"
 import FnBinderPyodide from "./FnBinderPyodide.vue"
 import FnBinderGbcall from "@/components/FnBinderGbcall.vue"
@@ -101,8 +100,13 @@ function del(scope: any) {
           <el-option label="JavaScript函数" value="js" />
         </el-select>
       </el-form-item>
-      <el-form-item label="触发机制">
-        <el-checkbox v-model="form.autoTrigger" label="自动触发" />
+      <el-form-item label="自动触发">
+        <el-switch
+          v-model="form.autoTrigger"
+          inline-prompt
+          :active-icon="Check"
+          :inactive-icon="Close"
+        />
       </el-form-item>
       <FnBinderGbcall v-if="form.type === 'py'"></FnBinderGbcall>
       <FnBinderJs v-if="form.type === 'js'"></FnBinderJs>

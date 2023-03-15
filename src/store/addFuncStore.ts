@@ -25,6 +25,7 @@ function formInit() {
     serverStatus: LoadStatus.ERR,
     funcStatus: LoadStatus.ERR,
     autoTrigger: true,
+    saveOnServer: false,
   }
 }
 export type FormInit = ReturnType<typeof formInit>
