@@ -96,6 +96,8 @@ export const useFuncStore = defineStore("funcStore", () => {
         outputTypes,
         autoTrigger,
         saveOnServer,
+        deps,
+        impl,
       }
     } else if (type === "pyodide") {
       funcMap[name] = {

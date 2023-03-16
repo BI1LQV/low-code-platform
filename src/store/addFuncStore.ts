@@ -1,5 +1,6 @@
 import { defineStore } from "pinia"
 import { ref, watch } from "vue"
+import type { UploadUserFile } from "element-plus"
 import { clearableReactive } from "@/composables/clearableReactive"
 import { pyCallGetInfo, pyCallTest } from "@/utils/globalCall"
 import { worker } from "@/utils/pyodide/asyncPyodide"
@@ -27,6 +28,7 @@ function formInit() {
     autoTrigger: true,
     saveOnServer: false,
     codeIllegal: false,
+    fileList: [] as UploadUserFile[],
   }
 }
 export type FormInit = ReturnType<typeof formInit>

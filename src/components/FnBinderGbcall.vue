@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { Check, Close, RefreshRight } from "@element-plus/icons-vue"
+import { Check, Close, Plus, RefreshRight } from "@element-plus/icons-vue"
 import { ref, watchEffect } from "vue"
 import { ElMessage } from "element-plus"
 import { storeToRefs } from "pinia"
-import type { UploadUserFile } from "element-plus"
 import Status from "./Status.vue"
 import { useFuncStore } from "@/store/funcStore"
 import { useAddFuncStore } from "@/store/addFuncStore"
+import { findAndDelete } from "@/utils"
 const funcStore = useFuncStore()
 const { nameList } = storeToRefs(funcStore)
 const addFuncStore = useAddFuncStore()
@@ -22,15 +22,15 @@ function refreshType() {
     refreshLoading.value = false
   })
 }
-const fileList = ref<UploadUserFile[]>([])
 
 watchEffect(() => {
-  if (fileList.value[0]?.raw) {
+  if (form?.fileList?.[0]?.raw) {
     const reader = new FileReader()
-    reader.readAsText(fileList.value[0].raw)
+    reader.readAsText(form.fileList[0].raw)
     reader.onload = (e) => {
       const code = e.target?.result as string
       form.impl = code
+      form.codeIllegal = false
     }
   }
 })
@@ -50,7 +50,7 @@ watchEffect(() => {
   </el-form-item>
   <template v-if="form.saveOnServer">
     <el-form-item label="代码文件">
-      <el-upload v-model:file-list="fileList" :auto-upload="false" style="width:400px" :limit="1">
+      <el-upload v-model:file-list="form.fileList" :auto-upload="false" style="width:400px" :limit="1">
         <template #trigger>
           <el-button type="primary">选择文件</el-button>
         </template>
@@ -63,6 +63,24 @@ watchEffect(() => {
     </el-form-item>
     <el-form-item label="绑定目标函数">
       <el-input v-model="form.pyName" disabled class="w-70%"></el-input>
+    </el-form-item>
+    <el-form-item label="绑定函数依赖">
+      <el-tag
+        v-for="dep of form.deps"
+        :key="dep" closable class="mr-20px" type="warning"
+        @close="findAndDelete(form.deps, dep)"
+      >
+        {{ dep }}
+      </el-tag>
+      <el-input v-model="form.depTmp" size="small" class="w-80px"></el-input>
+      <el-button
+        type="primary" :icon="Plus"
+        m-l-10px
+        size="small"
+        @click="form.deps.push(form.depTmp)"
+      >
+        添加
+      </el-button>
     </el-form-item>
   </template>
   <template v-else>

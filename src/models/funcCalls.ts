@@ -18,6 +18,8 @@ export interface PyFunc extends FuncBase {
   inputTypes: string[]
   outputTypes: string[]
   saveOnServer?: boolean
+  deps?: string[]
+  impl?: string
 }
 
 export interface PyodideFunc extends FuncBase {
