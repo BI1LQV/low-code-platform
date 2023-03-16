@@ -9,12 +9,8 @@ export default defineComponent({
   setup(props) {
     const { root } = useCanvasStore()
     watchEffect(() => {
-      console.log(props.id)
       useLoadingStore()
-        .setGlobalLoader("server func load",
-          wrappedFetch(`/api/loadFuncs?id=${props.id}`).then((res) => {
-            console.log(res)
-          }))
+        .setGlobalLoader("server func load", wrappedFetch(`/api/loadFuncs?id=${props.id}`))
     })
     let renderedRoot = computed(() => renderComp(root, false))
     return () => (

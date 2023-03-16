@@ -5,8 +5,7 @@ export function wrappedFetch(url: string, req: RequestInit & { loading?: Ref<boo
   const { loading } = req
   if (isRef(loading)) { loading.value = true }
   return fetch(
-    import.meta.env.VITE_URL_BASE
-    + url, req)
+    url.startsWith("http") ? url : `${import.meta.env.VITE_URL_BASE}${url}`, req)
     .then(res => res.json())
     .then((res) => {
       if (res.status === "OK") {
