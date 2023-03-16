@@ -29,9 +29,15 @@ export const useFuncStore = defineStore("funcStore", () => {
         ...func.inputs,
         func.impl)(...func.inputs.map(name => binderList.get(nameToIdMap[name])?.value))
     } else if (func.type === "py") {
-      res = await pyCall(func.baseUrl, func.pyName, func.isDirect, func.inputs.map((bindName: string) => {
-        return binderList.get(nameToIdMap[bindName])!.value
-      }), signal)
+      if (func.saveOnServer) {
+        res = await pyCall(import.meta.env.VITE_PYCALL_BASE, func.pyName, true, func.inputs.map((bindName: string) => {
+          return binderList.get(nameToIdMap[bindName])!.value
+        }), signal)
+      } else {
+        res = await pyCall(func.baseUrl, func.pyName, func.isDirect, func.inputs.map((bindName: string) => {
+          return binderList.get(nameToIdMap[bindName])!.value
+        }), signal)
+      }
     } else if (func.type === "pyodide") {
       res = await worker.callFunc(func.pyName, toRaw(func.inputTypes), toRaw(func.outputTypes),
         func.impl, func.inputs.map((bindName: string) => {
@@ -62,7 +68,12 @@ export const useFuncStore = defineStore("funcStore", () => {
 
   function setFunc(form: FormInit,
   ) {
-    const { name, type, impl, baseUrl, inputs, receivers, isDirect, pyName, inputTypes, outputTypes, deps, autoTrigger } = form
+    const {
+      name, type, impl, baseUrl,
+      inputs, receivers, isDirect, pyName, inputTypes,
+      outputTypes, deps, autoTrigger,
+      saveOnServer,
+    } = form
     if (type === "js") {
       funcMap[name] = {
         name,
@@ -84,6 +95,7 @@ export const useFuncStore = defineStore("funcStore", () => {
         inputTypes,
         outputTypes,
         autoTrigger,
+        saveOnServer,
       }
     } else if (type === "pyodide") {
       funcMap[name] = {
@@ -154,9 +166,9 @@ export const useFuncStore = defineStore("funcStore", () => {
   const router = useRouter()
   const requirePyodide = computed(() => {
     return router.currentRoute.value.name === "editor-name"
-    || Object.values(funcMap).some((func) => {
-      return func.type === "pyodide"
-    })
+      || Object.values(funcMap).some((func) => {
+        return func.type === "pyodide"
+      })
   })
 
   return {

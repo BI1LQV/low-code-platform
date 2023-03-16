@@ -26,6 +26,7 @@ function formInit() {
     funcStatus: LoadStatus.ERR,
     autoTrigger: true,
     saveOnServer: false,
+    codeIllegal: false,
   }
 }
 export type FormInit = ReturnType<typeof formInit>
@@ -73,13 +74,17 @@ export const useAddFuncStore = defineStore("addFuncStore", () => {
   })
 
   watch(() => form.impl, async () => {
-    if (form.type !== "pyodide") { return }
+    if (!(
+      form.type === "pyodide"
+      || (form.type === "py" && form.saveOnServer)
+    )) { return }
     try {
       const [funcName, inputTypes, outputTypes] = await worker.scanTypes(form.impl)
       form.pyName = funcName
       form.inputTypes = inputTypes
       form.outputTypes = outputTypes
     } catch {
+      form.codeIllegal = true
       form.pyName = ""
       form.inputTypes = []
       form.outputTypes = []

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Check, Close, RefreshRight } from "@element-plus/icons-vue"
-import { ref } from "vue"
+import { ref, watchEffect } from "vue"
 import { ElMessage } from "element-plus"
 import { storeToRefs } from "pinia"
 import type { UploadUserFile } from "element-plus"
@@ -24,10 +24,24 @@ function refreshType() {
 }
 const fileList = ref<UploadUserFile[]>([])
 
-function submitUpload() {
-  const reader = new FileReader()
-  reader.readAsText(fileList.value[0].raw!)
-}
+watchEffect(() => {
+  if (fileList.value[0]?.raw) {
+    const reader = new FileReader()
+    reader.readAsText(fileList.value[0].raw)
+    reader.onload = (e) => {
+      const code = e.target?.result as string
+      form.impl = code
+    }
+  }
+})
+watchEffect(() => {
+  if (form.codeIllegal) {
+    ElMessage({
+      message: "代码不合法",
+      type: "error",
+    })
+  }
+})
 </script>
 
 <template>
@@ -36,24 +50,19 @@ function submitUpload() {
   </el-form-item>
   <template v-if="form.saveOnServer">
     <el-form-item label="代码文件">
-      <el-upload
-        v-model:file-list="fileList"
-        :auto-upload="false"
-        style="width:400px"
-        :limit="1"
-      >
+      <el-upload v-model:file-list="fileList" :auto-upload="false" style="width:400px" :limit="1">
         <template #trigger>
           <el-button type="primary">选择文件</el-button>
         </template>
-        <el-button m-l-20px type="success" @click="submitUpload">
-          确认
-        </el-button>
         <template #tip>
           <div class="el-upload__tip">
             一个绑定函数只能上传一个文件，若要替换请删除之前选择的文件。
           </div>
         </template>
       </el-upload>
+    </el-form-item>
+    <el-form-item label="绑定目标函数">
+      <el-input v-model="form.pyName" disabled class="w-70%"></el-input>
     </el-form-item>
   </template>
   <template v-else>
