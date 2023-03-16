@@ -14,5 +14,5 @@ loadingStore.setGlobalLoader("editor_template_load",
 </script>
 
 <template>
-  <Preview></Preview>
+  <Preview :id="props.name"></Preview>
 </template>

@@ -49,7 +49,7 @@ async function importDsl() {
   <div flex flex-row h="[calc(100%-40px)]" justify-between>
     <ControlPanel></ControlPanel>
     <div w-800px border-3px>
-      <Preview v-if="isPreview"></Preview> <CanvasPanel v-else></CanvasPanel>
+      <Preview v-if="isPreview" :id="props.name"></Preview> <CanvasPanel v-else></CanvasPanel>
     </div>
     <PropertyPanel></PropertyPanel>
   </div>
