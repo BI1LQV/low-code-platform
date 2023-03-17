@@ -47,10 +47,13 @@ async function importDsl() {
     <el-button type="primary" @click="importDsl">从剪切板导入</el-button>
   </header>
   <div flex flex-row h="[calc(100%-40px)]" justify-between>
-    <ControlPanel></ControlPanel>
-    <div w-800px border-3px>
-      <Preview v-if="isPreview" :id="props.name"></Preview> <CanvasPanel v-else></CanvasPanel>
-    </div>
-    <PropertyPanel></PropertyPanel>
+    <template v-if="!isPreview">
+      <ControlPanel></ControlPanel>
+      <div border-3px>
+        <CanvasPanel></CanvasPanel>
+      </div>
+      <PropertyPanel></PropertyPanel>
+    </template>
+    <Preview v-else :id="props.name"></Preview>
   </div>
 </template>
