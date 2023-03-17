@@ -49,7 +49,7 @@ async function importDsl() {
   <div flex flex-row h="[calc(100%-40px)]" justify-between>
     <template v-if="!isPreview">
       <ControlPanel></ControlPanel>
-      <div border-3px>
+      <div border-3px w="[calc(100%-600px)]">
         <CanvasPanel></CanvasPanel>
       </div>
       <PropertyPanel></PropertyPanel>
