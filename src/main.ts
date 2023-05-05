@@ -3,6 +3,7 @@ import { createApp } from "vue"
 import { createRouter, createWebHistory } from "vue-router"
 import { createPinia } from "pinia"
 import routes from "virtual:generated-pages"
+import { ElMessage } from "element-plus"
 import App from "./App.vue"
 import now from "~build/time"
 import { sha } from "~build/info"
@@ -25,6 +26,15 @@ const router = createRouter({
 app.use(router)
 const pinia = createPinia()
 app.use(pinia)
+
+window.onunhandledrejection = (rejPromise) => {
+  ElMessage({
+    type: "error",
+    message: rejPromise.reason,
+    duration: 0,
+    showClose: true,
+  })
+}
 
 if (!(import.meta.env.MODE === "test")) {
   app.mount("#app")
