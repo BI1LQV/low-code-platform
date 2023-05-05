@@ -14,6 +14,7 @@ import Inspect from "vite-plugin-inspect"
 import VueMacros from "unplugin-vue-macros/vite"
 import HotExport from "vite-plugin-hot-export"
 import { visualizer } from "rollup-plugin-visualizer"
+import { svgPatch } from "@liuli-util/vite-plugin-svg-patch"
 
 export default defineConfig({
   server: {
@@ -63,6 +64,7 @@ export default defineConfig({
     }),
     HotExport(),
     visualizer(),
+    svgPatch(),
   ],
   // https://github.com/vitest-dev/vitest
   test: {
