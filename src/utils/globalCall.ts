@@ -26,5 +26,5 @@ export function pyCallGetInfo(baseUrl: string, isDirect: boolean, funcName: stri
   return fetchMaybeRelay(isDirect, `${baseUrl}/info/${funcName}`, {
     method: "get",
     signal,
-  })
+  }).catch(() => {})
 }
