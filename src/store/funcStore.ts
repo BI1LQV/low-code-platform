@@ -1,4 +1,4 @@
-import { computed, reactive, shallowReactive, toRaw, watch } from "vue"
+import { computed, reactive, shallowReactive, watch } from "vue"
 import { defineStore } from "pinia"
 import { useRouter } from "vue-router"
 import { useCanvasStore } from "./canvasStore"
@@ -39,10 +39,9 @@ export const useFuncStore = defineStore("funcStore", () => {
         }), signal)
       }
     } else if (func.type === "pyodide") {
-      res = await worker.callFunc(func.pyName, toRaw(func.inputTypes), toRaw(func.outputTypes),
-        func.impl, func.inputs.map((bindName: string) => {
-          return binderList.get(nameToIdMap[bindName])!.value
-        }))
+      res = await worker.callFunc(func.pyName, func.impl, func.inputs.map((bindName: string) => {
+        return binderList.get(nameToIdMap[bindName])!.value
+      }))
     }
 
     if (func.receivers.length && !signal?.aborted) {

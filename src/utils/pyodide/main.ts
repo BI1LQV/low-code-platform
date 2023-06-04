@@ -33,18 +33,12 @@ export async function installDeps(deps: string[]) {
 
 const funcPool: Record<string, Function> = {}
 
-export async function callFunc(funcName: string,
-  inputTypes: string[], outputTypes: string[],
-  impl: string, args: any[]) {
-  if (!(funcName in funcPool)) {
-    const pyFunc = pyodide.runPython(
-`${impl}
-from gbcall.callWithTypeCheck import callWithTypeCheck
-lambda args,inputTypes,outputTypes:callWithTypeCheck(${funcName},inputTypes,outputTypes,args)
-`)
+export async function callFunc(funcName: string, impl: string, args: any[]) {
+  if (!(impl in funcPool)) {
+    const pyFunc = pyodide.runPython(`${impl}\n${funcName}`)
     funcPool[impl] = pyFunc
   }
-  return returnValAndClean(await funcPool[impl](args, inputTypes, outputTypes))
+  return returnValAndClean(await funcPool[impl](...args))
 }
 
 export async function getLoadedPackages() {
