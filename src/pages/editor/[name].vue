@@ -22,7 +22,7 @@ const [isPreview, togglePreview] = useToggle(false)
 
 const uploading = ref(false)
 function save() {
-  uploadString(props.name, exportString(), uploading).then(() => {
+  return uploadString(props.name, exportString(), uploading).then(() => {
     ElMessage.success("保存成功")
   }).catch((err) => {
     ElMessage.error(err)
@@ -42,7 +42,7 @@ async function importDsl() {
 <template>
   <header h-40px>
     <el-button type="primary" :loading="uploading" @click="save">保存</el-button>
-    <el-button type="primary" @click="() => { if (!isPreview){ save() } togglePreview() }">{{ isPreview ? "进入编辑" : "保存并进入预览" }}</el-button>
+    <el-button type="primary" @click="async () => { if (!isPreview){ await save() } togglePreview() }">{{ isPreview ? "进入编辑" : "保存并进入预览" }}</el-button>
     <el-button type="primary" @click="exportDsl">导出到剪切板</el-button>
     <el-button type="primary" @click="importDsl">从剪切板导入</el-button>
   </header>
